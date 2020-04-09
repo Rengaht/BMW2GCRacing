@@ -2,7 +2,11 @@ var Container,autoDetectRenderer,loader,resources,Sprite,Texture,Rectangle;
 var _app;
 
 var _background;
-var _sky,_mountain,_road,_car,_scene_sprite;
+var _sky,_mountain,_road,_car,_scene;
+
+var _sprite_scene,_sprite_car;
+var _last_car_pos;
+
 var _shader_road,_shader_lane,_shader_rumble;
 
 var _windowWidth,_windowHeight;
@@ -101,27 +105,54 @@ function loadFinish(loader,resources_){
 						{\
 							gl_Position.xyw = projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0);\
 							gl_Position.z = 0.0;\
-							vTextureCoord = (uTextureMatrix * vec3(aTextureCoord, 1.0)).xy;\
+							vTextureCoord = aTextureCoord;\
 						}';
+						// vTextureCoord = (uTextureMatrix * vec3(aTextureCoord, 1.0)).xy;\
 	let frag_shader='varying vec2 vTextureCoord;\
 						uniform vec4 uColor;\
 						uniform sampler2D uSampler;\
 						void main(void)\
 						{\
-							gl_FragColor = texture2D(uSampler, vTextureCoord) * uColor;\
+							gl_FragColor =texture2D(uSampler, vTextureCoord) * uColor;\
 						}';
-	_shader_road=new PIXI.MeshMaterial(resources.road.texture,{program:PIXI.Program.from(vertex_shader,frag_shader)});
+						//gl_FragColor = texture2D(uSampler, vTextureCoord) * uColor;\
+							
+	let uniforms={
+		uSampler:resources.road.texture,
+		uColor:new Float32Array([1.,1.,1.,1.])
+	};
+	_shader_road=PIXI.Shader.from(vertex_shader,frag_shader,uniforms);
+	
+ 	for(var n=0;n<drawDistance;n++){
+ 		for(var i=0;i<4;++i){
+ 			_road.addChild(new PIXI.Mesh(createQuadGeometry(n/drawDistance,0,
+ 															0,0,0,0,0,0),
+ 										_shader_road));
+	 	}
+ 	}
+
 	// _shader_lane=new PIXI.MeshMaterial(resources.lane.texture,{program:PIXI.Program.from(vertex_shader,frag_shader)});
 	// _shader_rumble=new PIXI.MeshMaterial(resources.rumble.texture,{program:PIXI.Program.from(vertex_shader,frag_shader)});
 
 	// _car=new PIXI.Sprite(resources_.sprite.textures['car-center.png']);
-	_scene_sprite=new Container();
+	_scene=new Container();
+	_car=new Container();
+	
+	let car_center=new PIXI.Sprite(resources_.sprite.textures['car-center.png']);
+	let car_left=new PIXI.Sprite(resources_.sprite.textures['car-left.png']);
+	let car_right=new PIXI.Sprite(resources_.sprite.textures['car-right.png']);
+	_sprite_car={'center':car_center,'left':car_left,'right':car_right};
+	_last_car_pos='center';
+	
+	_car.addChild(_sprite_car[_last_car_pos]);
+
 
 	_background.addChild(_sky);
 	_background.addChild(_mountain);
 
 	_background.addChild(_road);
-	_background.addChild(_scene_sprite);
+	_background.addChild(_scene);
+	_background.addChild(_car);
 
 	_spriteScale=0.3*(1/resources_.sprite.textures['car-center.png'].width) ;
 	// _app.ticker.add(delta=>gameLoop(delta));
@@ -159,28 +190,31 @@ function setupGame(){
 // 	_mountain.tilePosition.x+=.5;
 // }
 
-function createQuad(x1, y1, x2, y2, x3, y3, x4, y4){
+function createQuadGeometry(x1, y1, x2, y2, x3, y3, x4, y4){
 
 	var vertices=[x1, y1, x2, y2, x3, y3,
 				  x3, y3, x4, y4,x1, y1];
 
-	var uvs=[];
-	for(var i=0;i<vertices.length;++i){
-		uvs[i]=(vertices[i])/_windowWidth;		
-	}
+	// var uvs=[0,x1,0,x1+.2,1,x1+.2,
+	// 		1,x1+.2,1,x1+.2,0,x1];
+	var uvs=[0,0.5,0,0.5,1,0.5,
+			1,0.5,1,0.5,0,0.5];
+	// for(var i=0;i<vertices.length;++i){
+	// 	uvs[i]=(vertices[i])/_windowWidth;		
+	// }
 
-	var index=[0,1,2,3,4,5];
+	var index=[0,1,2,3,4,5,7,8];
 	
 	let geometry=new PIXI.Geometry();
 	geometry.addAttribute('aVertexPosition',vertices,2);
 	geometry.addAttribute('aTextureCoord',uvs);
 	geometry.addIndex(index);
 
-	
+	return geometry;
 
 	//let shader=PIXI.Shader.from(vertex_shader,frag_shader,{'uColor':new Float32Array([1.,1.,1.,1.]),'uSampler':txt});
 	
-	return new PIXI.Mesh(geometry,_shader_road);
+	// return new PIXI.Mesh(geometry,_shader_road);
 
 	// return new PIXI.SimpleMesh(txt,vertices,uvs,index,PIXI.DRAW_MODES.TRIANLGES);
 

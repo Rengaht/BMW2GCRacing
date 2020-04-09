@@ -1,7 +1,8 @@
 var fps            = 60;                      // how many 'update' frames per second
 var step           = 1/fps;                   // how long is each frame (in seconds)
-var width          = 1024;                    // logical canvas width
-var height         = 768;                     // logical canvas height
+var width          = null;                    // logical canvas width
+var height         = null;                     // logical canvas height
+
 var centrifugal    = 0.3;                     // centrifugal force multiplier when going around curves
 var offRoadDecel   = 0.99;                    // speed multiplier when off road (e.g. you lose 2% speed each update frame)
 var skySpeed       = 0.001;                   // background sky layer scroll speed when going around curve (or up hill)
@@ -10,6 +11,7 @@ var treeSpeed      = 0.003;                   // background tree layer scroll sp
 var skyOffset      = 0;                       // current sky scroll offset
 var hillOffset     = 0;                       // current hill scroll offset
 var treeOffset     = 0;                       // current tree scroll offset
+
 var segments       = [];                      // array of road segments
 var cars           = [];                      // array of cars on the road
 var stats          = Game.stats('fps');       // mr.doobs FPS counter
@@ -239,8 +241,8 @@ function formatTime(dt) {
 
 function render() {
 
-	_scene_sprite.removeChildren();
-	_road.removeChildren();
+	// _scene.removeChildren();
+	// _road.removeChildren();
 
 
   var baseSegment   = findSegment(position);
@@ -280,7 +282,7 @@ function render() {
         (segment.p2.screen.y >= maxy))                  // clip by (already rendered) hill
       continue;
 
-    Render.segment(width, lanes,
+    Render.segment(Math.round(n),width, lanes,
                    segment.p1.screen.x,
                    segment.p1.screen.y,
                    segment.p1.screen.w,
@@ -426,23 +428,23 @@ function resetRoad() {
   segments = [];
 
   addStraight(ROAD.LENGTH.LONG);
-  addLowRollingHills();
+  // addLowRollingHills();
   addSCurves();
   addCurve(ROAD.LENGTH.MEDIUM, ROAD.CURVE.MEDIUM, ROAD.HILL.LOW);
-  addBumps();
-  addLowRollingHills();
+  // addBumps();
+  // addLowRollingHills();
   addCurve(ROAD.LENGTH.LONG*2, ROAD.CURVE.MEDIUM, ROAD.HILL.MEDIUM);
   addStraight();
-  addHill(ROAD.LENGTH.MEDIUM, ROAD.HILL.HIGH);
+  // addHill(ROAD.LENGTH.MEDIUM, ROAD.HILL.HIGH);
   addSCurves();
   addCurve(ROAD.LENGTH.LONG, -ROAD.CURVE.MEDIUM, ROAD.HILL.NONE);
-  addHill(ROAD.LENGTH.LONG, ROAD.HILL.HIGH);
+  // addHill(ROAD.LENGTH.LONG, ROAD.HILL.HIGH);
   addCurve(ROAD.LENGTH.LONG, ROAD.CURVE.MEDIUM, -ROAD.HILL.LOW);
-  addBumps();
-  addHill(ROAD.LENGTH.LONG, -ROAD.HILL.MEDIUM);
+  // addBumps();
+  // addHill(ROAD.LENGTH.LONG, -ROAD.HILL.MEDIUM);
   addStraight();
   addSCurves();
-  addDownhillToEnd();
+  // addDownhillToEnd();
 
   // resetSprites();
   // resetCars();

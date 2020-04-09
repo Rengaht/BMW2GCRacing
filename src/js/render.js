@@ -1,6 +1,6 @@
 var Render = {
 
-  polygon: function(x1, y1, x2, y2, x3, y3, x4, y4, color) {
+  polygon: function(index,x1, y1, x2, y2, x3, y3, x4, y4, color) {
     // ctx.fillStyle = color;
     // ctx.beginPath();
     // ctx.moveTo(x1, y1);
@@ -10,13 +10,23 @@ var Render = {
     // ctx.closePath();
     // ctx.fill();
 
-    let quad=createQuad(x1, y1, x2, y2, x3, y3, x4, y4);
-    _road.addChild(quad);
+    var quad=_road.getChildAt(index);
+    const buffer=quad.geometry.getBuffer('aVertexPosition');
+    buffer.update(new Float32Array([x1, y1, x2, y2, x3, y3,
+          x3, y3, x4, y4,x1, y1]));    
+    const uv=quad.geometry.getBuffer('aTextureCoord');
+    let p=1.0/drawDistance;
+    uv.update(new Float32Array([x1/_windowWidth,index*p,x2/_windowWidth,(index+1)*p,x3/_windowWidth,(index+1)*p,
+                                x3/_windowWidth,(index+1)*p,x4/_windowWidth,(index)*p,x1/_windowWidth,index*p]));
+
+    // uv.update(new Float32Array([0,y1/1024.0,0,y2/1024.0,1,y3/1024.0,
+    //                             1,y3/1024.0,1,y4/1024.0,0,y1/1024.0]));
+    // // console.log(y1);
   },
 
   //---------------------------------------------------------------------------
 
-  segment: function(width, lanes, x1, y1, w1, x2, y2, w2, fog, color) {
+  segment: function(n,width, lanes, x1, y1, w1, x2, y2, w2, fog, color) {
 
     var r1 = Render.rumbleWidth(w1, lanes),
         r2 = Render.rumbleWidth(w2, lanes),
@@ -30,9 +40,9 @@ var Render = {
     // Render.polygon(x1-w1-r1, y1, x1-w1, y1, x2-w2, y2, x2-w2-r2, y2, color.rumble);
     // Render.polygon(x1+w1+r1, y1, x1+w1, y1, x2+w2, y2, x2+w2+r2, y2, color.rumble);
     // Render.polygon(x1-w1,    y1, x1+w1, y1, x2+w2, y2, x2-w2,    y2, color.road);
-    Render.polygon(x2-w2-r2, y2, x1-w1-r1, y1, x1-w1, y1, x2-w2, y2,  color.rumble);
-    Render.polygon(x2+w2+r2, y2, x1+w1+r1, y1, x1+w1, y1, x2+w2, y2,  color.rumble);
-    Render.polygon(x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  color.road);
+    Render.polygon(n*4,  x2-w2-r2, y2, x1-w1-r1, y1, x1-w1, y1, x2-w2, y2,  color.rumble);
+    Render.polygon(n*4+1,x2+w2+r2, y2, x1+w1+r1, y1, x1+w1, y1, x2+w2, y2,  color.rumble);
+    Render.polygon(n*4+2,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  color.road);
     
     if (color.lane) {
       lanew1 = w1*2/lanes;
@@ -40,7 +50,7 @@ var Render = {
       lanex1 = x1 - w1 + lanew1;
       lanex2 = x2 - w2 + lanew2;
       for(lane = 1 ; lane < lanes ; lanex1 += lanew1, lanex2 += lanew2, lane++)
-        Render.polygon(lanex1 - l1/2, y1, lanex1 + l1/2, y1, lanex2 + l2/2, y2, lanex2 - l2/2, y2, color.lane);
+        Render.polygon(n*4+3,lanex1 - l1/2, y1, lanex1 + l1/2, y1, lanex2 + l2/2, y2, lanex2 - l2/2, y2, color.lane);
     }
     
     Render.fog(0, y1, width, y2-y1, fog);
@@ -93,7 +103,7 @@ var Render = {
     sprite.width=destW;
     sprite.height=destH-clipH;
 
-    _scene_sprite.addChild(sprite);
+    _scene.addChild(sprite);
 
   },
 
@@ -110,17 +120,43 @@ var Render = {
     // else
     //   sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_STRAIGHT : SPRITES.PLAYER_STRAIGHT;
 
-    var texture;
+    var next_car_pos;
     if (steer < 0)
-      texture = resources.sprite.textures['car-right.png'];
+      next_car_pos='right';
     else if (steer > 0)
-      texture = resources.sprite.textures['car-center.png'];
+      next_car_pos='center';
     else
-      texture = resources.sprite.textures['car-left.png'];
+      next_car_pos='left';
 
-    sprite=new PIXI.TilingSprite(texture);
+    sprite=_sprite_car[_last_car_pos];
 
-    Render.sprite(width, height, resolution, roadWidth, sprites, sprite, scale, destX, destY + bounce, -0.5, -1);
+    if(_last_car_pos!=next_car_pos){
+      _car.removeChildren();
+      
+      sprite=_sprite_car[next_car_pos];
+      _car.addChild(sprite);
+    }
+    _last_car_pos=next_car_pos;
+
+    // Render.sprite(width, height, resolution, roadWidth, sprites, sprite, scale, destX, destY + bounce, -0.5, -1);
+    var offsetX=-0.5;
+    var offsetY=-1;
+    var clipY=0;
+
+    var destW  = (sprite.texture.width * scale * width/2) * (_spriteScale * roadWidth);
+    var destH  = (sprite.texture.height * scale * width/2) * (_spriteScale * roadWidth);
+
+    destX = destX + (destW * (offsetX || 0));
+    destY = destY + (destH * (offsetY || 0));
+
+    var clipH = clipY ? Math.max(0, destY+destH-clipY) : 0;
+
+    sprite.x=destX;
+    sprite.y=destY;
+    sprite.width=destW;
+    sprite.height=destH-clipH;
+
+    
   },
 
   //---------------------------------------------------------------------------
