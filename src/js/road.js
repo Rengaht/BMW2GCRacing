@@ -20,16 +20,18 @@ var stats          = Game.stats('fps');       // mr.doobs FPS counter
 var background     = null;                    // our background image (loaded below)
 var sprites        = null;                    // our spritesheet (loaded below)
 var resolution     = null;                    // scaling factor to provide resolution independence (computed)
-var roadWidth      = 2000;                    // actually half the roads width, easier math if the road spans from -roadWidth to +roadWidth
+var roadWidth      = 2191;                    // actually half the roads width, easier math if the road spans from -roadWidth to +roadWidth
+
 var segmentLength  = 200;                     // length of a single segment
 var rumbleLength   = 3;                       // number of segments per red/white rumble strip
 var trackLength    = null;                    // z length of entire track (computed)
 var lanes          = 3;                       // number of lanes
 
-var fieldOfView    = 30;                     // angle (degrees) for field of view
+var fieldOfView    = 134;                     // angle (degrees) for field of view
 var cameraHeight   = 1000;                    // z height of camera
 var cameraDepth    = null;                    // z distance camera is from screen (computed)
-var drawDistance   = 500;                     // number of segments to draw
+var drawDistance   = 8;                     // number of segments to draw
+var CameraTilt=-Math.PI/100;
 
 var playerX        = 0;                       // player x offset from center of road (-1 to 1 to stay independent of roadWidth)
 var playerZ        = null;                    // player relative z distance from camera (computed)
@@ -119,7 +121,7 @@ function update(dt) {
     }
   }
 
-  playerX = Util.limit(playerX, -3, 3);     // dont ever let it go too far out of bounds
+  playerX = Util.limit(playerX, -1, 1);     // dont ever let it go too far out of bounds
   speed   = Util.limit(speed, 0, maxSpeed); // or exceed maxSpeed
 
   skyOffset  = Util.increase(skyOffset,  skySpeed  * playerSegment.curve * (position-startPosition)/segmentLength, 1);
@@ -244,6 +246,7 @@ function render() {
 	// _scene.removeChildren();
 	// _road.removeChildren();
 
+	// console.log("---------------render loop---------------");
 
   var baseSegment   = findSegment(position);
   var basePercent   = Util.percentRemaining(position, segmentLength);
@@ -271,14 +274,14 @@ function render() {
     segment.fog    = Util.exponentialFog(n/drawDistance, fogDensity);
     segment.clip   = maxy;
 
-    Util.project(segment.p1, (playerX * roadWidth) - x,      playerY + cameraHeight, position - (segment.looped ? trackLength : 0), cameraDepth, width, height, roadWidth);
-    Util.project(segment.p2, (playerX * roadWidth) - x - dx, playerY + cameraHeight, position - (segment.looped ? trackLength : 0), cameraDepth, width, height, roadWidth);
+    Util.project(n,segment.p1, (playerX * roadWidth) - x,      playerY + cameraHeight, position - (segment.looped ? trackLength : 0), cameraDepth, width, height, roadWidth);
+    Util.project(n+1,segment.p2, (playerX * roadWidth) - x - dx, playerY + cameraHeight, position - (segment.looped ? trackLength : 0), cameraDepth, width, height, roadWidth);
 
     x  = x + dx;
     dx = dx + segment.curve;
 
-    if ((segment.p1.camera.z <= cameraDepth)         || // behind us
-        (segment.p2.screen.y >= segment.p1.screen.y) || // back face cull
+    // if ((segment.p1.camera.z <= cameraDepth)         || // behind us
+    	if(	(segment.p2.screen.y >= segment.p1.screen.y) || // back face cull
         (segment.p2.screen.y >= maxy))                  // clip by (already rendered) hill
       continue;
 
@@ -427,25 +430,29 @@ function addDownhillToEnd(num) {
 function resetRoad() {
   segments = [];
 
-  addStraight(ROAD.LENGTH.LONG);
+  // addStraight(ROAD.LENGTH.LONG);
+  // addStraight(ROAD.LENGTH.SHORT);
+  // addStraight(ROAD.LENGTH.LONG);
   // addLowRollingHills();
-  addSCurves();
-  addCurve(ROAD.LENGTH.MEDIUM, ROAD.CURVE.MEDIUM, ROAD.HILL.LOW);
-  // addBumps();
-  // addLowRollingHills();
-  addCurve(ROAD.LENGTH.LONG*2, ROAD.CURVE.MEDIUM, ROAD.HILL.MEDIUM);
-  addStraight();
-  // addHill(ROAD.LENGTH.MEDIUM, ROAD.HILL.HIGH);
-  addSCurves();
-  addCurve(ROAD.LENGTH.LONG, -ROAD.CURVE.MEDIUM, ROAD.HILL.NONE);
-  // addHill(ROAD.LENGTH.LONG, ROAD.HILL.HIGH);
-  addCurve(ROAD.LENGTH.LONG, ROAD.CURVE.MEDIUM, -ROAD.HILL.LOW);
-  // addBumps();
-  // addHill(ROAD.LENGTH.LONG, -ROAD.HILL.MEDIUM);
-  addStraight();
-  addSCurves();
+  // addSCurves();
+  addCurve(ROAD.LENGTH.MEDIUM, ROAD.CURVE.MEDIUM, ROAD.HILL.NONE);
+  // // addBumps();
+  // // addLowRollingHills();
+  // addCurve(ROAD.LENGTH.LONG*2, ROAD.CURVE.MEDIUM, ROAD.HILL.NONE);
+  // addStraight();
+  // // addHill(ROAD.LENGTH.MEDIUM, ROAD.HILL.HIGH);
+  // addSCurves();
+  // addCurve(ROAD.LENGTH.LONG, -ROAD.CURVE.MEDIUM, ROAD.HILL.NONE);
+  // // addHill(ROAD.LENGTH.LONG, ROAD.HILL.HIGH);
+  // addCurve(ROAD.LENGTH.LONG, ROAD.CURVE.MEDIUM, -ROAD.HILL.NONE);
+  // // addBumps();
+  // // addHill(ROAD.LENGTH.LONG, -ROAD.HILL.MEDIUM);
+  // addStraight();
+  // addSCurves();
   // addDownhillToEnd();
 
+  // addStraight(ROAD.LENGTH.LONG);
+  // addStraight(ROAD.LENGTH.LONG);
   // resetSprites();
   // resetCars();
 

@@ -14,6 +14,8 @@ var RoadRatio=.6;
 var MoutainRatio=.124;
 var _spriteScale;
 
+var PolyPerSeg=4+(lanes-1);
+
 
 function init(){
 
@@ -58,6 +60,7 @@ function loadTexture(){
 			.add('road','asset/img/texture-04.png')
 			.add('side_road','asset/img/texture-01.png')
 			.add('sprite','asset/img/sprite.json')
+			.add('ref','asset/img/ref.png')
 			.load(loadFinish);
 
 }
@@ -68,32 +71,22 @@ function loadFinish(loader,resources_){
 	_background=new Container();
 	_app.stage.addChild(_background);
 
-	_sky=new PIXI.TilingSprite(resources.sky.texture,_windowWidth,_windowHeight*(1.0-RoadRatio));	
+	_sky=new PIXI.TilingSprite(resources.sky.texture,_windowWidth,_windowHeight*(1.0-RoadRatio+yproj[drawDistance]));	
 	_sky.tileScale.x=_sky.tileScale.y=_windowWidth/resources.sky.texture.width;
 	
 	_mountain=new PIXI.TilingSprite(resources.mountain.texture,_windowWidth,_windowHeight*MoutainRatio);
-	_mountain.y=_windowHeight*(1.0-RoadRatio-MoutainRatio);
+	_mountain.y=_windowHeight*(1.0-RoadRatio+yproj[drawDistance]-MoutainRatio);
 	_mountain.tileScale.x=_mountain.tileScale.y=_windowHeight*MoutainRatio/resources.mountain.texture.height;	
 	
-	// _road=new PIXI.Sprite(resources.road.texture);
-	// _road.y=_windowHeight*(1.0-RoadRatio);
+	_ref=new PIXI.TilingSprite(resources.ref.texture,_windowWidth,_windowHeight);
+	_ref.tileScale.x=_ref.tileScale.y=Math.min(_windowWidth/resources.ref.texture.width,_windowHeight/resources.ref.texture.height);
+	_ref.tilePosition.x=_windowWidth*.5-_ref.tileScale.x*resources.ref.texture.width*.5;
+	// _ref.tilePosition.y=_windowHeight*(-.5+_ref.tileScale.y*.5);
 
-	var centerX=_windowWidth/2;
-	var centerY=_windowHeight*(1.0-RoadRatio);
-	var ang_=.2;
-	var ang2_=.6;
-		
-	// _road=createQuad(resources.road.texture,
-	// 		new PIXI.Point(centerX-ang_*_windowWidth,centerY),
-	// 		new PIXI.Point(centerX-ang2_*_windowWidth,centerY+_windowHeight*.3),
-	// 		new PIXI.Point(centerX+ang2_*_windowWidth,centerY+_windowHeight*.3),
-	// 		new PIXI.Point(centerX+ang_*_windowWidth,centerY));
-	
+	// _background.addChild(_ref);
+
 	_road=new Container();
-	// _road=PIXI.projection.Sprite2s(resources.road.texture);
-	// _road.width=_windowWidth;
-	// _road.height=_windowHeight;
-	// _road.anchor.set(0.5,1.0);
+	
 	let vertex_shader='precision highp float;\
 						attribute vec2 aVertexPosition;\
 						attribute vec2 aTextureCoord;\
@@ -107,14 +100,17 @@ function loadFinish(loader,resources_){
 							gl_Position.z = 0.0;\
 							vTextureCoord = aTextureCoord;\
 						}';
-						// vTextureCoord = (uTextureMatrix * vec3(aTextureCoord, 1.0)).xy;\
-	let frag_shader='varying vec2 vTextureCoord;\
-						uniform vec4 uColor;\
-						uniform sampler2D uSampler;\
-						void main(void)\
-						{\
-							gl_FragColor =texture2D(uSampler, vTextureCoord) * uColor;\
-						}';
+						// vTextureCoord = (uTextureMatrix * vec3(aTextureCoord, 1.0)).xy;
+	let frag_shader="varying vec2 vTextureCoord;\
+					uniform vec4 uColor;\
+					uniform sampler2D uSampler;\
+					void main(void){\
+						if(vTextureCoord.x<1.0){ gl_FragColor=vec4(0.72,0.72,0.72,1.0);}\
+						else if(vTextureCoord.x<2.0){ gl_FragColor=vec4(0.59,0.59,0.59,1.0);}\
+						else if(vTextureCoord.x<3.0){ gl_FragColor=vec4(1.0,1.0,1.0,1.0);}\
+						else if(vTextureCoord.x<4.0){ gl_FragColor=vec4(0.5,0.91,0.56,1.0);}\
+						else if(vTextureCoord.x<5.0){ gl_FragColor=vec4(0.26,0.78,0.5,1.0);}\
+					}";
 						//gl_FragColor = texture2D(uSampler, vTextureCoord) * uColor;\
 							
 	let uniforms={
@@ -124,7 +120,7 @@ function loadFinish(loader,resources_){
 	_shader_road=PIXI.Shader.from(vertex_shader,frag_shader,uniforms);
 	
  	for(var n=0;n<drawDistance;n++){
- 		for(var i=0;i<4;++i){
+ 		for(var i=0;i<PolyPerSeg;++i){
  			_road.addChild(new PIXI.Mesh(createQuadGeometry(n/drawDistance,0,
  															0,0,0,0,0,0),
  										_shader_road));
@@ -154,7 +150,7 @@ function loadFinish(loader,resources_){
 	_background.addChild(_scene);
 	_background.addChild(_car);
 
-	_spriteScale=0.3*(1/resources_.sprite.textures['car-center.png'].width) ;
+	_spriteScale=0.4*(1/resources.sprite.textures['car-center.png'].width);
 	// _app.ticker.add(delta=>gameLoop(delta));
 	setupGame();
 
@@ -232,19 +228,21 @@ function createQuadGeometry(x1, y1, x2, y2, x3, y3, x4, y4){
   options       = options || {};
   // canvas.width  = width  = Util.toInt(options.width,          width);
   // canvas.height = height = Util.toInt(options.height,         height);
-  lanes                  = Util.toInt(options.lanes,          lanes);
-  roadWidth              = Util.toInt(options.roadWidth,      roadWidth);
-  cameraHeight           = Util.toInt(options.cameraHeight,   cameraHeight);
-  drawDistance           = Util.toInt(options.drawDistance,   drawDistance);
-  fogDensity             = Util.toInt(options.fogDensity,     fogDensity);
-  fieldOfView            = Util.toInt(options.fieldOfView,    fieldOfView);
-  segmentLength          = Util.toInt(options.segmentLength,  segmentLength);
-  rumbleLength           = Util.toInt(options.rumbleLength,   rumbleLength);
   cameraDepth            = 1 / Math.tan((fieldOfView/2) * Math.PI/180);
   playerZ                = (cameraHeight * cameraDepth);
   resolution             = height/480;
+  roadWidth				 = height*RoadRatio/cameraDepth;
+  // roadWidth				 = width*0.65/(cameraDepth/segmentLength*(width/2));
+  
+  // let zfar=(height*RoadRatio*Math.cos(CameraTilt)*cameraHeight*cameraDepth)/(height*.01);
+  // segmentLength			 = (zfar)/drawDistance;
   // refreshTweakUI();
-
+  for(var i=0;i<drawDistance+1;++i){
+  	// if(i==0) dk.push(1);
+  	dk.push((yproj[i])*((i*segmentLength-cameraDepth)/cameraHeight));
+  }
   if ((segments.length==0) || (options.segmentLength) || (options.rumbleLength))
     resetRoad(); // only rebuild road when necessary
 }
+
+

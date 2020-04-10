@@ -1,6 +1,9 @@
 //=========================================================================
 // general purpose helpers (mostly math)
 //=========================================================================
+var yproj=[1,.67,.41,.24,.13,.07,.04,.032,.022];
+var dk=[];
+
 
 var Util = {
 
@@ -27,14 +30,50 @@ var Util = {
     return result;
   },
 
-  project: function(p, cameraX, cameraY, cameraZ, cameraDepth, width, height, roadWidth) {
+  project: function(index,p, cameraX, cameraY, cameraZ, cameraDepth, width, height, roadWidth) {
+
+
+   //  p.camera.x     = (p.world.x || 0) - cameraX;
+   //  p.camera.y     = (p.world.y || 0) - cameraY;
+   //  p.camera.z     = (p.world.z || 0) - cameraZ;
+    
+   // // rotate by x-axis 
+   //  let rx=p.camera.x;
+   //  let ry=p.camera.y*Math.cos(CameraTilt)-p.camera.z*Math.sin(CameraTilt);
+   //  let rz=p.camera.y*Math.sin(CameraTilt)+p.camera.z*Math.cos(CameraTilt);
+
+   //  p.camera.x=rx;
+   //  p.camera.y=ry;
+   //  p.camera.z=rz;
+
+   //  p.screen.scale = cameraDepth/p.camera.z;
+   //  p.screen.x     = Math.round((width/2)  + (p.screen.scale * p.camera.x  * width/2));
+   //  p.screen.y     = Math.round((height*(1.0-RoadRatio)) - (p.screen.scale *  p.camera.y  * height*RoadRatio));
+   //  p.screen.w     = Math.round(             (p.screen.scale * roadWidth   * width/2));
+
     p.camera.x     = (p.world.x || 0) - cameraX;
     p.camera.y     = (p.world.y || 0) - cameraY;
     p.camera.z     = (p.world.z || 0) - cameraZ;
+
     p.screen.scale = cameraDepth/p.camera.z;
-    p.screen.x     = Math.round((width/2)  + (p.screen.scale * p.camera.x  * width/2));
-    p.screen.y     = Math.round((height/2) - (p.screen.scale * p.camera.y  * height/2));
-    p.screen.w     = Math.round(             (p.screen.scale * roadWidth   * width/2));
+
+    let xp=p.camera.x* p.screen.scale;
+    let yp=p.camera.y*dk[index]/p.camera.z;
+    // console.log("project: "+index+" "+xp+" , "+yp);
+    p.screen.x     = Math.round((width/2)  + (xp* width/2));
+    p.screen.y     = Math.round((height*(1.0-RoadRatio)) - (yp * height*RoadRatio));
+    p.screen.w     = Math.round(( yp * height*RoadRatio/cameraDepth));
+    // p.screen.w     = Math.round(( p.screen.scale*roadWidth * width/2));
+
+    //  p.camera.x     = (p.world.x || 0) - cameraX;
+    // p.camera.y     = (p.world.y || 0) - cameraY;
+    // p.camera.z     = (p.world.z || 0) - cameraZ;
+
+    // p.screen.scale = cameraDepth/p.camera.z;
+   
+    // p.screen.x     = Math.round((width/2)  + (p.screen.scale * p.camera.x  * width/2));
+    // p.screen.y     = Math.round((height*(1.0-RoadRatio)) - (p.screen.scale * p.camera.y  * height*RoadRatio));
+    // p.screen.w     = Math.round(             (p.screen.scale * roadWidth   * width/2));
   },
 
   overlap: function(x1, w1, x2, w2, percent) {

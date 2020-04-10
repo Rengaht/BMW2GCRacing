@@ -16,12 +16,25 @@ var Render = {
           x3, y3, x4, y4,x1, y1]));    
     const uv=quad.geometry.getBuffer('aTextureCoord');
     let p=1.0/drawDistance;
-    uv.update(new Float32Array([x1/_windowWidth,index*p,x2/_windowWidth,(index+1)*p,x3/_windowWidth,(index+1)*p,
-                                x3/_windowWidth,(index+1)*p,x4/_windowWidth,(index)*p,x1/_windowWidth,index*p]));
-
+    index%=drawDistance;
+    // uv.update(new Float32Array([x1/_windowWidth,index*p,
+    //                             x2/_windowWidth,(index+1)*p,
+    //                             x3/_windowWidth,(index+1)*p,
+                                
+    //                             x3/_windowWidth,(index+1)*p,
+    //                             x4/_windowWidth,(index)*p,
+    //                             x1/_windowWidth,index*p]));
+    // console.log(index%2);
+    let i=Math.floor(index)%8;
+    uv.update(new Float32Array([color,index*p,
+                                color,(index+1)*p,
+                                color,(index+1)*p,                                
+                                color,(index+1)*p,
+                                color,(index)*p,
+                                color,index*p]));
     // uv.update(new Float32Array([0,y1/1024.0,0,y2/1024.0,1,y3/1024.0,
     //                             1,y3/1024.0,1,y4/1024.0,0,y1/1024.0]));
-    // // console.log(y1);
+   
   },
 
   //---------------------------------------------------------------------------
@@ -36,13 +49,14 @@ var Render = {
     
     // ctx.fillStyle = color.grass;
     // ctx.fillRect(0, y2, width, y1 - y2);
+    Render.polygon(n*PolyPerSeg,  0, y2, 0, y1,width,y1,width,y2, 3+n%2);
     
     // Render.polygon(x1-w1-r1, y1, x1-w1, y1, x2-w2, y2, x2-w2-r2, y2, color.rumble);
     // Render.polygon(x1+w1+r1, y1, x1+w1, y1, x2+w2, y2, x2+w2+r2, y2, color.rumble);
     // Render.polygon(x1-w1,    y1, x1+w1, y1, x2+w2, y2, x2-w2,    y2, color.road);
-    Render.polygon(n*4,  x2-w2-r2, y2, x1-w1-r1, y1, x1-w1, y1, x2-w2, y2,  color.rumble);
-    Render.polygon(n*4+1,x2+w2+r2, y2, x1+w1+r1, y1, x1+w1, y1, x2+w2, y2,  color.rumble);
-    Render.polygon(n*4+2,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  color.road);
+    Render.polygon(n*PolyPerSeg+1,  x2-w2-r2, y2, x1-w1-r1, y1, x1-w1, y1, x2-w2, y2,  2);
+    Render.polygon(n*PolyPerSeg+2,x2+w2+r2, y2, x1+w1+r1, y1, x1+w1, y1, x2+w2, y2,  2);
+    Render.polygon(n*PolyPerSeg+3,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  n%2);
     
     if (color.lane) {
       lanew1 = w1*2/lanes;
@@ -50,7 +64,7 @@ var Render = {
       lanex1 = x1 - w1 + lanew1;
       lanex2 = x2 - w2 + lanew2;
       for(lane = 1 ; lane < lanes ; lanex1 += lanew1, lanex2 += lanew2, lane++)
-        Render.polygon(n*4+3,lanex1 - l1/2, y1, lanex1 + l1/2, y1, lanex2 + l2/2, y2, lanex2 - l2/2, y2, color.lane);
+        Render.polygon(n*PolyPerSeg+3+lane,lanex1 - l1/2, y1, lanex1 + l1/2, y1, lanex2 + l2/2, y2, lanex2 - l2/2, y2, 2);
     }
     
     Render.fog(0, y1, width, y2-y1, fog);
@@ -120,13 +134,14 @@ var Render = {
     // else
     //   sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_STRAIGHT : SPRITES.PLAYER_STRAIGHT;
 
+    // switch car sprite
     var next_car_pos;
     if (steer < 0)
-      next_car_pos='right';
-    else if (steer > 0)
-      next_car_pos='center';
-    else
       next_car_pos='left';
+    else if (steer > 0)
+      next_car_pos='right';
+    else
+      next_car_pos='center';
 
     sprite=_sprite_car[_last_car_pos];
 
