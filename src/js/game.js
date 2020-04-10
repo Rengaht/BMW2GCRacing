@@ -237,9 +237,9 @@ function createQuadGeometry(x1, y1, x2, y2, x3, y3, x4, y4){
   // let zfar=(height*RoadRatio*Math.cos(CameraTilt)*cameraHeight*cameraDepth)/(height*.01);
   // segmentLength			 = (zfar)/drawDistance;
   // refreshTweakUI();
-  for(var i=0;i<drawDistance+1;++i){
+  for(var i=0;i<drawSeg+1;++i){
   	// if(i==0) dk.push(1);
-  	dk.push((yproj[i])*((i*segmentLength-cameraDepth)/cameraHeight));
+  	dk.push((yproj[i])*((i*segmentLength*segPerSeg-cameraDepth)/cameraHeight));
   }
   if ((segments.length==0) || (options.segmentLength) || (options.rumbleLength))
     resetRoad(); // only rebuild road when necessary

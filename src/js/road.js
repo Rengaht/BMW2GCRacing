@@ -22,7 +22,7 @@ var sprites        = null;                    // our spritesheet (loaded below)
 var resolution     = null;                    // scaling factor to provide resolution independence (computed)
 var roadWidth      = 2191;                    // actually half the roads width, easier math if the road spans from -roadWidth to +roadWidth
 
-var segmentLength  = 200;                     // length of a single segment
+var segmentLength  = 20;                     // length of a single segment
 var rumbleLength   = 3;                       // number of segments per red/white rumble strip
 var trackLength    = null;                    // z length of entire track (computed)
 var lanes          = 3;                       // number of lanes
@@ -30,7 +30,11 @@ var lanes          = 3;                       // number of lanes
 var fieldOfView    = 134;                     // angle (degrees) for field of view
 var cameraHeight   = 1000;                    // z height of camera
 var cameraDepth    = null;                    // z distance camera is from screen (computed)
-var drawDistance   = 8;                     // number of segments to draw
+var drawDistance   = 80;                     // number of segments to draw
+
+var segPerSeg=10;
+var drawSeg=8;
+
 var CameraTilt=-Math.PI/100;
 
 var playerX        = 0;                       // player x offset from center of road (-1 to 1 to stay independent of roadWidth)
@@ -275,7 +279,7 @@ function render() {
     segment.clip   = maxy;
 
     Util.project(n,segment.p1, (playerX * roadWidth) - x,      playerY + cameraHeight, position - (segment.looped ? trackLength : 0), cameraDepth, width, height, roadWidth);
-    Util.project(n+1,segment.p2, (playerX * roadWidth) - x - dx, playerY + cameraHeight, position - (segment.looped ? trackLength : 0), cameraDepth, width, height, roadWidth);
+    Util.project((n+1),segment.p2, (playerX * roadWidth) - x - dx, playerY + cameraHeight, position - (segment.looped ? trackLength : 0), cameraDepth, width, height, roadWidth);
 
     x  = x + dx;
     dx = dx + segment.curve;
@@ -431,11 +435,11 @@ function resetRoad() {
   segments = [];
 
   // addStraight(ROAD.LENGTH.LONG);
-  // addStraight(ROAD.LENGTH.SHORT);
+  addStraight(ROAD.LENGTH.SHORT);
   // addStraight(ROAD.LENGTH.LONG);
   // addLowRollingHills();
   // addSCurves();
-  addCurve(ROAD.LENGTH.MEDIUM, ROAD.CURVE.MEDIUM, ROAD.HILL.NONE);
+  addCurve(ROAD.LENGTH.SHORT, ROAD.CURVE.HARD, ROAD.HILL.NONE);
   // // addBumps();
   // // addLowRollingHills();
   // addCurve(ROAD.LENGTH.LONG*2, ROAD.CURVE.MEDIUM, ROAD.HILL.NONE);

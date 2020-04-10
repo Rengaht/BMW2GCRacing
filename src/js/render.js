@@ -49,14 +49,14 @@ var Render = {
     
     // ctx.fillStyle = color.grass;
     // ctx.fillRect(0, y2, width, y1 - y2);
-    Render.polygon(n*PolyPerSeg,  0, y2, 0, y1,width,y1,width,y2, 3+n%2);
+    Render.polygon(n*PolyPerSeg,  0, y2, 0, y1,width,y1,width,y2, 3+Math.floor(n/segPerSeg)%2);
     
     // Render.polygon(x1-w1-r1, y1, x1-w1, y1, x2-w2, y2, x2-w2-r2, y2, color.rumble);
     // Render.polygon(x1+w1+r1, y1, x1+w1, y1, x2+w2, y2, x2+w2+r2, y2, color.rumble);
     // Render.polygon(x1-w1,    y1, x1+w1, y1, x2+w2, y2, x2-w2,    y2, color.road);
     Render.polygon(n*PolyPerSeg+1,  x2-w2-r2, y2, x1-w1-r1, y1, x1-w1, y1, x2-w2, y2,  2);
     Render.polygon(n*PolyPerSeg+2,x2+w2+r2, y2, x1+w1+r1, y1, x1+w1, y1, x2+w2, y2,  2);
-    Render.polygon(n*PolyPerSeg+3,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  n%2);
+    Render.polygon(n*PolyPerSeg+3,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  Math.floor(n/segPerSeg)%2);
     
     if (color.lane) {
       lanew1 = w1*2/lanes;

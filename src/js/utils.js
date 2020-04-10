@@ -58,8 +58,15 @@ var Util = {
     p.screen.scale = cameraDepth/p.camera.z;
 
     let xp=p.camera.x* p.screen.scale;
-    let yp=p.camera.y*dk[index]/p.camera.z;
-    // console.log("project: "+index+" "+xp+" , "+yp);
+
+    let iseg=Math.floor(index/segPerSeg);
+    let inter=index/segPerSeg-iseg;
+    let d_=Util.interpolate(dk[iseg],dk[iseg+1],inter);
+
+    let yp=p.camera.y*d_/p.camera.z;
+    
+    // console.log("project: "+index+" "+d_);
+
     p.screen.x     = Math.round((width/2)  + (xp* width/2));
     p.screen.y     = Math.round((height*(1.0-RoadRatio)) - (yp * height*RoadRatio));
     p.screen.w     = Math.round(( yp * height*RoadRatio/cameraDepth));
