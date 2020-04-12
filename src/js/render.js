@@ -13,7 +13,7 @@ var Render = {
     var quad=_road.getChildAt(index);
     const buffer=quad.geometry.getBuffer('aVertexPosition');
     buffer.update(new Float32Array([x1, y1, x2, y2, x3, y3,
-          x3, y3, x4, y4,x1, y1]));    
+                                    x3, y3, x4, y4,x1, y1]));    
     const uv=quad.geometry.getBuffer('aTextureCoord');
     let p=1.0/drawDistance;
     index%=drawDistance;
@@ -39,7 +39,7 @@ var Render = {
 
   //---------------------------------------------------------------------------
 
-  segment: function(n,width, lanes, x1, y1, w1, x2, y2, w2, fog, color) {
+  segment: function(index,width, lanes, x1, y1, w1, x2, y2, w2, fog, color) {
 
     var r1 = Render.rumbleWidth(w1, lanes),
         r2 = Render.rumbleWidth(w2, lanes),
@@ -49,14 +49,15 @@ var Render = {
     
     // ctx.fillStyle = color.grass;
     // ctx.fillRect(0, y2, width, y1 - y2);
-    Render.polygon(n*PolyPerSeg,  0, y2, 0, y1,width,y1,width,y2, 3+Math.floor(n/segPerSeg)%2);
+    let n=index%drawDistance;
+    Render.polygon(n*PolyPerSeg,  0, y2, 0, y1,width,y1,width,y2, 3+Math.floor(index/segPerSeg)%2);
     
     // Render.polygon(x1-w1-r1, y1, x1-w1, y1, x2-w2, y2, x2-w2-r2, y2, color.rumble);
     // Render.polygon(x1+w1+r1, y1, x1+w1, y1, x2+w2, y2, x2+w2+r2, y2, color.rumble);
     // Render.polygon(x1-w1,    y1, x1+w1, y1, x2+w2, y2, x2-w2,    y2, color.road);
     Render.polygon(n*PolyPerSeg+1,  x2-w2-r2, y2, x1-w1-r1, y1, x1-w1, y1, x2-w2, y2,  2);
     Render.polygon(n*PolyPerSeg+2,x2+w2+r2, y2, x1+w1+r1, y1, x1+w1, y1, x2+w2, y2,  2);
-    Render.polygon(n*PolyPerSeg+3,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  Math.floor(n/segPerSeg)%2);
+    Render.polygon(n*PolyPerSeg+3,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  Math.floor(index/segPerSeg)%2);
     
     if (color.lane) {
       lanew1 = w1*2/lanes;
@@ -72,24 +73,26 @@ var Render = {
 
   //---------------------------------------------------------------------------
 
-  background: function(background, width, height, layer, rotation, offset) {
+  background: function(background_sprite, width, height, rotation, offset) {
 
     rotation = rotation || 0;
     offset   = offset   || 0;
 
-    var imageW = layer.w/2;
-    var imageH = layer.h;
+    var imageW = background_sprite.texture.width/2;
+    var imageH = background_sprite.texture.height;
 
-    var sourceX = layer.x + Math.floor(layer.w * rotation);
-    var sourceY = layer.y
-    var sourceW = Math.min(imageW, layer.x+layer.w-sourceX);
-    var sourceH = imageH;
+    var sourceX = Math.floor(background_sprite.texture.width * rotation);
+    var sourceY = 0;
+    // var sourceW = Math.min(imageW, layer.x+layer.w-sourceX);
+    // var sourceH = imageH;
     
     var destX = 0;
     var destY = offset;
-    var destW = Math.floor(width * (sourceW/imageW));
-    var destH = height;
+    // var destW = Math.floor(width * (sourceW/imageW));
+    // var destH = height;
 
+
+    background_sprite.tilePosition.x=-sourceX;
     //TODO:
     // ctx.drawImage(background, sourceX, sourceY, sourceW, sourceH, destX, destY, destW, destH);
     // if (sourceW < imageW)
@@ -101,8 +104,10 @@ var Render = {
   sprite: function(width, height, resolution, roadWidth, sprites, sprite, scale, destX, destY, offsetX, offsetY, clipY) {
 
                     //  scale for projection AND relative to roadWidth (for tweakUI)
-    var destW  = (sprite.texture.width * scale * width/2) * (_spriteScale * roadWidth);
-    var destH  = (sprite.texture.height * scale * width/2) * (_spriteScale * roadWidth);
+    // var destW  = (sprite.texture.width * scale * width/2)* (_spriteScale * roadWidth);
+    // var destH  = (sprite.texture.height * scale* width/2) * (_spriteScale * roadWidth);
+    var destW  = (sprite.texture.width * scale *roadWidth*2);
+    var destH  = (sprite.texture.height * scale*roadWidth*2);
 
     destX = destX + (destW * (offsetX || 0));
     destY = destY + (destH * (offsetY || 0));
@@ -116,8 +121,14 @@ var Render = {
     sprite.y=destY;
     sprite.width=destW;
     sprite.height=destH-clipH;
+    if(sprite.texture.textureCacheIds[0]=='board-2.png'){
+      // console.log(sprite.y+","+sprite.height);
+    }
+    if(sprite.scale.y<0) sprite.scale.y=-sprite.scale.y;
+      // return;
 
-    _scene.addChild(sprite);
+    sprite.visible=true;
+    // _scene.addChild(sprite);
 
   },
 
@@ -137,9 +148,9 @@ var Render = {
     // switch car sprite
     var next_car_pos;
     if (steer < 0)
-      next_car_pos='left';
-    else if (steer > 0)
       next_car_pos='right';
+    else if (steer > 0)
+      next_car_pos='left';
     else
       next_car_pos='center';
 

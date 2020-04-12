@@ -71,11 +71,11 @@ function loadFinish(loader,resources_){
 	_background=new Container();
 	_app.stage.addChild(_background);
 
-	_sky=new PIXI.TilingSprite(resources.sky.texture,_windowWidth,_windowHeight*(1.0-RoadRatio+yproj[drawDistance]));	
+	_sky=new PIXI.TilingSprite(resources.sky.texture,_windowWidth,_windowHeight*(1.0-RoadRatio+yproj[drawDistance/segPerSeg]));	
 	_sky.tileScale.x=_sky.tileScale.y=_windowWidth/resources.sky.texture.width;
 	
 	_mountain=new PIXI.TilingSprite(resources.mountain.texture,_windowWidth,_windowHeight*MoutainRatio);
-	_mountain.y=_windowHeight*(1.0-RoadRatio+yproj[drawDistance]-MoutainRatio);
+	_mountain.y=_windowHeight*(1.0-RoadRatio+yproj[drawDistance/segPerSeg]-MoutainRatio);
 	_mountain.tileScale.x=_mountain.tileScale.y=_windowHeight*MoutainRatio/resources.mountain.texture.height;	
 	
 	_ref=new PIXI.TilingSprite(resources.ref.texture,_windowWidth,_windowHeight);
@@ -132,6 +132,7 @@ function loadFinish(loader,resources_){
 
 	// _car=new PIXI.Sprite(resources_.sprite.textures['car-center.png']);
 	_scene=new Container();
+	_scene.sortableChildren=true;
 	_car=new Container();
 	
 	let car_center=new PIXI.Sprite(resources_.sprite.textures['car-center.png']);
@@ -173,6 +174,16 @@ function setupGame(){
 	  ready: function() {
 	    reset();
 	   	console.log("game ready !");
+
+
+	   	hud={
+			speed:            { value: null, dom: Dom.get('speed_value')            },
+			current_lap_time: { value: null, dom: Dom.get('current_lap_time_value') },
+			last_lap_time:    { value: null, dom: Dom.get('last_lap_time_value')    },
+			fast_lap_time:    { value: null, dom: Dom.get('fast_lap_time_value')    },
+			playerx:    { value: null, dom: Dom.get('playerx_value')    }
+		};
+
 	    Dom.storage.fast_lap_time = Dom.storage.fast_lap_time || 180;
 	    updateHud('fast_lap_time', formatTime(Util.toFloat(Dom.storage.fast_lap_time)));
 	  }
@@ -199,12 +210,12 @@ function createQuadGeometry(x1, y1, x2, y2, x3, y3, x4, y4){
 	// 	uvs[i]=(vertices[i])/_windowWidth;		
 	// }
 
-	var index=[0,1,2,3,4,5,7,8];
+	var index=[0,1,2,3,4,5,6];
 	
 	let geometry=new PIXI.Geometry();
 	geometry.addAttribute('aVertexPosition',vertices,2);
 	geometry.addAttribute('aTextureCoord',uvs);
-	geometry.addIndex(index);
+	// geometry.addIndex(index);
 
 	return geometry;
 
@@ -239,7 +250,8 @@ function createQuadGeometry(x1, y1, x2, y2, x3, y3, x4, y4){
   // refreshTweakUI();
   for(var i=0;i<drawSeg+1;++i){
   	// if(i==0) dk.push(1);
-  	dk.push((yproj[i])*((i*segmentLength*segPerSeg-cameraDepth)/cameraHeight));
+  	// else 
+  		dk.push((yproj[i])*(((i+1)*segmentLength*segPerSeg-cameraDepth)/cameraHeight));
   }
   if ((segments.length==0) || (options.segmentLength) || (options.rumbleLength))
     resetRoad(); // only rebuild road when necessary

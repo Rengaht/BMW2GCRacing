@@ -55,15 +55,17 @@ var Util = {
     p.camera.y     = (p.world.y || 0) - cameraY;
     p.camera.z     = (p.world.z || 0) - cameraZ;
 
-    p.screen.scale = cameraDepth/p.camera.z;
-
-    let xp=p.camera.x* p.screen.scale;
-
     let iseg=Math.floor(index/segPerSeg);
     let inter=index/segPerSeg-iseg;
     let d_=Util.interpolate(dk[iseg],dk[iseg+1],inter);
 
+    p.screen.scale = d_/p.camera.z;
+
+    let xp=p.camera.x*cameraDepth/p.camera.z;
+
+    
     let yp=p.camera.y*d_/p.camera.z;
+    // let yp=p.camera.y* p.screen.scale;
     
     // console.log("project: "+index+" "+d_);
 
@@ -286,3 +288,18 @@ var COLORS = {
   START:  { road: 'white',   grass: 'white',   rumble: 'white'                     },
   FINISH: { road: 'black',   grass: 'black',   rumble: 'black'                     }
 };
+
+var SPRITES={
+  COIN:         {src:'logo.png'},
+  TREE1:        {src:'tree-1.png'},
+  TREE2:        {src:'tree-2.png'},
+  SIGN_LEFT:    {src:'sign-left.png'},
+  SIGN_RIGHT:   {src:'sign-right.png'},
+  CONE:         {src:'cone.png'},
+  OBSTACLE:     {src:'obstacle.png'},
+  BOARD1:       {src:'board-1.png'},
+  BOARD2:       {src:'board-2.png'}
+};
+
+
+

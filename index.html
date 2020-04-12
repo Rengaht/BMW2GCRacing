@@ -8,20 +8,37 @@
 	<script src="src/lib/pixi/5.2.0/pixi.js"></script>
 	<script src="src/lib/pixi/5.2.0/pixi-legacy.js"></script>
 	<!-- <script src="src/lib/projection/pixi-projection.js"></script> -->
-	
 	<script src="src/js/utils.js"></script>
 	<script src="src/js/render.js"></script>
 	<script src="src/js/road.js"></script>
-	<script src="src/js/game.js"></script>
 	
 </head>
 <body onload="init();">
-	
-	
+	 
 	
 	<div id="_frame"></div>
 	<div id="_stats"></div>
+	<div id="hud">
+      <span id="playerx" class="hud">
+      	<span id="playerx_value" class="value">0</span>
+      </span>
+      <span id="speed" class="hud">
+      	<span id="speed_value" class="value">0</span> mph
+      </span>
+      <span id="current_lap_time" class="hud">Time: 
+      	<span id="current_lap_time_value" class="value">0.0</span>
+      </span> 
+      <span id="last_lap_time" class="hud">Last Lap: 
+      	<span id="last_lap_time_value" class="value">0.0</span>
+      </span>
+      <span id="fast_lap_time" class="hud">Fastest Lap: 
+      	<span id="fast_lap_time_value" class="value">0.0</span>
+      </span>
+    </div>
 	
+	<script src="src/js/game.js"></script>
+	
+
 </body>
 
 </html>
