@@ -1,14 +1,6 @@
 var Render = {
 
   polygon: function(index,x1, y1, x2, y2, x3, y3, x4, y4, color) {
-    // ctx.fillStyle = color;
-    // ctx.beginPath();
-    // ctx.moveTo(x1, y1);
-    // ctx.lineTo(x2, y2);
-    // ctx.lineTo(x3, y3);
-    // ctx.lineTo(x4, y4);
-    // ctx.closePath();
-    // ctx.fill();
 
     var quad=_road.getChildAt(index);
     const buffer=quad.geometry.getBuffer('aVertexPosition');
@@ -17,14 +9,7 @@ var Render = {
     const uv=quad.geometry.getBuffer('aTextureCoord');
     let p=1.0/drawDistance;
     index%=drawDistance;
-    // uv.update(new Float32Array([x1/_windowWidth,index*p,
-    //                             x2/_windowWidth,(index+1)*p,
-    //                             x3/_windowWidth,(index+1)*p,
-                                
-    //                             x3/_windowWidth,(index+1)*p,
-    //                             x4/_windowWidth,(index)*p,
-    //                             x1/_windowWidth,index*p]));
-    // console.log(index%2);
+
     let i=Math.floor(index)%8;
     uv.update(new Float32Array([color,index*p,
                                 color,(index+1)*p,
@@ -32,8 +17,6 @@ var Render = {
                                 color,(index+1)*p,
                                 color,(index)*p,
                                 color,index*p]));
-    // uv.update(new Float32Array([0,y1/1024.0,0,y2/1024.0,1,y3/1024.0,
-    //                             1,y3/1024.0,1,y4/1024.0,0,y1/1024.0]));
    
   },
 
@@ -47,17 +30,12 @@ var Render = {
         l2 = Render.laneMarkerWidth(w2, lanes),
         lanew1, lanew2, lanex1, lanex2, lane;
     
-    // ctx.fillStyle = color.grass;
-    // ctx.fillRect(0, y2, width, y1 - y2);
     let n=index%drawDistance;
-    Render.polygon(n*PolyPerSeg,  0, y2, 0, y1,width,y1,width,y2, 3+Math.floor(index/segPerSeg)%2);
+    Render.polygon(n*PolyPerSeg,  0, y2, 0, y1,width,y1,width,y2, 3+Math.floor(index/segmentPerDraw)%2);
     
-    // Render.polygon(x1-w1-r1, y1, x1-w1, y1, x2-w2, y2, x2-w2-r2, y2, color.rumble);
-    // Render.polygon(x1+w1+r1, y1, x1+w1, y1, x2+w2, y2, x2+w2+r2, y2, color.rumble);
-    // Render.polygon(x1-w1,    y1, x1+w1, y1, x2+w2, y2, x2-w2,    y2, color.road);
     Render.polygon(n*PolyPerSeg+1,  x2-w2-r2, y2, x1-w1-r1, y1, x1-w1, y1, x2-w2, y2,  2);
     Render.polygon(n*PolyPerSeg+2,x2+w2+r2, y2, x1+w1+r1, y1, x1+w1, y1, x2+w2, y2,  2);
-    Render.polygon(n*PolyPerSeg+3,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  Math.floor(index/segPerSeg)%2);
+    Render.polygon(n*PolyPerSeg+3,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  Math.floor(index/segmentPerDraw)%2);
     
     if (color.lane) {
       lanew1 = w1*2/lanes;
@@ -101,13 +79,17 @@ var Render = {
 
   //---------------------------------------------------------------------------
 
-  sprite: function(width, height, resolution, roadWidth, sprites, sprite, scale, destX, destY, offsetX, offsetY, clipY) {
+  sprite: function(sprite,width, height, resolution, roadWidth, texture, scale, destX, destY, offsetX, offsetY, clipY) {
 
                     //  scale for projection AND relative to roadWidth (for tweakUI)
     // var destW  = (sprite.texture.width * scale * width/2)* (_spriteScale * roadWidth);
     // var destH  = (sprite.texture.height * scale* width/2) * (_spriteScale * roadWidth);
-    var destW  = (sprite.texture.width * scale *roadWidth*2);
-    var destH  = (sprite.texture.height * scale*roadWidth*2);
+    if(texture===undefined) return;
+
+    sprite.texture=texture;
+    
+    var destW  = (texture.width * scale *roadWidth*2);
+    var destH  = (texture.height * scale*roadWidth*2);
 
     destX = destX + (destW * (offsetX || 0));
     destY = destY + (destH * (offsetY || 0));
@@ -121,9 +103,7 @@ var Render = {
     sprite.y=destY;
     sprite.width=destW;
     sprite.height=destH-clipH;
-    if(sprite.texture.textureCacheIds[0]=='board-2.png'){
-      // console.log(sprite.y+","+sprite.height);
-    }
+   
     if(sprite.scale.y<0) sprite.scale.y=-sprite.scale.y;
       // return;
 

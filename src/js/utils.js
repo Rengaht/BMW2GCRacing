@@ -55,8 +55,8 @@ var Util = {
     p.camera.y     = (p.world.y || 0) - cameraY;
     p.camera.z     = (p.world.z || 0) - cameraZ;
 
-    let iseg=Math.floor(index/segPerSeg);
-    let inter=index/segPerSeg-iseg;
+    let iseg=Math.floor(index/segmentPerDraw);
+    let inter=index/segmentPerDraw-iseg;
     let d_=Util.interpolate(dk[iseg],dk[iseg+1],inter);
 
     p.screen.scale = d_/p.camera.z;
@@ -288,17 +288,23 @@ var COLORS = {
   START:  { road: 'white',   grass: 'white',   rumble: 'white'                     },
   FINISH: { road: 'black',   grass: 'black',   rumble: 'black'                     }
 };
-
-var SPRITES={
-  COIN:         {src:'logo.png'},
-  TREE1:        {src:'tree-1.png'},
-  TREE2:        {src:'tree-2.png'},
-  SIGN_LEFT:    {src:'sign-left.png'},
-  SIGN_RIGHT:   {src:'sign-right.png'},
-  CONE:         {src:'cone.png'},
-  OBSTACLE:     {src:'obstacle.png'},
-  BOARD1:       {src:'board-1.png'},
-  BOARD2:       {src:'board-2.png'}
+var SPRITE_ROAD={
+  COIN:   ['logo.png'],  
+  COMBO:  ['logo2-1.png'],
+  CONE:   ['cone-1.png','cone-2.png','cone-3.png'],
+  BLOCK:   ['block-1.png','block-2.png','block-3.png'],
+  LIGHT:   ['light-1.png','light-2.png','light-3.png']
+}
+var SPRITES1={
+  TREE:        ['1-tree-1.png','1-tree-2.png'],
+  TURN_LEFT:        ['1-turn-left.png'],
+  TURN_RIGHT:       ['1-turn-right.png'],
+  GRASS:       ['1-grass1.png','1-grass2.png','1-grass3.png','1-grass4.png','1-grass5.png','1-grass6.png'],
+  HOUSE_LEFT:  ['1-house1-left.png','1-house2-left.png'], 
+  HOUSE_RIGHT:  ['1-house1-right.png','1-house2-right.png'], 
+  BOARD:       ['1-board1.png','1-board2.png'],
+  TOWER:       ['1-tower1.png','1-tower2.png'],
+  START:['start.png']
 };
 
 
