@@ -7,7 +7,9 @@
 		
 	<script src="src/lib/pixi/5.2.0/pixi.js"></script>
 	<script src="src/lib/pixi/5.2.0/pixi-legacy.js"></script>
+	<script src="src/lib/jquery-3.3.1.min.js"></script>
 	<!-- <script src="src/lib/projection/pixi-projection.js"></script> -->
+	<script src="src/js/interact.js"></script>
 	<script src="src/js/utils.js"></script>
 	<script src="src/js/render.js"></script>
 	<script src="src/js/road.js"></script>
@@ -16,9 +18,75 @@
 <body onload="init();">
 	 
 	
-	<div id="_frame"></div>
-	<div id="_stats"></div>
-	<div id="hud">
+		
+	<div id="_home" class="PageContainer">
+		<img id="_game_logo" src="asset/img/ui/game_logo.png" class="Center"/>
+		<div class="BottomWrapper">
+			<div id="_button_start" class="Button Center" onclick="gotoPage('_driver')"></div>		
+		</div>
+	</div>
+	<div id="_driver" class="PageContainer hidden close">
+		<img id="_button_back_home" class="ButtonBack" onclick='goToPage("_home")'/>
+		<div id="_flag_top" class="Flag Center">
+			<div id="_hint_driver_name" class="Hint">Enter Driver's Name</div>
+			<div>
+				<span id="_driver_title">DRIVER</span>	
+				<input type="text" id="_input_driver" maxlength="6" />
+			</div>			
+		</div>
+		<div class="BottomWrapper">
+			<div id="_button_ok" class="Button Center" onclick="gotoPage('_color')"></div>		
+			</div>		
+		</div>
+	</div>
+	<div id="_color" class="PageContainer hidden close">
+		<img id="_button_back_home" class="ButtonBack" onclick='goToPage("_driver")'/>
+		<div id="_flag_bottom" class="Flag Center">
+			<div id="_hint_car_color" class="Hint">CHOOSE THE COLOR</div>			
+		</div>
+		<img id="_img_car_color" src="asset/img/ui/frontcar-1.png"/>			
+		<div class="ColorButtonWrapper">			
+			<img src="asset/img/ui/button_blue.png" class="ColorButton" onClick="setCarColor('BLUE')"/>
+			<img src="asset/img/ui/button_red.png" class="ColorButton" onClick="setCarColor('RED')"/>
+			<img src="asset/img/ui/button_gray.png" class="ColorButton" onClick="setCarColor('GRAY')"/>
+			<img src="asset/img/ui/button_white.png" class="ColorButton" onClick="setCarColor('WHITE')"/>
+		</div>
+		<div class="BottomWrapper">
+			<div id="_button_go" class="Button Center" onclick="gotoPage('_game')"></div>		
+			</div>		
+		</div>
+	</div>
+	
+	<div id="_game" class="PageContainer">
+		<div id="_game_frame"></div>
+		<div id="_speed_meter">
+			<div id="_speed_pointer"></div>
+			<div id="_speed_text">
+				<span id="_speed_value">160</span>
+				<span id="_speed_unit">km/h</span>
+			</div>
+		</div>
+		<div id="_hud">
+			<div class="HudElement">
+				<span>LIFE</span>
+				<span>
+					<img src="asset/img/ui/star.png"/>
+					<img src="asset/img/ui/star.png"/>
+					<img src="asset/img/ui/star.png"/>
+				</span>
+			</div>
+			<div class="HudElement">
+				<span>TIME</span>
+				<span id="_hud_time">00:60</span>
+			</div>
+			<div class="HudElement">
+				<span>SCORE</span>
+				<span id="_hud_score">888</span>
+			</div>			
+		</div>
+	</div>
+
+	<!-- <div id="hud">
       <span id="playerx" class="hud">
       	<span id="playerx_value" class="value">0</span>
       </span>
@@ -34,7 +102,7 @@
       <span id="fast_lap_time" class="hud">Fastest Lap: 
       	<span id="fast_lap_time_value" class="value">0.0</span>
       </span>
-    </div>
+    </div> -->
 	
 	<script src="src/js/game.js"></script>
 	

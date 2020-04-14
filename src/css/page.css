@@ -1,3 +1,42 @@
+@font-face {
+	font-family: 'BMWFont-Bold';
+	src:url("../../asset/font/arudjingxiheipe1xg30_hv.ttf");
+}
+@font-face {
+	font-family: 'BMWFont-Bold';
+	unicode-range: U+00-024F;
+	src:url("../../asset/font/BMWTypeNextLatinTT-Bold.ttf");
+}
+
+.TitleFont{
+	font-family:'BMWFont-Bold';
+	line-height: 1.2;	
+}
+*:focus {
+    outline: none;
+}
+body{
+
+	font-family:'BMWFont-Bold';
+
+	border:0;
+	margin:0;	
+	outline:none;
+	background-color: #001368;
+	overflow: hidden;
+}
+img, a {border:none; outline: none;}
+.Center{
+	display:block;
+	text-align: center;
+	margin: auto;
+}
+.BottomWrapper{
+	position: absolute;
+	bottom: 90px;
+	width: 100%;
+}
+
 #_frame{
 	position: absolute;
 	left:0;
@@ -8,4 +47,155 @@
 #hud{
 	position: absolute;
 	right:0;
+}
+
+.Button{
+	background-size:100% 100%;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+.hidden{
+	opacity: 0;
+	transition:opacity .5s ease-out;
+}
+.close{
+	display:none !important;
+}
+.PageContainer{
+	position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;	
+}
+
+/* page home */
+#_home{
+	background-image: url(../../asset/img/ui/BG_home.png);
+}
+#_game_logo{
+	top:134px;
+	max-height:23%;
+	margin-top:134px;
+}
+#_button_start{
+	background-image:url(../../asset/img/ui/button_start.png);
+	width:605px;
+	height:133px;
+}
+
+/* page driver */
+.ButtonBack{
+	position: absolute;
+	top:83px;
+	left:64px;
+	width:70px;
+	height:110px;
+	background-image: url(../../asset/img/ui/button_back.png);	
+	background-size: conver;
+}
+#_driver{
+	background-image: url(../../asset/img/ui/BG_info.png);	
+}
+.Flag{
+	position: relative;
+	background-image: url(../../asset/img/ui/flag.png);
+	background-size: 100% auto;
+	width:67%;
+	
+}
+#_flag_top{
+	height:100%;
+	top:25%; 
+}
+
+.Hint{
+	color:#008AFF;
+	font-size: 72px;	
+}
+#_hint_driver_name{	
+	position:absolute;
+	top:6%;
+	left:28%;
+	text-align: left;
+}
+#_button_ok{
+	background-image:url(../../asset/img/ui/button_ok.png);
+	width:398;
+	height:157px;
+}
+#_driver_title{
+	font-size: 36px;
+	text-align: left;	
+	color:white;
+
+	position:absolute;
+	top:26%;
+	left:28%;
+}
+#_input_driver{
+
+	font-family:'BMWFont-Bold';
+
+	font-size: 108px;	
+	color:#7CFFFB;
+
+	position:absolute;
+	top:30%;
+	left:28%;
+	width:44%;
+	background:transparent;	
+	border:none;
+}
+/* page color */
+#_color{
+	background-image: url(../../asset/img/ui/BG_car.png);	
+}
+#_flag_bottom{
+	height:72%;
+	top:0; 
+	background-position:bottom;
+}
+#_hint_car_color{
+	position: absolute;
+	top:25%;
+	left:28%;
+	text-align: left;
+	color:#7CFFFB;
+}
+#_img_car_color{
+	position: absolute;
+	top:40%;
+	left:21%;
+	width:57%;
+}
+.ColorButtonWrapper{
+	position: absolute;
+	right:8%;
+	top:32%;
+}
+.ColorButton{
+	display: block;
+	margin-top:43px;
+}
+#_button_go{
+	background-image:url(../../asset/img/ui/button_go_normal.png);
+	width:398;
+	height:157px;
+}
+
+/* page game */
+#_hud{
+	position:absolute;
+	top:0;
+}
+.HudElement{
+	font-size: 72px;
+}
+#_speed_meter{
+	position:absolute;
+	left:0;
+	bottom:0;
+	background-image: url(../../asset)
 }

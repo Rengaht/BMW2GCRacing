@@ -51,7 +51,7 @@ function setupPixi(){
  	 });
 
 
-	document.getElementById('_frame').appendChild(_app.view);
+	document.getElementById('_game_frame').appendChild(_app.view);
 }
 
 function loadTexture(){
@@ -143,12 +143,16 @@ function loadFinish(loader,resources_){
  															0,0,0,0,0,0),
  										_shader_road));
 	 	}
-	 	let sprite=new PIXI.Sprite();
-	 	sprite.zIndex=drawDistance-n;
-	 	_scene.addChild(sprite);
+	 	let sprite_left=new PIXI.Sprite();
+	 	let sprite_right=new PIXI.Sprite();
+	 	
+	 	sprite_left.zIndex=sprite_right.zIndex=drawDistance-n;
+
+	 	_scene.addChild(sprite_left);
+	 	_scene.addChild(sprite_right);
  	}
 
- 	
+
 	_scene.sortableChildren=true;
 
 
@@ -175,8 +179,7 @@ function loadFinish(loader,resources_){
 
 	_spriteScale=0.4*(1/car_center.width);
 	// _app.ticker.add(delta=>gameLoop(delta));
-	setupGame();
-
+	
 }
 function setupGame(){
 
@@ -197,9 +200,7 @@ function setupGame(){
 	    reset();
 
 	    indexScene=0;
-	    setupScene(indexScene);
-	   	console.log("game ready !");
-
+	   	setupScene(indexScene);
 
 	   	hud={
 			speed:            { value: null, dom: Dom.get('speed_value')            },
@@ -214,6 +215,11 @@ function setupGame(){
 	  }
 	});
 
+}
+
+function run(){
+    isPlaying=true;
+	console.log("------------- Start Game -------------");
 }
 
 // function gameLoop(delta){

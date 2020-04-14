@@ -88,8 +88,8 @@ var Render = {
 
     sprite.texture=texture;
     
-    var destW  = (texture.width * scale *roadWidth*2);
-    var destH  = (texture.height * scale*roadWidth*2);
+    var destW  = (texture.width * scale);
+    var destH  = (texture.height  * scale);
 
     destX = destX + (destW * (offsetX || 0));
     destY = destY + (destH * (offsetY || 0));

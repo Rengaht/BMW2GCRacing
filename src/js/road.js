@@ -55,12 +55,16 @@ var totalScene =3;
 var sceneInterval=20;  // 20s for each scene
 var sceneSpeedRatio=[1,1.5,2,3];
 var lengthScene=1000; // segment count for scene 1
-var BaseSpeed  =lengthScene*segmentLength/(sceneInterval*sceneInterval*1.25);
+var BaseSpeed  =lengthScene*segmentLength/(sceneInterval*1.25);
+var isPlaying=false;
+
 
 var sceneSegment=[];
+var tmp=0;
 for(var i=0;i<totalScene;++i){
-  let len=.5*BaseSpeed*(sceneSpeedRatio[i]+sceneSpeedRatio[i+1])*sceneInterval*sceneInterval;
-  sceneSegment.push(len);
+  let len=.5*BaseSpeed*(sceneSpeedRatio[i]+sceneSpeedRatio[i+1])*sceneInterval;  
+  tmp+=Math.round(len/segmentLength);
+  sceneSegment.push(tmp);
 }
 
 
@@ -87,6 +91,12 @@ var hud = null;
 
 function update(dt) {
 
+  if(isPlaying){
+    position = Util.increase(position, dt * speed, trackLength);
+    speed=Util.increase(speed, dt * accel,sceneSpeedRatio[indexScene+1]*BaseSpeed);
+  }
+
+
   var n, car, carW, sprite, spriteW;
   var playerSegment = findSegment(position+playerZ);
   // var playerW       = SPRITES.PLAYER_STRAIGHT.w * SPRITES.SCALE;
@@ -95,14 +105,17 @@ function update(dt) {
   var dx            = dt * 2 * speedPercent; // at top speed, should be able to cross from left to right (-1 to 1) in 1 second
   var startPosition = position;
 
+  if(playerSegment.index>=sceneSegment[indexScene]){
+    if(indexScene<totalScene-1){
+      setupScene(indexScene+1);
+      indexScene++;
+    }
+    else endGame();
+  }
+
   updateCars(dt, playerSegment, playerW);
 
-  position = Util.increase(position, dt * speed, trackLength);
-  speed=Util.increase(speed, dt * accel,sceneSpeedRatio[indexScene+1]*BaseSpeed);
   
-  if(playerSegment.index>=sceneSegment[indexScene+1]){
-    setupScene(indexScene+1);
-  }
 
   // if (keyLeft)
   //   playerX = playerX - dx;
@@ -290,7 +303,8 @@ function render() {
   
   var n, i, segment, car, sprite, spriteScale, spriteX, spriteY;
 
-  for(n=0;n<drawDistance;++n){
+  // reset all scene sprite
+  for(n=0;n<drawDistance*2;++n){
     _scene.getChildAt(n).visible=false;
   }
 
@@ -345,11 +359,16 @@ function render() {
 
       sprite      = segment.sprites[i];
 
-      spriteScale = segment.p1.screen.scale;
+      spriteScale = (segment.p1.screen.y-height*(1.0-RoadRatio))/height/RoadRatio*2;
       spriteX     = segment.p1.screen.x + ( sprite.offset * segment.p1.screen.w*2);
       spriteY     = segment.p1.screen.y;
       
-      Render.sprite(_scene.getChildAt(n),width, height, resolution, roadWidth , _texture_scene[indexScene][sprite.source], spriteScale, spriteX, spriteY, (sprite.offset < 0 ? -1 : 0), -1, segment.clip);
+      Render.sprite(_scene.getChildAt(n*2+(sprite.offset<0?0:1)),
+                    width, height, resolution, roadWidth ,
+                    _texture_scene[indexScene][sprite.source], 
+                    spriteScale, spriteX, spriteY, 
+                    (sprite.offset < 0 ? -1 : 0), -1, 
+                    segment.clip);
       // console.log('updage '+n+' -> '+sprite.source);
     }
 
@@ -470,34 +489,12 @@ function addDownhillToEnd(num) {
 function resetRoad() {
   segments = [];
 
-  // addStraight(ROAD.LENGTH.LONG);
   addStraight(sceneSegment[0]);
-  addStraight(sceneSegment[1]);
-  addStraight(sceneSegment[2]);
-  // addStraight(ROAD.LENGTH.LONG);
-  // addLowRollingHills();
+  addStraight(sceneSegment[1]-sceneSegment[0]);
+  addStraight(sceneSegment[2]-sceneSegment[1]);
   // addSCurves();
   // addCurve(ROAD.LENGTH.SHORT, ROAD.CURVE.MEDIUM, ROAD.HILL.NONE);
-  // addStraight(ROAD.LENGTH.SHORT);
-  // addCurve(ROAD.LENGTH.SHORT, -ROAD.CURVE.MEDIUM, ROAD.HILL.NONE);
-  // addStraight(ROAD.LENGTH.SHORT);
-  // // addBumps();
-  // // addLowRollingHills();
-  // addCurve(ROAD.LENGTH.LONG*2, ROAD.CURVE.MEDIUM, ROAD.HILL.NONE);
-  // addStraight();
-  // // addHill(ROAD.LENGTH.MEDIUM, ROAD.HILL.HIGH);
-  // addSCurves();
-  // addCurve(ROAD.LENGTH.LONG, -ROAD.CURVE.MEDIUM, ROAD.HILL.NONE);
-  // // addHill(ROAD.LENGTH.LONG, ROAD.HILL.HIGH);
-  // addCurve(ROAD.LENGTH.LONG, ROAD.CURVE.MEDIUM, -ROAD.HILL.NONE);
-  // // addBumps();
-  // // addHill(ROAD.LENGTH.LONG, -ROAD.HILL.MEDIUM);
-  // addStraight();
-  // addSCurves();
-  // addDownhillToEnd();
 
-  // addStraight(ROAD.LENGTH.LONG);
-  // addStraight(ROAD.LENGTH.LONG);
   resetSprites();
   // resetCars();
 
@@ -516,83 +513,98 @@ function resetSprites() {
 
   // scene 1
   addSprite(20,SPRITES1.START[0],-1);
-  for(var i=0;i<sceneSegment[0];++i){
-     
+
+  for(var scene_=0;scene_<totalScene;++scene_){
+
+    let start_seg=scene_<1?0:sceneSegment[scene_-1];
+    let end_seg=sceneSegment[scene_];
+
+    for(var i=start_seg;i<end_seg;++i){
+       
       if(i%(segmentPerDraw)!=0) continue;
+ 
+      for(var j=0;j<2;++j){
+        
+        if(j==0) dir=1+Math.random();
+        else dir=-1-Math.random();
+        
+        if(Math.random()*1<1){
+          let option_=Math.round(Math.random()*(i<1?5:4));
+          let txt=getRandomSprite(scene_,option_,dir);
 
-      let opt=Math.round(Math.random()*8);
-      let txt=null;
-      let dir=Math.random()*2<1?1:-1;
+          if(txt!=null) 
+            addSprite(i,txt,dir);
+        }
 
-      switch(opt){
+      }
+
+    }
+
+  }
+  
+}
+function getRandomSprite(index_,opt_,dir_){
+
+  let txt=null;
+  switch(index_){
+    case 0:
+      switch(opt_){
         case 0:  
           txt=SPRITES1.TREE[Math.round(Math.random()*2)];
           break;
         case 1:  
-          txt=SPRITES1.GRASS[Math.round(Math.random()*6)];
+          txt=SPRITES1.GRASS[Math.round(Math.random()*4)];
           break;
         case 2:
-          txt=SPRITES1.HOUSE_LEFT[Math.round(Math.random()*2)];
-          dir=-1;
+          if(dir_<0) txt=SPRITES1.HOUSE.left[Math.round(Math.random()*2)];
+          else txt=SPRITES1.HOUSE.right[Math.round(Math.random()*2)];
           break;
         case 3:
-          txt=SPRITES1.HOUSE_RIGHT[Math.round(Math.random()*2)];
-          dir=1;
-          break;
-        case 4:
           txt=SPRITES1.BOARD[Math.round(Math.random()*2)];
           break;
-        case 5:
+        case 4:
           txt=SPRITES1.TOWER[Math.round(Math.random()*2)];
           break;
-        default:
-            continue;
       }
-      dir=dir+dir*Math.random();
-      addSprite(i,txt,dir);
+      break;
+    case 1:
+      switch(opt_){
+        case 0:  
+          txt=SPRITES2.BRIDGE[0];
+          break;
+        case 1:
+          if(dir_<0) txt=SPRITES2.HOUSE.left[Math.round(Math.random()*4)];
+          else txt=SPRITES2.HOUSE.right[Math.round(Math.random()*4)];
+          break;
+        case 2:
+          txt=SPRITES2.BOARD[Math.round(Math.random()*2)];
+          break;
+        case 3:
+          if(dir_<0) txt=SPRITES2.LIGHT.left[0];
+          else  txt=SPRITES2.LIGHT.right[0];
+          break;
+      }
+      break;
+    case 2:
+      switch(opt_){
+        case 0:  
+          txt=SPRITES3.CHAIR[Math.round(Math.random()*3)];
+          break;
+        case 1:
+          if(dir_<0) txt=SPRITES3.HOUSE.left[0];
+          break;
+        case 2:
+          txt=SPRITES3.BOARD[Math.round(Math.random()*2)];
+          break;
+        case 3:
+          txt=SPRITES3.UMBRELLA[Math.round(Math.random()*4)];
+          break;
+      }
+      break;
+    default:
+      break;
   }
-  
-
-  // addSprite(20,  SPRITES.BOARD1, -1);
-  // addSprite(40,  SPRITES.BOARD1, -1);
-  // addSprite(60,  SPRITES.BOARD1, -1);
-  // addSprite(80,  SPRITES.BOARD2, -1);
-  // addSprite(100, SPRITES.BOARD2, -1);
-  // addSprite(120, SPRITES.BOARD2, -1);
-
-  // addSprite(240,                  SPRITES.BOARD2, -1.2);
-  // addSprite(240,                  SPRITES.BOARD2,  1.2);
-  // addSprite(segments.length - 25, SPRITES.BOARD1, -1.2);
-  // addSprite(segments.length - 25, SPRITES.BOARD1,  1.2);
-
-  // for(n = 0 ; n < segments.length ; n += 4 + Math.floor(n/100)) {
-  //   addSprite(n, SPRITES.TREE1, .5 + Math.random()*0.5);
-  //   addSprite(n, SPRITES.TREE1, -.5 - Math.random()*0.5);
-  //    // addSprite(n, SPRITES.TREE2,   1 + Math.random()*2);
-  // }
-
-  // for(n = 250 ; n < 1000 ; n += 5) {
-  //   addSprite(n,     SPRITES.COLUMN, 1.1);
-  //   addSprite(n + Util.randomInt(0,5), SPRITES.TREE1, -1 - (Math.random() * 2));
-  //   addSprite(n + Util.randomInt(0,5), SPRITES.TREE2, -1 - (Math.random() * 2));
-  // }
-
-  // for(n = 200 ; n < segments.length ; n += 3) {
-  //   addSprite(n, Util.randomChoice(SPRITES.PLANTS), Util.randomChoice([1,-1]) * (2 + Math.random() * 5));
-  // }
-
-  // var side, sprite, offset;
-  // for(n = 1000 ; n < (segments.length-50) ; n += 100) {
-  //   side      = Util.randomChoice([1, -1]);
-  //   addSprite(n + Util.randomInt(0, 50), Util.randomChoice(SPRITES.BILLBOARDS), -side);
-  //   for(i = 0 ; i < 20 ; i++) {
-  //     sprite = Util.randomChoice(SPRITES.PLANTS);
-  //     offset = side * (1.5 + Math.random());
-  //     addSprite(n + Util.randomInt(0, 50), sprite, offset);
-  //   }
-      
-  // }
-
+  return txt;
 }
 
 function resetCars() {
@@ -616,8 +628,12 @@ function resetCoins(){
 
 
 function setupScene(index){
-  console.log("-------------Enter scene "+index+"-------------");
+  console.log("-------------Enter scene "+index+"  "+formatTime(currentLapTime)+"-------------");
   speed=sceneSpeedRatio[index]*BaseSpeed;
   accel=(sceneSpeedRatio[index+1]*BaseSpeed-speed)/sceneInterval;
-
+  console.log("v= "+speed+"  a= "+accel);
+}
+function endGame(){
+  console.log("------------- End Game "+formatTime(currentLapTime)+"-------------");
+  isPlaying=false;
 }
