@@ -28,7 +28,7 @@ input,select{
 }
 .BottomWrapper{
 	position: absolute;
-	bottom: 90px;
+	bottom: 6%;
 	width: 100%;
 }
 
@@ -48,6 +48,7 @@ input,select{
 	background-size:100% 100%;
 	background-repeat: no-repeat;
 	cursor: pointer;
+	max-height:11vh;
 }
 .hidden{
 	opacity: 0;
@@ -74,21 +75,13 @@ input,select{
 	max-height:23%;
 	margin-top:134px;
 }
-#_button_start{
-	background-image:url(../../asset/img/ui/button_start.png);
-	width:605px;
-	height:133px;
-}
 
 /* page driver */
 .ButtonBack{
 	position: absolute;
 	top:85px;
 	left:64px;
-	width:70px;
-	height:110px;
-	background-image: url(../../asset/img/ui/button_back.png);	
-	background-size: conver;
+	width:3%;
 }
 #_driver{
 	background-image: url(../../asset/img/ui/BG_info.png);	
@@ -97,20 +90,21 @@ input,select{
 	position: relative;
 	background-image: url(../../asset/img/ui/flag.png);
 	background-size: 100% auto;
-	width:67%;
+	width: 103vh;
 	
 }
 #_flag_top{
-	height:100%;
-	top:25%; 
+	height:75vh;
+	top:25vh; 
 }
 
 
 #_hint_driver_name{	
 	position:absolute;
-	top:6%;
-	left:28%;
+	top:calc(9vh - 1rem);
+	left:29vh;
 	text-align: left;
+	vertical-align: middle;
 }
 
 #_driver_title{
@@ -118,53 +112,57 @@ input,select{
 	color:white;
 
 	position:absolute;
-	top:26%;
-	left:28%;
+	top:calc(28vh - .5rem);
+	left:29vh;
+	vertical-align: middle;
 }
 #_input_driver{
 
 	position:absolute;
-	top:30%;
-	left:28%;
-	width:44%;
+	top:calc(35vh - 1.5rem);
+	left:29vh;
+	width:65vh;
 	background:transparent;	
 	border:none;
+	vertical-align: middle;
 }
 /* page color */
 #_color{
 	background-image: url(../../asset/img/ui/BG_car.png);	
 }
 #_flag_bottom{
-	height:72%;
+	height:72vh;
 	top:0; 
 	background-position:bottom;
 }
 #_hint_car_color{
 	position: absolute;
-	top:25%;
-	left:28%;
+	top:calc(20vh - 1rem);
+	left:29vh;
 	text-align: left;
+}
+.FrontCar{
+	max-width:57%;
+	max-height: 36%;
 }
 #_img_car_color{
 	position: absolute;
 	top:40%;
-	left:21%;
-	width:57%;
+	left:calc(50vw - 51vh + 13vh);
+
 }
 .ColorButtonWrapper{
 	position: absolute;
 	right:8%;
 	top:32%;
+	width: 8%;
 }
 .ColorButton{
 	display: block;
-	margin-top:43px;
+	margin-top:20px;
+	width:100%;
 }
-#_button_go{
-	background-image:url(../../asset/img/ui/button_go_normal.png);
-	width:398;
-	height:157px;
-}
+
 
 /* page game */
 #_hud{
@@ -175,7 +173,7 @@ input,select{
 
 	display:flex;
 	flex-direction: row;
-	flex-wrap:wrap;
+	
 	justify-content: space-between;
 	
 }
@@ -185,6 +183,10 @@ input,select{
 .HudElement>span{
 	margin-right:25px;
 }
+#_life_star>img{
+	height:2rem;
+}
+
 
 #_speed_meter{
 	position:absolute;
@@ -194,7 +196,7 @@ input,select{
 	height:18%;
 }
 #_speed_meter>img{
-	width: 100%;
+	max-height: 100%;
 }
 #_speed_pointer{
 	position: absolute;
@@ -215,14 +217,17 @@ input,select{
 }
 #_driver_name_in_game{
 	color:white;
-	margin-top:8px;
-	margin-bottom:30px;
+	margin-top:0.22rem;
+	margin-bottom:0.83rem;
 }
 
 #_hint{
 	position: absolute;
 	top:35%;
 	width:100%;
+}
+#_hint>img{
+	width:60%;
 }
 
 /* congradulation !!! */
@@ -235,7 +240,7 @@ input,select{
 	height:90%;
 
 	background-image: url(../../asset/img/ui/frame_complete.png);
-	background-size: contain;
+	background-size: cover;
 	background-repeat: no-repeat;
 }
 #_score_board>div>div:first-child{
@@ -250,7 +255,7 @@ input,select{
 
 	display:flex;
 	flex-direction: row;
-	flex-wrap:wrap;
+	
 	justify-content: space-between;
 	
 	position: relative;
@@ -265,7 +270,6 @@ input,select{
 }
 
 #_car_complete{
-	width:57%;
 	margin-top: 50px;
 }
 #_complete_button_wrapper>img:first-child{
@@ -286,11 +290,10 @@ input,select{
 	top:200px;
 	bottom:200px;*/
 	width:80%;
-	margin-top:273px;
+	margin-top:10%;
 
 	display:flex;
 	flex-direction: row;
-	flex-wrap:wrap;
 	justify-content: space-between;
 }
 .LotteryColumn{
@@ -337,15 +340,19 @@ input,select{
 	margin-right:10px;
 }
 .WaveTitle>img{
-	transform: translateY(-24px);
+	width:12%;
+	transform: translateY(-.5rem);
 }
 .WaveTitle>img:last-child{
-	transform:scaleX(-1)  translateY(-24px);
+	transform:scaleX(-1)  translateY(-.5rem);
 }
 #_rank_info{
 
 	width:37%;
-	margin-top:112px;
+	margin-top:8%;
+	height:60%;
+	overflow: scroll;
+	overflow-x: hidden;
 }
 .RankItem:first-child,.RankItem:nth-child(2),.RankItem:nth-child(3),.RankItem:nth-child(4){
 	color:#FF8345;

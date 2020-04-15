@@ -13,9 +13,15 @@ function gotoPage(page_){
 			$('#_input_driver').focus();
 			break;
 		case '_color':
+			hideItem($('#_button_rank'));
 			break;
 		case '_game':
+			hideItem($('#_button_rank'));
 			setupGame();
+			break;
+		case '_rank':
+		case '_lottery':
+			hideItem($('#_button_rank'));
 			break;
 	}
 
@@ -54,6 +60,12 @@ function showItem(item_){
 	},10);
 }
 
+function setCarColor(set_){
+
+}
+
 function sendInfo(){
+
+
 
 }

@@ -23,11 +23,11 @@
 	<div id="_home" class="PageContainer">
 		<img id="_game_logo" src="asset/img/ui/game_logo.png" class="Center"/>
 		<div class="BottomWrapper">
-			<div id="_button_start" class="Button Center" onclick="gotoPage('_driver')"></div>		
+			<img id="_button_start" class="Button Center" onclick="gotoPage('_driver')" src="asset/img/ui/button_start.png"/>		
 		</div>
 	</div>
 	<div id="_driver" class="PageContainer hidden close">
-		<img class="ButtonBack" onclick='goToPage("_home")'/>
+		<img class="ButtonBack" onclick='gotoPage("_home")' src="asset/img/ui/button_back.png"/>
 		<div id="_flag_top" class="Flag Center">
 			<div id="_hint_driver_name" class="FontT2 MiddleBlue">Enter Driver's Name</div>
 			<div>
@@ -41,11 +41,11 @@
 		</div>
 	</div>
 	<div id="_color" class="PageContainer hidden close">
-		<img id="_button_back_home" class="ButtonBack" onclick='gotoPage("_driver")'/>
+		<img id="_button_back_home" class="ButtonBack" onclick='gotoPage("_driver")'  src="asset/img/ui/button_back.png"/>
 		<div id="_flag_bottom" class="Flag Center">
 			<div id="_hint_car_color" class="FontT2 LightBlue">CHOOSE THE COLOR</div>			
 		</div>
-		<img id="_img_car_color" src="asset/img/ui/frontcar-1.png"/>			
+		<img id="_img_car_color" class="FrontCar" src="asset/img/ui/frontcar-1.png"/>			
 		<div class="ColorButtonWrapper">			
 			<img src="asset/img/ui/button_blue.png" class="ColorButton" onClick="setCarColor('BLUE')"/>
 			<img src="asset/img/ui/button_red.png" class="ColorButton" onClick="setCarColor('RED')"/>
@@ -53,7 +53,7 @@
 			<img src="asset/img/ui/button_white.png" class="ColorButton" onClick="setCarColor('WHITE')"/>
 		</div>
 		<div class="BottomWrapper">
-			<div id="_button_go" class="Button Center" onclick="gotoPage('_game')"></div>		
+			<img id="_button_go" class="Button Center" onclick="gotoPage('_game')" src="asset/img/ui/button_go_normal.png"/>		
 			</div>		
 		</div>
 	</div>
@@ -119,7 +119,7 @@
 						<div id="_rank_complete" class="FontT1 Orange">7</div>
 					</div>
 				</div>
-				<img id="_car_complete" src="asset/img/ui/frontcar-1.png"/>
+				<img id="_car_complete" class="FrontCar" src="asset/img/ui/frontcar-1.png"/>
 				<div id="_complete_button_wrapper" class="BottomWrapper">
 					<img class="Button" src="asset/img/ui/button_home_normal.png" onclick="gotoPage('_home')"/>
 					<img class="Button" src="asset/img/ui/button_lottery_normal.png" onclick="gotoPage('_lottery')"/>
@@ -130,7 +130,7 @@
 	</div>
 	
 	<div id="_lottery" class="PageContainer hidden close">
-		<img class="ButtonBack" onclick='gotoPage("_game")'/>
+		<img class="ButtonBack" onclick='gotoPage("_game")' src="asset/img/ui/button_back.png"/>
 		<div id="_lottery_title" class="Center LightBlue FontT1">
 			<span>輸入資料參加抽獎</span>
 		</div>
@@ -211,7 +211,7 @@
 		</div>
 	</div>
 	<div id="_rank" class="PageContainer hidden close">
-		<img class="ButtonBack" onclick='gotoPage("_game")'/>
+		<img class="ButtonBack" onclick='gotoPage("_game")' src="asset/img/ui/button_back.png"/>
 		<div class="Center">
 			<div class="FontT1 LightBlue">BEST RUNNERS</div>
 			<div class="WaveTitle FontT2 MiddleBlue">
