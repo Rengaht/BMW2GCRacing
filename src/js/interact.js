@@ -6,8 +6,10 @@ function gotoPage(page_){
 
 	switch(page_){
 		case '_home':
+			showItem($('#_button_rank'));
 			break;
 		case '_driver':
+			hideItem($('#_button_rank'));
 			$('#_input_driver').focus();
 			break;
 		case '_color':
@@ -50,4 +52,8 @@ function showItem(item_){
 		item_.removeClass('hidden');		
 		item_.children().not("#_button_record").removeClass('hidden');
 	},10);
+}
+
+function sendInfo(){
+
 }

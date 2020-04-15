@@ -1,31 +1,26 @@
-@font-face {
-	font-family: 'BMWFont-Bold';
-	src:url("../../asset/font/arudjingxiheipe1xg30_hv.ttf");
-}
-@font-face {
-	font-family: 'BMWFont-Bold';
-	unicode-range: U+00-024F;
-	src:url("../../asset/font/BMWTypeNextLatinTT-Bold.ttf");
-}
-
-.TitleFont{
-	font-family:'BMWFont-Bold';
-	line-height: 1.2;	
-}
 *:focus {
     outline: none;
 }
 body{
 
 	font-family:'BMWFont-Bold';
+	line-height: 1.2;	
 
 	border:0;
 	margin:0;	
 	outline:none;
 	background-color: #001368;
 	overflow: hidden;
+
+	text-transform: uppercase;
 }
 img, a {border:none; outline: none;}
+input,select{
+	font-family:'BMWFont-Bold';
+	text-transform: uppercase;
+}
+
+
 .Center{
 	display:block;
 	text-align: center;
@@ -88,7 +83,7 @@ img, a {border:none; outline: none;}
 /* page driver */
 .ButtonBack{
 	position: absolute;
-	top:83px;
+	top:85px;
 	left:64px;
 	width:70px;
 	height:110px;
@@ -110,23 +105,15 @@ img, a {border:none; outline: none;}
 	top:25%; 
 }
 
-.Hint{
-	color:#008AFF;
-	font-size: 72px;	
-}
+
 #_hint_driver_name{	
 	position:absolute;
 	top:6%;
 	left:28%;
 	text-align: left;
 }
-#_button_ok{
-	background-image:url(../../asset/img/ui/button_ok.png);
-	width:398;
-	height:157px;
-}
+
 #_driver_title{
-	font-size: 36px;
 	text-align: left;	
 	color:white;
 
@@ -135,11 +122,6 @@ img, a {border:none; outline: none;}
 	left:28%;
 }
 #_input_driver{
-
-	font-family:'BMWFont-Bold';
-
-	font-size: 108px;	
-	color:#7CFFFB;
 
 	position:absolute;
 	top:30%;
@@ -162,7 +144,6 @@ img, a {border:none; outline: none;}
 	top:25%;
 	left:28%;
 	text-align: left;
-	color:#7CFFFB;
 }
 #_img_car_color{
 	position: absolute;
@@ -188,14 +169,200 @@ img, a {border:none; outline: none;}
 /* page game */
 #_hud{
 	position:absolute;
-	top:0;
+	top:43px;
+	left:50px;
+	right:50px;
+
+	display:flex;
+	flex-direction: row;
+	flex-wrap:wrap;
+	justify-content: space-between;
+	
 }
 .HudElement{
-	font-size: 72px;
+	display:flex;	
 }
+.HudElement>span{
+	margin-right:25px;
+}
+
 #_speed_meter{
 	position:absolute;
-	left:0;
+	left:50px;
+	bottom:32px;
+	width:14%;
+	height:18%;
+}
+#_speed_meter>img{
+	width: 100%;
+}
+#_speed_pointer{
+	position: absolute;
+}
+#_speed_value{
+	position: absolute;
+	right:45%;
 	bottom:0;
-	background-image: url(../../asset)
+}
+
+#_driver_in_game{
+	position:absolute;
+	right:50px;
+	bottom:32px;	
+	
+	text-align:right;
+
+}
+#_driver_name_in_game{
+	color:white;
+	margin-top:8px;
+	margin-bottom:30px;
+}
+
+#_hint{
+	position: absolute;
+	top:35%;
+	width:100%;
+}
+
+/* congradulation !!! */
+#_score{
+	position: fixed;
+	background-color:rgba(255,131,69,0.5);
+}
+#_score_board{
+	width:94%;
+	height:90%;
+
+	background-image: url(../../asset/img/ui/frame_complete.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+#_score_board>div>div:first-child{
+	position: relative;
+	top: 70px;
+	left:125px;
+	text-align: left;
+}
+#_info_complete{
+	
+	color:white;
+
+	display:flex;
+	flex-direction: row;
+	flex-wrap:wrap;
+	justify-content: space-between;
+	
+	position: relative;
+	padding-left:125px;
+	padding-right:125px;
+	margin-top: 100px;
+}
+.ScoreElement{
+	display:flex;
+	text-align: left;
+	flex-direction: column;
+}
+
+#_car_complete{
+	width:57%;
+	margin-top: 50px;
+}
+#_complete_button_wrapper>img:first-child{
+	margin-right:100px;
+}
+
+
+/* lottery */
+#_lottery{
+	background-color: #001368;
+}
+#_lottery_title{
+	margin-top:85px;
+}
+#_lottery_info{
+	
+	/*position: absolute;
+	top:200px;
+	bottom:200px;*/
+	width:80%;
+	margin-top:273px;
+
+	display:flex;
+	flex-direction: row;
+	flex-wrap:wrap;
+	justify-content: space-between;
+}
+.LotteryColumn{
+	
+	/*margin-right: 70px;*/
+	width: 50%;
+	display: flex;	
+	flex-direction: column;
+	justify-content: flex-start;
+}
+.LotteryItem{
+	width:100%;
+	margin-bottom:42px;
+	
+	display: flex;
+	flex-direction: row;
+	justify-content: start;
+
+	text-align: left;
+}
+.LotteryItem>*{
+	margin-left:20px;
+}
+.LotteryItem>input,select{
+	flex-grow:1;
+	
+	margin-right: 35px;
+	background-color: transparent;
+}
+.LotteryItem>p{
+
+	text-align: left;
+	line-height: 150%;
+}
+
+/* rank page */
+#_rank{
+	background-image:url(../../asset/img/ui/BG_rank.png);
+	padding-top:85px;
+}
+
+.WaveTitle>span{
+	margin-left:10px;
+	margin-right:10px;
+}
+.WaveTitle>img{
+	transform: translateY(-24px);
+}
+.WaveTitle>img:last-child{
+	transform:scaleX(-1)  translateY(-24px);
+}
+#_rank_info{
+
+	width:37%;
+	margin-top:112px;
+}
+.RankItem:first-child,.RankItem:nth-child(2),.RankItem:nth-child(3),.RankItem:nth-child(4){
+	color:#FF8345;
+}
+.RankItem{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+.RankItem>span{
+	display: flex;
+}
+
+#_button_rank{
+	position: fixed;
+	top:0;
+	right:6%;
+	z-index: 100;
 }

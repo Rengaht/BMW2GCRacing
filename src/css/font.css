@@ -1,0 +1,51 @@
+@font-face {
+	font-family: 'BMWFont-Bold';
+	src:url("../../asset/font/arudjingxiheipe1xg30_hv.ttf");
+}
+@font-face {
+	font-family: 'BMWFont-Bold';
+	unicode-range: U+00-024F;
+	src:url("../../asset/font/BMWTypeNextLatinTT-Bold.ttf");
+}
+.FontT1{
+	font-size: 108px;
+	letter-spacing:8px;
+}
+.FontT2{
+	font-size: 72px;
+	letter-spacing:3px;
+}
+.FontT3{
+	font-size: 60px;
+	letter-spacing:3px;
+}
+.FontText{
+	font-size:36px;
+	letter-spacing:3px;
+}
+.FontSpeedMeter{
+	font-size: 48px;
+	letter-spacing:3px;
+}
+.FontInfo{
+	font-size: 44px;
+	letter-spacing:3px;
+}
+
+.FontFormSmall{
+	font-size: 24px;
+	letter-spacing:3px;
+}
+
+.DeepBlue{
+	color:#1B2495;
+}
+.MiddleBlue{
+	color:#008AFF;
+}
+.LightBlue{
+	color:#7CFFFB;
+}
+.Orange{
+	color:#FF8345;
+}

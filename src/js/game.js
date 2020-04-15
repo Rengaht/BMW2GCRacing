@@ -177,7 +177,7 @@ function loadFinish(loader,resources_){
 	_background.addChild(_scene);
 	_background.addChild(_car);
 
-	_spriteScale=0.4*(1/car_center.width);
+	_spriteScale=0.3*(1/car_center.width);
 	// _app.ticker.add(delta=>gameLoop(delta));
 	
 }
@@ -203,15 +203,13 @@ function setupGame(){
 	   	setupScene(indexScene);
 
 	   	hud={
-			speed:            { value: null, dom: Dom.get('speed_value')            },
-			current_lap_time: { value: null, dom: Dom.get('current_lap_time_value') },
-			last_lap_time:    { value: null, dom: Dom.get('last_lap_time_value')    },
-			fast_lap_time:    { value: null, dom: Dom.get('fast_lap_time_value')    },
-			playerx:    { value: null, dom: Dom.get('playerx_value')    }
+			speed:            { value: null, dom: Dom.get('_speed_value')},
+			time: { value: null, dom: Dom.get('_hud_time') },
+			star:{ value: null, dom: Dom.get('_life_star') }
 		};
 
-	    Dom.storage.fast_lap_time = Dom.storage.fast_lap_time || 180;
-	    updateHud('fast_lap_time', formatTime(Util.toFloat(Dom.storage.fast_lap_time)));
+	    // Dom.storage.fast_lap_time = Dom.storage.fast_lap_time || 180;
+	    // updateHud('fast_lap_time', formatTime(Util.toFloat(Dom.storage.fast_lap_time)));
 	  }
 	});
 

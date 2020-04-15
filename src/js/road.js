@@ -57,7 +57,7 @@ var sceneSpeedRatio=[1,1.5,2,3];
 var lengthScene=1000; // segment count for scene 1
 var BaseSpeed  =lengthScene*segmentLength/(sceneInterval*1.25);
 var isPlaying=false;
-
+var maxSpeed=BaseSpeed*sceneSpeedRatio[sceneSpeedRatio.length-1];
 
 var sceneSegment=[];
 var tmp=0;
@@ -164,29 +164,28 @@ function update(dt) {
 
   if (position > playerZ) {
     if (currentLapTime && (startPosition < playerZ)) {
-      lastLapTime    = currentLapTime;
-      currentLapTime = 0;
-      if (lastLapTime <= Util.toFloat(Dom.storage.fast_lap_time)) {
-        Dom.storage.fast_lap_time = lastLapTime;
-        updateHud('fast_lap_time', formatTime(lastLapTime));
-        Dom.addClassName('fast_lap_time', 'fastest');
-        Dom.addClassName('last_lap_time', 'fastest');
-      }
-      else {
-        Dom.removeClassName('fast_lap_time', 'fastest');
-        Dom.removeClassName('last_lap_time', 'fastest');
-      }
-      updateHud('last_lap_time', formatTime(lastLapTime));
-      Dom.show('last_lap_time');
+      // lastLapTime    = currentLapTime;
+      // currentLapTime = 0;
+      // if (lastLapTime <= Util.toFloat(Dom.storage.fast_lap_time)) {
+      //   Dom.storage.fast_lap_time = lastLapTime;
+      //   updateHud('fast_lap_time', formatTime(lastLapTime));
+      //   Dom.addClassName('fast_lap_time', 'fastest');
+      //   Dom.addClassName('last_lap_time', 'fastest');
+      // }
+      // else {
+      //   Dom.removeClassName('fast_lap_time', 'fastest');
+      //   Dom.removeClassName('last_lap_time', 'fastest');
+      // }
+      // updateHud('last_lap_time', formatTime(lastLapTime));
+      // Dom.show('last_lap_time');
     }
     else {
       currentLapTime += dt;
     }
   }
 
-  updateHud('playerx',          playerSegment.index);
-  updateHud('speed',            speed);
-  updateHud('current_lap_time', formatTime(currentLapTime));
+  updateHud('speed',Math.round(Util.interpolate(0,200,speed/maxSpeed)));
+  updateHud('time', formatTime(currentLapTime));
 }
 
 //-------------------------------------------------------------------------
@@ -343,7 +342,7 @@ function render() {
     maxy = segment.p1.screen.y;
   }
 
-  for(n = (drawDistance-1) ; n > 0 ; n--) {
+  for(n=0;n<drawDistance;++n){
     segment = segments[(baseSegment.index + n) % segments.length];
 
     // for(i = 0 ; i < segment.cars.length ; i++) {

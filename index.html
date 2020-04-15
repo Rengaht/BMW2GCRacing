@@ -3,6 +3,7 @@
 	<meta charset="utf-8">
 	<title>THE 2 RACING CHALLENGE</title>
 
+	<link rel="stylesheet" type="text/css" href="src/css/font.css">
 	<link rel="stylesheet" type="text/css" href="src/css/page.css">
 		
 	<script src="src/lib/pixi/5.2.0/pixi.js"></script>
@@ -17,7 +18,7 @@
 </head>
 <body onload="init();">
 	 
-	
+	<img id="_button_rank" src="asset/img/ui/button_rank.png" class="Button" onclick="gotoPage('_rank')"/>
 		
 	<div id="_home" class="PageContainer">
 		<img id="_game_logo" src="asset/img/ui/game_logo.png" class="Center"/>
@@ -26,23 +27,23 @@
 		</div>
 	</div>
 	<div id="_driver" class="PageContainer hidden close">
-		<img id="_button_back_home" class="ButtonBack" onclick='goToPage("_home")'/>
+		<img class="ButtonBack" onclick='goToPage("_home")'/>
 		<div id="_flag_top" class="Flag Center">
-			<div id="_hint_driver_name" class="Hint">Enter Driver's Name</div>
+			<div id="_hint_driver_name" class="FontT2 MiddleBlue">Enter Driver's Name</div>
 			<div>
-				<span id="_driver_title">DRIVER</span>	
-				<input type="text" id="_input_driver" maxlength="6" />
+				<span id="_driver_title" class="FontText">DRIVER</span>	
+				<input type="text" id="_input_driver" maxlength="6" class="FontT1 LightBlue"/>
 			</div>			
 		</div>
 		<div class="BottomWrapper">
-			<div id="_button_ok" class="Button Center" onclick="gotoPage('_color')"></div>		
+			<img id="_button_ok" class="Button Center" onclick="gotoPage('_color')" src="asset/img/ui/button_ok.png"/>		
 			</div>		
 		</div>
 	</div>
 	<div id="_color" class="PageContainer hidden close">
-		<img id="_button_back_home" class="ButtonBack" onclick='goToPage("_driver")'/>
+		<img id="_button_back_home" class="ButtonBack" onclick='gotoPage("_driver")'/>
 		<div id="_flag_bottom" class="Flag Center">
-			<div id="_hint_car_color" class="Hint">CHOOSE THE COLOR</div>			
+			<div id="_hint_car_color" class="FontT2 LightBlue">CHOOSE THE COLOR</div>			
 		</div>
 		<img id="_img_car_color" src="asset/img/ui/frontcar-1.png"/>			
 		<div class="ColorButtonWrapper">			
@@ -57,19 +58,22 @@
 		</div>
 	</div>
 	
-	<div id="_game" class="PageContainer">
+	<div id="_game" class="PageContainer hidden close">
 		<div id="_game_frame"></div>
 		<div id="_speed_meter">
+			<img src="asset/img/ui/meter.png"/>
 			<div id="_speed_pointer"></div>
-			<div id="_speed_text">
-				<span id="_speed_value">160</span>
-				<span id="_speed_unit">km/h</span>
-			</div>
+			<div id="_speed_value" class="LightBlue FontSpeedMeter">160</div>
 		</div>
-		<div id="_hud">
+		<div id="_driver_in_game">
+			<div class="LightBlue FontText">DRIVER</div>
+			<div id="_driver_name_in_game" class="LightBlue FontT3">KAREN</div>
+			<img src="asset/img/ui/line_name.png"/>
+		</div>
+		<div id="_hud" class="FontT2 DeepBlue">
 			<div class="HudElement">
 				<span>LIFE</span>
-				<span>
+				<span id="_life_star">
 					<img src="asset/img/ui/star.png"/>
 					<img src="asset/img/ui/star.png"/>
 					<img src="asset/img/ui/star.png"/>
@@ -84,26 +88,172 @@
 				<span id="_hud_score">888</span>
 			</div>			
 		</div>
+		<div id="_hint">
+			<img src="asset/img/ui/hint.png" class="Center"/>
+		</div>
+
+		<div id="_score" class="PageContainer hidden close">
+			<div id="_score_board" class="Center">
+				<div style="position:relative;width:100%;height:100%">
+				<div class="FontT1 Orange">CONGRADULATIONS !!!</div>
+				<div id="_info_complete" class="FontText">
+					<div class="ScoreElement">
+						<div>
+							<span>DIRVER</span>
+							<img src="asset/img/ui/line_complete_name.png"/>
+						</div>
+						<div id="_driver_name_complete" class="FontT1 LightBlue">KAREN</div>
+					</div>
+					<div class="ScoreElement">
+						<div>
+							<span>SCORE</span>
+							<img src="asset/img/ui/line_complete_score.png"/>
+						</div>
+						<div id="_score_complete" class="FontT1 MiddleBlue">888</div>
+					</div>
+					<div class="ScoreElement">
+						<div>
+							<span>RANK</span>
+							<img src="asset/img/ui/line_complete_score.png"/>
+						</div>
+						<div id="_rank_complete" class="FontT1 Orange">7</div>
+					</div>
+				</div>
+				<img id="_car_complete" src="asset/img/ui/frontcar-1.png"/>
+				<div id="_complete_button_wrapper" class="BottomWrapper">
+					<img class="Button" src="asset/img/ui/button_home_normal.png" onclick="gotoPage('_home')"/>
+					<img class="Button" src="asset/img/ui/button_lottery_normal.png" onclick="gotoPage('_lottery')"/>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="_lottery" class="PageContainer hidden close">
+		<img class="ButtonBack" onclick='gotoPage("_game")'/>
+		<div id="_lottery_title" class="Center LightBlue FontT1">
+			<span>輸入資料參加抽獎</span>
+		</div>
+		<div id="_lottery_info" class="Center FontInfo MiddleBlue">
+			<div class="LotteryColumn">
+				<div class="LotteryItem">
+					<span>姓名</span>
+					<input type="text" id="_input_lottery_name" class="FontInfo LightBlue"/>
+				</div>
+				<div class="LotteryItem">
+					<span>性別</span>
+					<select id="_input_lottery_gender" class="FontInfo LightBlue">
+						<option value="男">男</option>
+						<option value="女">女</option>
+					</select>
+					<span>年齡</span>
+					<select id="_input_lottery_age" class="FontInfo LightBlue">
+						<option value="20-">20歲以下</option>
+						<option value="21-30">21-30歲</option>
+						<option value="31-40">31-40歲</option>
+						<option value="41-50">41-50歲</option>
+						<option value="51-60">51-60歲</option>
+						<option value="61-70">61-70歲</option>
+					</select>
+				</div>
+				<div class="LotteryItem">
+					<span>手機</span>
+					<input type="text" id="_input_lottery_phone" class="FontInfo LightBlue"/>
+				</div>
+				<div class="LotteryItem">
+					<span>信箱</span>
+					<input type="text" id="_input_lottery_email" class="FontInfo LightBlue"/>
+				</div>
+			</div>
+			<div class="LotteryColumn">
+				<div class="LotteryItem" style="flex-grow:1">
+					<p class="FontFormSmall LightBlue">是否需為您安排前往BMW展示中心進行試乘體驗，如欲參加請選擇您欲前往的展示中心，我們將針對您感興趣之車款，將由BMW專業銷售顧問與您聯絡，提供進一步的產品資訊。</p>
+				</div>
+				<div class="LotteryItem">
+					<span>試乘體驗</span>
+					<select id="_input_lottery_trial" class="FontInfo LightBlue">
+						<option value="yes">當然好，我有興趣</option>
+						<option value="no">否</option>
+					</select>
+				</div>
+				<div class="LotteryItem">
+					<span>門市</span>
+					<select id="_input_lottery_store" class="FontInfo LightBlue">
+						<option value="台北汎德 - 天母">台北汎德 - 天母</option>
+						<option value="台北汎德 - 敦南">台北汎德 - 敦南</option>
+						<option value="台北汎德 - 民生">台北汎德 - 民生</option>
+						<option value="台北汎德 - 濱江">台北汎德 - 濱江</option>
+						<option value="鎔德 - 內湖">鎔德 - 內湖</option>
+						<option value="依德 - 中和">依德 - 中和</option>
+						<option value="尚德 - 新莊">尚德 - 新莊</option>
+						<option value="大桐 - 桃園">大桐 - 桃園</option>
+						<option value="大桐 - 平鎮">大桐 - 平鎮</option>
+						<option value="中鎂 - 新竹">中鎂 - 新竹</option>
+						<option value="台中汎德 - 復興">台中汎德 - 復興</option>
+						<option value="台中汎德 - 文心">台中汎德 - 文心</option>
+						<option value="台中汎德 - 崇德">台中汎德 - 崇德</option>
+						<option value="長慶 - 南投">長慶 - 南投</option>
+						<option value="昌一 - 彰化">昌一 - 彰化</option>
+						<option value="賓歐 - 嘉義">賓歐 - 嘉義</option>
+						<option value="台南汎德 - 永華">台南汎德 - 永華</option>
+						<option value="台南汎德 - 永康">台南汎德 - 永康</option>
+						<option value="高雄汎德 - 新生">高雄汎德 - 新生</option>
+						<option value="高雄汎德 - 博愛">高雄汎德 - 博愛</option>
+						<option value="高雄汎德 - 屏東">高雄汎德 - 屏東</option>
+						<option value="來德 - 花蓮">來德 - 花蓮</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="BottomWrapper">
+			<img id="_button_send" class="Button Center" onclick="sendInfo()" src="asset/img/ui/button_send_normal.png"/>
+			</div>		
+		</div>
+	</div>
+	<div id="_rank" class="PageContainer hidden close">
+		<img class="ButtonBack" onclick='gotoPage("_game")'/>
+		<div class="Center">
+			<div class="FontT1 LightBlue">BEST RUNNERS</div>
+			<div class="WaveTitle FontT2 MiddleBlue">
+				<img src="asset/img/ui/line_title.png"/>
+				<span>排行榜</span>
+				<img src="asset/img/ui/line_title.png"/>
+			</div>
+		</div>
+		<div id="_rank_info" class="Center FontInfo LightBlue">
+			<div class="RankItem">
+				<span>1.</span><span>KAREN</span><span>8888</span>
+			</div>
+			<div class="RankItem">
+				<span>2.</span><span>十元十元</span><span>8888</span>
+			</div>
+			<div class="RankItem">
+				<span>3.</span><span>RUBY RUBY</span><span>8888</span>
+			</div>
+			<div class="RankItem">
+				<span>4.</span><span>KAREN</span><span>8888</span>
+			</div>
+			<div class="RankItem">
+				<span>5.</span><span>PIPI</span><span>8888</span>
+			</div>
+			<div class="RankItem">
+				<span>6.</span><span>KAREN</span><span>8888</span>
+			</div>
+			<div class="RankItem">
+				<span>7.</span><span>HEY HEY HEY</span><span>8888</span>
+			</div>
+			<div class="RankItem">
+				<span>8.</span><span>KAREN</span><span>8888</span>
+			</div>
+			<div class="RankItem">
+				<span>9.</span><span>KAREN</span><span>8888</span>
+			</div>
+			<div class="RankItem">
+				<span>10.</span><span>KAREN</span><span>8888</span>
+			</div>
+		</div>
 	</div>
 
-	<!-- <div id="hud">
-      <span id="playerx" class="hud">
-      	<span id="playerx_value" class="value">0</span>
-      </span>
-      <span id="speed" class="hud">
-      	<span id="speed_value" class="value">0</span> mph
-      </span>
-      <span id="current_lap_time" class="hud">Time: 
-      	<span id="current_lap_time_value" class="value">0.0</span>
-      </span> 
-      <span id="last_lap_time" class="hud">Last Lap: 
-      	<span id="last_lap_time_value" class="value">0.0</span>
-      </span>
-      <span id="fast_lap_time" class="hud">Fastest Lap: 
-      	<span id="fast_lap_time_value" class="value">0.0</span>
-      </span>
-    </div> -->
-	
 	<script src="src/js/game.js"></script>
 	
 
