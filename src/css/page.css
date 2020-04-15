@@ -64,6 +64,7 @@ input,select{
     right: 0;
     bottom: 0;
     background-size: cover;	
+    background-position: center center;
 }
 
 /* page home */
@@ -192,7 +193,7 @@ input,select{
 	position:absolute;
 	left:50px;
 	bottom:32px;
-	width:14%;
+	/*width:14%;*/
 	height:18%;
 }
 #_speed_meter>img{

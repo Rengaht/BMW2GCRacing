@@ -17,6 +17,7 @@ function gotoPage(page_){
 			break;
 		case '_game':
 			hideItem($('#_button_rank'));
+			hideItem($('#_score'));			
 			setupGame();
 			break;
 		case '_rank':
@@ -29,6 +30,7 @@ function gotoPage(page_){
 	showItem($('#'+page_));
 
 	cur_page=page_;
+
 }
 
 
@@ -52,11 +54,11 @@ function showItem(item_){
 	if(!item_.hasClass('hidden')) return;
 	
 	item_.removeClass('close');
-	item_.children().not("#_button_record").removeClass('close');
+	item_.children().not("#_score").removeClass('close');
 	
 	setTimeout(function(){		
 		item_.removeClass('hidden');		
-		item_.children().not("#_button_record").removeClass('hidden');
+		item_.children().not("#_score").removeClass('hidden');
 	},10);
 }
 
