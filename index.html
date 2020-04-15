@@ -32,11 +32,11 @@
 			<div id="_hint_driver_name" class="FontT2 MiddleBlue">Enter Driver's Name</div>
 			<div>
 				<span id="_driver_title" class="FontText">DRIVER</span>	
-				<input type="text" id="_input_driver" maxlength="6" class="FontT1 LightBlue"/>
+				<input type="text" id="_input_driver" maxlength="6" class="FontT1 LightBlue" placeholder="YOUR NAME..." />
 			</div>			
 		</div>
 		<div class="BottomWrapper">
-			<img id="_button_ok" class="Button Center" onclick="gotoPage('_color')" src="asset/img/ui/button_ok.png"/>		
+			<img id="_button_ok" class="Button Center" onclick="onDriverNameClick()" src="asset/img/ui/button_ok.png"/>		
 			</div>		
 		</div>
 	</div>
@@ -45,12 +45,30 @@
 		<div id="_flag_bottom" class="Flag Center">
 			<div id="_hint_car_color" class="FontT2 LightBlue">CHOOSE THE COLOR</div>			
 		</div>
-		<img id="_img_car_color" class="FrontCar" src="asset/img/ui/frontcar-1.png"/>			
+		<div class="ColorCarWrapper">
+			<img id="_img_car_color_blue" class="FrontCar" src="asset/img/ui/frontcar-1.png"/>		
+			<img id="_img_car_color_red" class="FrontCar hidden close" src="asset/img/ui/frontcar-2.png"/>		
+			<img id="_img_car_color_gray" class="FrontCar hidden close" src="asset/img/ui/frontcar-3.png"/>		
+			<img id="_img_car_color_white" class="FrontCar hidden close" src="asset/img/ui/frontcar-4.png"/>		
+		</div>
 		<div class="ColorButtonWrapper">			
-			<img src="asset/img/ui/button_blue.png" class="ColorButton" onClick="setCarColor('BLUE')"/>
-			<img src="asset/img/ui/button_red.png" class="ColorButton" onClick="setCarColor('RED')"/>
-			<img src="asset/img/ui/button_gray.png" class="ColorButton" onClick="setCarColor('GRAY')"/>
-			<img src="asset/img/ui/button_white.png" class="ColorButton" onClick="setCarColor('WHITE')"/>
+			<div class="ColorButton" onClick="setDriverColor('blue')">
+				<img src="asset/img/ui/button_blue.png" class="Button"/>
+				<img id="_button_blue_selected" src="asset/img/ui/button_color_select.png"/>
+			</div>
+			<div class="ColorButton" onClick="setDriverColor('red')">
+				<img src="asset/img/ui/button_red.png" class="Button"/>
+				<img id="_button_red_selected" src="asset/img/ui/button_color_select.png" " class="hidden close"/>
+			</div>
+			<div class="ColorButton" onClick="setDriverColor('gray')">
+				<img src="asset/img/ui/button_gray.png" class="Button"/>
+				<img id="_button_gray_selected" src="asset/img/ui/button_color_select.png" " class="hidden close"/>
+			</div>
+			<div class="ColorButton" onClick="setDriverColor('white')">
+				<img src="asset/img/ui/button_white.png" class="Button"/>
+				<img id="_button_white_selected" src="asset/img/ui/button_color_select.png" " class="hidden close"/>
+			</div>
+			
 		</div>
 		<div class="BottomWrapper">
 			<img id="_button_go" class="Button Center" onclick="gotoPage('_game')" src="asset/img/ui/button_go_normal.png"/>		
