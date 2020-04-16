@@ -16,7 +16,7 @@
 	<script src="src/js/road.js"></script>
 	
 </head>
-<body onload="init();">
+<body onload="onload();">
 	 
 	<img id="_button_rank" src="asset/img/ui/button_rank.png" class="Button" onclick="gotoPage('_rank')"/>
 		
@@ -106,7 +106,7 @@
 				<span id="_hud_score">888</span>
 			</div>			
 		</div>
-		<div id="_hint">
+		<div id="_hint" onClick="startGame()">
 			<img src="asset/img/ui/hint.png" class="Center"/>
 		</div>
 
@@ -189,10 +189,14 @@
 				</div>
 				<div class="LotteryItem">
 					<span>試乘體驗</span>
-					<select id="_input_lottery_trial" class="FontInfo LightBlue">
-						<option value="yes">當然好，我有興趣</option>
-						<option value="no">否</option>
-					</select>
+					<div id="_input_lottery_trial" class="radio FontInfo LightBlue">
+						<label class="radio">
+							<input type="radio" name="trial">當然好，我有興趣
+						</label>
+						<label class="radio" name="trial">
+							<input type="radio">否
+						</label>
+					</div>
 				</div>
 				<div class="LotteryItem">
 					<span>門市</span>

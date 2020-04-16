@@ -194,8 +194,12 @@ input,select{
 	display:flex;	
 }
 .HudElement>span{
-	margin-right:25px;
+	width:7.5rem;
+	margin-right:1rem;
+	text-align: left;
 }
+
+
 #_life_star>img{
 	height:2rem;
 }

@@ -3,6 +3,13 @@
 //=========================================================================
 var yproj=[1,.67,.41,.24,.13,.07,.04,.032,.022];
 var dk=[];
+var theta_road=[0.66,0.97]; // in rad
+var RoadSpriteWScale=Math.tan(theta_road[1])-Math.tan(theta_road[0]);
+var RoadSpriteXScale=Math.tan(theta_road[0]);
+
+var theta_side=[1.21,1.29];
+var SideSpriteWScale=Math.tan(theta_side[1])-Math.tan(theta_side[0]);
+var SideSpriteXScale=Math.tan(theta_side[0]);
 
 
 var Util = {
@@ -62,16 +69,18 @@ var Util = {
     p.screen.scale = d_/p.camera.z;
 
     let xp=p.camera.x*cameraDepth/p.camera.z;
-
-    
     let yp=p.camera.y*d_/p.camera.z;
+
+    p.project.x=xp;
+    p.project.y=Math.abs(yp);
+
     // let yp=p.camera.y* p.screen.scale;
     
     // console.log("project: "+index+" "+d_);
 
     p.screen.x     = Math.round((width/2)  + (xp* width/2));
     p.screen.y     = Math.round((height*(1.0-RoadRatio)) - (yp * height*RoadRatio));
-    p.screen.w     = Math.round(( yp * height*RoadRatio/cameraDepth));
+    p.screen.w     = Math.abs(( yp * height*RoadRatio/cameraDepth));
     // p.screen.w     = Math.round(( p.screen.scale*roadWidth * width/2));
 
     //  p.camera.x     = (p.world.x || 0) - cameraX;
@@ -117,7 +126,17 @@ if (!window.requestAnimationFrame) { // http://paulirish.com/2011/requestanimati
 var Dom = {
 
   get:  function(id)                     { return ((id instanceof HTMLElement) || (id === document)) ? id : document.getElementById(id); },
-  set:  function(id, html)               { Dom.get(id).innerHTML = html;                        },
+  set:  function(id,val,dom)             { 
+    
+    if(id==='life'){
+      for(var i=0;i<MaxLife;++i){
+          if(i<val) showItem(dom.children().eq(i));
+          else hideItem(dom.children().eq(i));
+      }
+    }else
+      dom.html(val);
+
+  },
   on:   function(ele, type, fn, capture) { Dom.get(ele).addEventListener(type, fn, capture);    },
   un:   function(ele, type, fn, capture) { Dom.get(ele).removeEventListener(type, fn, capture); },
   show: function(ele, type)              { Dom.get(ele).style.display = (type || 'block');      },
@@ -149,17 +168,11 @@ var Game = {  // a modified version of the game loop from my previous boulderdas
 
   run: function(options) {
 
-    // Game.loadImages(options.images, function(images) {
-
       options.ready(); // tell caller to initialize itself because images are loaded and we're ready to rumble
 
-      Game.setKeyListener(options.keys);
-
-      var canvas = options.canvas,    // canvas render target is provided by caller
-          update = options.update,    // method to update game logic is provided by caller
+      var update = options.update,    // method to update game logic is provided by caller
           render = options.render,    // method to render the game is provided by caller
           step   = options.step,      // fixed frame step (1/fps) is specified by caller
-          stats  = options.stats,     // stats instance is provided by caller
           now    = null,
           last   = Util.timestamp(),
           dt     = 0,
@@ -178,34 +191,13 @@ var Game = {  // a modified version of the game loop from my previous boulderdas
         render();
         // stats.update();
         last = now;
-        requestAnimationFrame(frame, canvas);
+        requestAnimationFrame(frame);
       }
       frame(); // lets get this party started
       // Game.playMusic();
     // });
   },
-
   //---------------------------------------------------------------------------
-
-  loadImages: function(names, callback) { // load multiple images and callback when ALL images have loaded
-    var result = [];
-    var count  = names.length;
-
-    var onload = function() {
-      if (--count == 0)
-        callback(result);
-    };
-
-    for(var n = 0 ; n < names.length ; n++) {
-      var name = names[n];
-      result[n] = document.createElement('img');
-      Dom.on(result[n], 'load', onload);
-      result[n].src = "images/" + name + ".png";
-    }
-  },
-
-  //---------------------------------------------------------------------------
-
   setKeyListener: function(keys) {
     var onkey = function(keyCode, mode) {
       var n, k;
@@ -222,35 +214,6 @@ var Game = {  // a modified version of the game loop from my previous boulderdas
     Dom.on(document, 'keydown', function(ev) { onkey(ev.keyCode, 'down'); } );
     Dom.on(document, 'keyup',   function(ev) { onkey(ev.keyCode, 'up');   } );
   },
-
-  //---------------------------------------------------------------------------
-
-  stats: function(parentId, id) { // construct mr.doobs FPS counter - along with friendly good/bad/ok message box
-
-    // var result = new Stats();
-    // result.domElement.id = id || 'stats';
-    // Dom.get(parentId).appendChild(result.domElement);
-
-    // var msg = document.createElement('div');
-    // msg.style.cssText = "border: 2px solid gray; padding: 5px; margin-top: 5px; text-align: left; font-size: 1.15em; text-align: right;";
-    // msg.innerHTML = "Your canvas performance is ";
-    // Dom.get(parentId).appendChild(msg);
-
-    // var value = document.createElement('span');
-    // value.innerHTML = "...";
-    // // document.getElementById("_stats").appendChild(value);
-
-    // setInterval(function() {
-    //   var fps   = result.current();
-    //   var ok    = (fps > 50) ? 'good'  : (fps < 30) ? 'bad' : 'ok';
-    //   var color = (fps > 50) ? 'green' : (fps < 30) ? 'red' : 'gray';
-    //   value.innerHTML       = ok;
-    //   value.style.color     = color;
-    //   msg.style.borderColor = color;
-    // }, 5000);
-    // return result;
-  },
-
   //---------------------------------------------------------------------------
 
   playMusic: function() {

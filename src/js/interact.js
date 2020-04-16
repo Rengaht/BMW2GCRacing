@@ -94,7 +94,13 @@ function setDriverColor(set_){
 	_driver_color=set_;
 
 }
+function setDriverScore(set_){
 
+	// TODO: upload score & get rank
+
+	$('#_score_complete').text(set_);	
+
+}
 function sendInfo(){
 
 

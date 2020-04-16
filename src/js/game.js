@@ -2,10 +2,11 @@ var Container,autoDetectRenderer,loader,resources,Sprite,Texture,Rectangle;
 var _app;
 
 var _background;
-var _sky,_mountain,_road,_car,_scene;
+var _sky,_mountain,_road,_car,_scene_side,_scene_road;
 
 var _texture_scene=[];
 var _texture_car;
+var _texture_road;
 var _last_car_pos;
 
 var _shader_road,_shader_lane,_shader_rumble;
@@ -18,11 +19,26 @@ var _spriteScale;
 var PolyPerSeg=4+(lanes-1);
 
 
-function init(){
+function onload(){
 
-// PIXI.useDeprecated();
+	// setup pixi
 	setupPixi();	
 	loadTexture();
+	
+	// setup hud
+	hud={
+		speed:{ value: null, dom: $('#_speed_value')},
+		score:{ value: null, dom: $('#_hud_score')},
+		time:{ value: null, dom: $('#_hud_time') },
+		life:{ value: null, dom: $('#_life_star') }
+	};
+
+	Game.setKeyListener(
+	   [{ keys: [KEY.LEFT,  KEY.A], mode: 'down', action: function() { keyLeft   = true;  } },
+	    { keys: [KEY.RIGHT, KEY.D], mode: 'down', action: function() { keyRight  = true;  } },
+	    { keys: [KEY.LEFT,  KEY.A], mode: 'up',   action: function() { keyLeft   = false; } },
+	    { keys: [KEY.RIGHT, KEY.D], mode: 'up',   action: function() { keyRight  = false; } }]);
+
 
 }
 function setupPixi(){
@@ -96,6 +112,8 @@ function loadFinish(loader,resources_){
 	_texture_scene.push(resources.scene2.textures);
 	_texture_scene.push(resources.scene3.textures);
 	
+
+	_texture_road=resources.road_element.textures;
 	_texture_car=resources.car.textures;
 
 	// load road
@@ -135,7 +153,8 @@ function loadFinish(loader,resources_){
 
 	_road=new Container();
 
-	_scene=new Container();
+	_scene_side=new Container();
+	_scene_road=new Container();
 
  	for(var n=0;n<drawDistance;n++){
  		for(var i=0;i<PolyPerSeg;++i){
@@ -143,88 +162,106 @@ function loadFinish(loader,resources_){
  															0,0,0,0,0,0),
  										_shader_road));
 	 	}
+	 	// scene object
 	 	let sprite_left=new PIXI.Sprite();
 	 	let sprite_right=new PIXI.Sprite();
 	 	
 	 	sprite_left.zIndex=sprite_right.zIndex=drawDistance-n;
 
-	 	_scene.addChild(sprite_left);
-	 	_scene.addChild(sprite_right);
+	 	_scene_side.addChild(sprite_left);
+	 	_scene_side.addChild(sprite_right);
+
+	 	// road object
+	 	let coin_left=new PIXI.Sprite();
+	 	let coin_center=new PIXI.Sprite();
+	 	let coin_right=new PIXI.Sprite();
+
+	 	coin_left.zIndex=coin_center.zIndex=coin_right.zIndex=drawDistance-n;
+
+	 	_scene_road.addChild(coin_left);
+	 	_scene_road.addChild(coin_center);
+	 	_scene_road.addChild(coin_right);
+
  	}
 
 
-	_scene.sortableChildren=true;
-
+	_scene_road.sortableChildren=true;
+	_scene_side.sortableChildren=true;
 
 
 	
 	// laod car texture
-	_car=new Container();
+	_car=new PIXI.Sprite(_texture_car['car1-left.png']);
 	
-	let car_center=new PIXI.Sprite(_texture_car['car1-center.png']);
-	let car_left=new PIXI.Sprite(_texture_car['car1-left.png']);
-	let car_right=new PIXI.Sprite(_texture_car['car1-right.png']);
-	_sprite_car={'center':car_center,'left':car_left,'right':car_right};
-	_last_car_pos='center';
+	_driver_color='blue';
+	setupCarSprite(_driver_color);
 	
-	_car.addChild(_sprite_car[_last_car_pos]);
-
 
 	_background.addChild(_sky);
 	_background.addChild(_mountain);
 
 	_background.addChild(_road);
-	_background.addChild(_scene);
+	_background.addChild(_scene_side);
+	_background.addChild(_scene_road);
 	_background.addChild(_car);
 
-	_spriteScale=0.3*(1/car_center.width);
+	_spriteScale=0.3*(1/_car.texture.width);
 	// _app.ticker.add(delta=>gameLoop(delta));
 	
 }
+function setupCarSprite(color_){
+	let id=null;
+	switch(color_){
+		case 'blue': id='1'; break;
+		case 'red': id='2'; break;
+		case 'gray': id='3'; break;
+		case 'white': id='4'; break;
+	}
+	_sprite_car={'center':'car'+id+'-center.png',
+				 'left':'car'+id+'-left.png',
+				 'right':'car'+id+'-right.png'};
+	_last_car_pos='center';
+
+	_car.texture=_texture_car[_sprite_car[_last_car_pos]];
+}
+
+
 function setupGame(){
 
-	 Game.run({
-	  canvas: null, render: render, update: update, stats: stats, step: step,
-	  images: [],
-	  keys: [
-	    { keys: [KEY.LEFT,  KEY.A], mode: 'down', action: function() { keyLeft   = true;  } },
-	    { keys: [KEY.RIGHT, KEY.D], mode: 'down', action: function() { keyRight  = true;  } },
-	    { keys: [KEY.UP,    KEY.W], mode: 'down', action: function() { keyFaster = true;  } },
-	    { keys: [KEY.DOWN,  KEY.S], mode: 'down', action: function() { keySlower = true;  } },
-	    { keys: [KEY.LEFT,  KEY.A], mode: 'up',   action: function() { keyLeft   = false; } },
-	    { keys: [KEY.RIGHT, KEY.D], mode: 'up',   action: function() { keyRight  = false; } },
-	    { keys: [KEY.UP,    KEY.W], mode: 'up',   action: function() { keyFaster = false; } },
-	    { keys: [KEY.DOWN,  KEY.S], mode: 'up',   action: function() { keySlower = false; } }
-	  ],
+	// show hint
+	showItem($('#_hint'));
+	setupCarSprite(_driver_color);
+
+	Game.run({
+	  render: render, 
+	  update: update,
+	  step: step,
 	  ready: function() {
 	    reset();
 
 	    indexScene=0;
 	   	setupScene(indexScene);
-
-	   	hud={
-			speed:            { value: null, dom: Dom.get('_speed_value')},
-			time: { value: null, dom: Dom.get('_hud_time') },
-			star:{ value: null, dom: Dom.get('_life_star') }
-		};
-
-	    // Dom.storage.fast_lap_time = Dom.storage.fast_lap_time || 180;
-	    // updateHud('fast_lap_time', formatTime(Util.toFloat(Dom.storage.fast_lap_time)));
 	  }
 	});
 
+
 }
 
-function run(){
-    isPlaying=true;
-	console.log("------------- Start Game -------------");
+function startGame(){
+
+	hideItem($('#_hint'));
+		
+	setTimeout(function(){
+		
+		//TODO: countdown here 
+
+
+		isPlaying=true;
+		console.log("------------- Start Game -------------");		
+	},500);
+
+
 }
-
-// function gameLoop(delta){
-
-// 	_sky.tilePosition.y-=1;
-// 	_mountain.tilePosition.x+=.5;
-// }
 
 function createQuadGeometry(x1, y1, x2, y2, x3, y3, x4, y4){
 
@@ -235,10 +272,7 @@ function createQuadGeometry(x1, y1, x2, y2, x3, y3, x4, y4){
 	// 		1,x1+.2,1,x1+.2,0,x1];
 	var uvs=[0,0.5,0,0.5,1,0.5,
 			1,0.5,1,0.5,0,0.5];
-	// for(var i=0;i<vertices.length;++i){
-	// 	uvs[i]=(vertices[i])/_windowWidth;		
-	// }
-
+	
 	var index=[0,1,2,3,4,5,6];
 	
 	let geometry=new PIXI.Geometry();
@@ -247,43 +281,47 @@ function createQuadGeometry(x1, y1, x2, y2, x3, y3, x4, y4){
 	// geometry.addIndex(index);
 
 	return geometry;
-
-	//let shader=PIXI.Shader.from(vertex_shader,frag_shader,{'uColor':new Float32Array([1.,1.,1.,1.]),'uSampler':txt});
-	
-	// return new PIXI.Mesh(geometry,_shader_road);
-
-	// return new PIXI.SimpleMesh(txt,vertices,uvs,index,PIXI.DRAW_MODES.TRIANLGES);
-
-	// let points=[];
-	// for (let i = 0; i < 20; i++) {
-	//     points.push(new PIXI.Point(i * 50, 0));
-	// };
-	// return new PIXI.SimplePlane(txt,points);
-
-
 }
 
 
- function reset(options) {
-  options       = options || {};
-  // canvas.width  = width  = Util.toInt(options.width,          width);
-  // canvas.height = height = Util.toInt(options.height,         height);
+ function reset(){
+  
+  position=0;
+  score=0;
+  life=MaxLife;
+  currentLapTime=0;
+  speed=0;
+
+  updateHud();
+  
   cameraDepth            = 1 / Math.tan((fieldOfView/2) * Math.PI/180);
   playerZ                = (cameraHeight * cameraDepth);
   resolution             = height/480;
   roadWidth				 = height*RoadRatio/cameraDepth;
-  // roadWidth				 = width*0.65/(cameraDepth/segmentLength*(width/2));
   
-  // let zfar=(height*RoadRatio*Math.cos(CameraTilt)*cameraHeight*cameraDepth)/(height*.01);
+  // roadWidth				 = width*0.65/(cameraDepth/segmentLength*(width/2));
   // segmentLength			 = (zfar)/drawDistance;
-  // refreshTweakUI();
-  for(var i=0;i<mDrawSegment+1;++i){
-  	// if(i==0) dk.push(1);
-  	// else 
-  		dk.push((yproj[i])*(((i+1)*segmentLength*segmentPerDraw-cameraDepth)/cameraHeight));
+
+  // setup projection  
+  if(dk.length==0){  
+	  for(var i=0;i<mDrawSegment+1;++i){
+	  	dk.push((yproj[i])*(((i+1)*segmentLength*segmentPerDraw-cameraDepth)/cameraHeight));
+	  }
   }
-  if ((segments.length==0) || (options.segmentLength) || (options.rumbleLength))
+  if(segments.length==0)
     resetRoad(); // only rebuild road when necessary
+
 }
 
+function endGame(){
+
+if(!isPlaying) return;
+
+  console.log("------------- End Game "+formatTime(currentLapTime)+"-------------");
+  isPlaying=false;
+
+  setDriverScore(score);
+  showItem($('#_score'));
+  showItem($('#_button_rank'));
+}
 

@@ -79,32 +79,27 @@ var Render = {
 
   //---------------------------------------------------------------------------
 
-  sprite: function(sprite,width, height, resolution, roadWidth, texture, scale, destX, destY, offsetX, offsetY, clipY) {
+  sprite: function(sprite, texture, destX, destY, scale){
 
-                    //  scale for projection AND relative to roadWidth (for tweakUI)
-    // var destW  = (sprite.texture.width * scale * width/2)* (_spriteScale * roadWidth);
-    // var destH  = (sprite.texture.height * scale* width/2) * (_spriteScale * roadWidth);
     if(texture===undefined) return;
 
     sprite.texture=texture;
     
-    var destW  = (texture.width * scale);
-    var destH  = (texture.height  * scale);
+    // var destW  = (destW);
+    var destW=  texture.width*scale;
+    var destH  = texture.height*scale;
 
-    destX = destX + (destW * (offsetX || 0));
-    destY = destY + (destH * (offsetY || 0));
+    destX = destX -destW/2;
+    // destY = destY + (destH * (offsetY || 0));
 
-    var clipH = clipY ? Math.max(0, destY+destH-clipY) : 0;
+    // var clipH = clipY ? Math.max(0, destY+destH-clipY) : 0;
 
-    //TODO:
-    // if (clipH < destH)
-    //   ctx.drawImage(sprites, sprite.x, sprite.y, sprite.w, sprite.h - (sprite.h*clipH/destH), destX, destY, destW, destH - clipH);
     sprite.x=destX;
     sprite.y=destY;
     sprite.width=destW;
-    sprite.height=destH-clipH;
+    sprite.height=destH;
    
-    if(sprite.scale.y<0) sprite.scale.y=-sprite.scale.y;
+    // if(sprite.scale.y<0) sprite.scale.y=-sprite.scale.y;
       // return;
 
     sprite.visible=true;
@@ -117,7 +112,7 @@ var Render = {
   player: function(width, height, resolution, roadWidth, sprites, speedPercent, scale, destX, destY, steer, updown) {
 
     var bounce = (1.5 * Math.random() * speedPercent * resolution) * Util.randomChoice([-1,1]);
-    var sprite;
+    
     // if (steer < 0)
     //   sprite = (updown > 0) ? SPRITES.PLAYER_UPHILL_LEFT : SPRITES.PLAYER_LEFT;
     // else if (steer > 0)
@@ -134,13 +129,9 @@ var Render = {
     else
       next_car_pos='center';
 
-    sprite=_sprite_car[_last_car_pos];
-
+    
     if(_last_car_pos!=next_car_pos){
-      _car.removeChildren();
-      
-      sprite=_sprite_car[next_car_pos];
-      _car.addChild(sprite);
+      _car.texture=_texture_car[_sprite_car[next_car_pos]];
     }
     _last_car_pos=next_car_pos;
 
@@ -149,18 +140,18 @@ var Render = {
     var offsetY=-1;
     var clipY=0;
 
-    var destW  = (sprite.texture.width * scale * width/2) * (_spriteScale * roadWidth);
-    var destH  = (sprite.texture.height * scale * width/2) * (_spriteScale * roadWidth);
+    var destW  = (_car.texture.width * scale * width/2) * (_spriteScale * roadWidth);
+    var destH  = (_car.texture.height * scale * width/2) * (_spriteScale * roadWidth);
 
     destX = destX + (destW * (offsetX || 0));
     destY = destY + (destH * (offsetY || 0));
 
     var clipH = clipY ? Math.max(0, destY+destH-clipY) : 0;
 
-    sprite.x=destX;
-    sprite.y=destY;
-    sprite.width=destW;
-    sprite.height=destH-clipH;
+    _car.x=destX;
+    _car.y=destY;
+    _car.width=destW;
+    _car.height=destH-clipH;
 
     
   },
