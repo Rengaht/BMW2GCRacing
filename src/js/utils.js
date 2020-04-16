@@ -80,7 +80,7 @@ var Util = {
 
     p.screen.x     = Math.round((width/2)  + (xp* width/2));
     p.screen.y     = Math.round((height*(1.0-RoadRatio)) - (yp * height*RoadRatio));
-    p.screen.w     = Math.abs(( yp * height*RoadRatio/cameraDepth));
+    p.screen.w     = Math.abs(( yp * roadWidth));
     // p.screen.w     = Math.round(( p.screen.scale*roadWidth * width/2));
 
     //  p.camera.x     = (p.world.x || 0) - cameraX;

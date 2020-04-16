@@ -350,6 +350,8 @@ function render() {
   for(n=0;n<drawDistance;++n){
     segment = segments[(baseSegment.index + n) % segments.length];
 
+    
+
     let index_draw=(baseSegment.index + n)%drawDistance;
     // for(i = 0 ; i < segment.cars.length ; i++) {
     //   car         = segment.cars[i];
@@ -364,22 +366,23 @@ function render() {
 
       sprite      = segment.sprites[i];
 
-      spriteScale = segment.p1.project.y*height*RoadRatio*SideSpriteXScale/600;
+      spriteScale = segment.p1.project.y*height*RoadRatio*SideSpriteXScale/313;
       spriteX     = segment.p1.screen.x + ( sprite.offset *Math.abs(segment.p1.screen.w));
       spriteY     = segment.p1.screen.y;      
 
-     
+
       Render.sprite(_scene_side.getChildAt(index_draw*2+(sprite.offset<0?0:1)),                   
                     _texture_scene[indexScene][sprite.source], 
+                    // _texture_scene[0]['1-tree-1.png'], 
                     spriteX, spriteY, 
-                    spriteScale);
+                    spriteScale,drawDistance-n);
       // console.log('updage '+n+' -> '+sprite.source);
     }
 
     for(i=0;i<segment.coins.length;++i){
       
       coin=segment.coins[i];
-      spriteScale = segment.p1.project.y*height*RoadRatio*RoadSpriteXScale/386;
+      spriteScale = segment.p1.project.y*height*RoadRatio*RoadSpriteXScale/417;
       spriteX     = segment.p1.screen.x + ( coin.offset *Math.abs(segment.p1.screen.w));
       spriteY     = segment.p1.screen.y;      
       
@@ -387,8 +390,9 @@ function render() {
 
       Render.sprite(_scene_road.getChildAt(index_draw*3+road),
                     _texture_road[coin.source], 
+                    // _texture_scene[0]['1-tree-1.png'], 
                     spriteX, spriteY, 
-                    spriteScale);
+                    spriteScale,drawDistance-n);
 
     }
     for(i=0;i<segment.obstacles.length;++i){
@@ -402,8 +406,9 @@ function render() {
 
       Render.sprite(_scene_road.getChildAt(index_draw*3+road),
                     _texture_road[obstacle.source], 
+                    // _texture_scene[0]['1-tree-1.png'], 
                     spriteX, spriteY, 
-                    spriteScale);
+                    spriteScale,drawDistance-n);
 
     }
 

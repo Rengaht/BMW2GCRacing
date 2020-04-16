@@ -79,7 +79,7 @@ var Render = {
 
   //---------------------------------------------------------------------------
 
-  sprite: function(sprite, texture, destX, destY, scale){
+  sprite: function(sprite, texture, destX, destY, scale,zIndex){
 
     if(texture===undefined) return;
 
@@ -90,6 +90,7 @@ var Render = {
     var destH  = texture.height*scale;
 
     destX = destX -destW/2;
+    destY=destY-destH;
     // destY = destY + (destH * (offsetY || 0));
 
     // var clipH = clipY ? Math.max(0, destY+destH-clipY) : 0;
@@ -98,7 +99,7 @@ var Render = {
     sprite.y=destY;
     sprite.width=destW;
     sprite.height=destH;
-   
+    sprite.zIndex=zIndex;
     // if(sprite.scale.y<0) sprite.scale.y=-sprite.scale.y;
       // return;
 

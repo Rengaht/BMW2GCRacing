@@ -156,6 +156,9 @@ function loadFinish(loader,resources_){
 	_scene_side=new Container();
 	_scene_road=new Container();
 
+	_scene_road.sortableChildren=true;
+	_scene_side.sortableChildren=true;
+
  	for(var n=0;n<drawDistance;n++){
  		for(var i=0;i<PolyPerSeg;++i){
  			_road.addChild(new PIXI.Mesh(createQuadGeometry(n/drawDistance,0,
@@ -166,7 +169,9 @@ function loadFinish(loader,resources_){
 	 	let sprite_left=new PIXI.Sprite();
 	 	let sprite_right=new PIXI.Sprite();
 	 	
-	 	sprite_left.zIndex=sprite_right.zIndex=drawDistance-n;
+	 	let z=drawDistance-n;
+	 	sprite_left.zIndex=z;
+	 	sprite_right.zIndex=z;
 
 	 	_scene_side.addChild(sprite_left);
 	 	_scene_side.addChild(sprite_right);
@@ -176,7 +181,9 @@ function loadFinish(loader,resources_){
 	 	let coin_center=new PIXI.Sprite();
 	 	let coin_right=new PIXI.Sprite();
 
-	 	coin_left.zIndex=coin_center.zIndex=coin_right.zIndex=drawDistance-n;
+	 	coin_left.zIndex=drawDistance-n;
+	 	coin_center.zIndex=drawDistance-n;
+	 	coin_right.zIndex=drawDistance-n;
 
 	 	_scene_road.addChild(coin_left);
 	 	_scene_road.addChild(coin_center);
@@ -185,8 +192,6 @@ function loadFinish(loader,resources_){
  	}
 
 
-	_scene_road.sortableChildren=true;
-	_scene_side.sortableChildren=true;
 
 
 	
