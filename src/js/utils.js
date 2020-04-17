@@ -273,8 +273,7 @@ var SPRITES1={
   HOUSE:  {left:['1-house1-left.png','1-house2-left.png'], 
             right: ['1-house1-right.png','1-house2-right.png']}, 
   BOARD:       ['1-board1.png','1-board2.png'],
-  TOWER:       ['1-tower1.png','1-tower2.png'],
-  START:['start.png']
+  TOWER:       ['1-tower1.png','1-tower2.png']
 };
 
 

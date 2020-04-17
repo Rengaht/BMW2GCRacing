@@ -83,7 +83,7 @@ function loadTexture(){
 			.add('scene1','asset/img/sprite/scene1.json')
 			.add('scene2','asset/img/sprite/scene2.json')
 			.add('scene3','asset/img/sprite/scene3.json')
-			.add('gate','asset/img/gate.json')
+			.add('gate','asset/img/sprite/gate.json')
 			.load(loadFinish);
 
 }
@@ -243,25 +243,41 @@ function setupCarSprite(color_){
 
 
 function setupGame(){
+	position=0;
+	score=0;
+	life=MaxLife;
+	currentLapTime=0;
+	speed=0;
+	lastSegment=0;
+	setupScene(0);
+	playerX=0;
 
-	// show hint
-	reset();
-    
+	updateHud();
+
+	cameraDepth            = 1 / Math.tan((fieldOfView/2) * Math.PI/180);
+	// playerZ                = 15*segmentLength;
+	resolution             = height/480;
+	roadWidth				 = height*RoadRatio/cameraDepth;
+
+	// roadWidth				 = width*0.65/(cameraDepth/segmentLength*(width/2));
+	// segmentLength			 = (zfar)/drawDistance;
+
+	// setup projection  
+	if(dk.length==0){  
+		for(var i=0;i<mDrawSegment+1;++i){
+			dk.push((yproj[i])*(((i+1)*segmentLength*segmentPerDraw-cameraDepth)/cameraHeight));
+		}
+	}
+	// if(segments.length==0)
+	resetRoad(); // only rebuild road when necessary
+
+	showItem($('#_hint'));
+	setupCarSprite(_driver_color);
+
+	indexScene=0;
+	setupScene(indexScene);
 
 	_app.ticker.start();
-
-	// Game.run({
-	//   render: render, 
-	//   update: update,
-	//   step: step,
-	//   ready: function() {
-	//     reset();
-	//     indexScene=0;
-	//    	setupScene(indexScene);
-	//   }
-	// });
-
-
 }
 
 function startGame(){
@@ -299,43 +315,6 @@ function createQuadGeometry(x1, y1, x2, y2, x3, y3, x4, y4){
 	return geometry;
 }
 
-
- function reset(){
-  
-  position=0;
-  score=0;
-  life=MaxLife;
-  currentLapTime=0;
-  speed=0;
-  lastSegment=0;
-  setupScene(0);
-  playerX=0;
-
-  updateHud();
-  
-  cameraDepth            = 1 / Math.tan((fieldOfView/2) * Math.PI/180);
-  playerZ                = (cameraHeight * 1);
-  resolution             = height/480;
-  roadWidth				 = height*RoadRatio/cameraDepth;
-  
-  // roadWidth				 = width*0.65/(cameraDepth/segmentLength*(width/2));
-  // segmentLength			 = (zfar)/drawDistance;
-
-  // setup projection  
-  if(dk.length==0){  
-	  for(var i=0;i<mDrawSegment+1;++i){
-	  	dk.push((yproj[i])*(((i+1)*segmentLength*segmentPerDraw-cameraDepth)/cameraHeight));
-	  }
-  }
-  // if(segments.length==0)
-    resetRoad(); // only rebuild road when necessary
-
-   showItem($('#_hint'));
-	setupCarSprite(_driver_color);
-
-	indexScene=0;
-	setupScene(indexScene);
-}
 
 function endGame(){
 

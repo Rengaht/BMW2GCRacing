@@ -38,7 +38,7 @@ var segmentPerDraw = drawDistance/mDrawSegment;
 
 
 var playerX        = 0;                       // player x offset from center of road (-1 to 1 to stay independent of roadWidth)
-var playerZ        = null;                    // player relative z distance from camera (computed)
+var playerZ        = 15*segmentLength;                    // player relative z distance from camera (computed)
 var fogDensity     = 5;                       // exponential fog density
 var position       = 0;                       // current camera Z position (add playerZ to get player's absolute Z position)
 var speed          = 0;                       // current speed
@@ -63,7 +63,7 @@ for(var i=0;i<totalScene;++i){
 }
 
 var sceneSpeedRatio=[1,1.25,1.6,2.2];
-var lengthScene=400; // segment count for scene 1
+var lengthScene=500; // segment count for scene 1
 var BaseSpeed  =lengthScene*segmentLength/(sceneInterval[0]*(sceneSpeedRatio[0]+sceneSpeedRatio[1])/2);
 var isPlaying=false;
 var maxSpeed=BaseSpeed*sceneSpeedRatio[sceneSpeedRatio.length-1];
@@ -85,13 +85,13 @@ var life=MaxLife;
 var totalCars      = [5,20,30];                     // total number of cars on the road
 var totalCoins     = [20,40,60];
 var totalCombos    = [5,8,15];
-var totalObstacles = [5,15,30];
+var totalObstacles = [5,15,25];
 
 var sidePosition=[-2,2,0];
 var onRoadPosition = [-1,0,1];
 
 var CoinFlyVel=0.1;
-
+var startGateZ=35*segmentLength;
 
 var currentLapTime = 0;                       // current lap time
 var lastLapTime    = null;                    // last lap time
@@ -121,7 +121,7 @@ function update(dt) {
 
 
   var n, car, carW, sprite, spriteW;
-  var playerSegment = findSegment(position+15*segmentLength);
+  var playerSegment = findSegment(position+playerZ);
   
  // update projection coordinates 
   var baseSegment   = findSegment(position);
@@ -352,7 +352,7 @@ function render() {
   var baseSegment   = findSegment(position);
   var basePercent   = Util.percentRemaining(position, segmentLength);
 
-  var playerSegment = findSegment(position+15*segmentLength);
+  var playerSegment = findSegment(position+playerZ);
   var playerPercent = Util.percentRemaining(position+playerZ, segmentLength);
   var playerY       = Util.interpolate(playerSegment.p1.world.y, playerSegment.p2.world.y, playerPercent);
   var maxy          = height;
@@ -369,7 +369,7 @@ function render() {
 
   
   var n, i, segment, car, spriteScale, spriteX, spriteY,sprite;
-  var coin, road, obstacle;
+  var coin, road, obstacle,texture;
 
 
   // reset all scene sprite
@@ -438,10 +438,12 @@ function render() {
       spriteX     = segment.p1.screen.x + ( sprite.offset *Math.abs(segment.p1.screen.w));
       spriteY     = segment.p1.screen.y;      
 
+      if(sprite.source===GATE.START || sprite.source===GATE.GOAL) 
+        texture=resources.gate.textures[sprite.source];
+      else texture     = _texture_scene[indexScene][sprite.source];
 
       Render.sprite(_scene_side.getChildAt(index_draw*2+(sprite.offset<0?0:1)),                   
-                    _texture_scene[indexScene][sprite.source], 
-                    // _texture_scene[0]['1-tree-1.png'], 
+                    texture, 
                     spriteX, spriteY, 
                     spriteScale,drawDistance-n);
       // console.log('updage '+n+' -> '+sprite.source);
@@ -454,11 +456,12 @@ function render() {
       spriteX     = segment.p1.screen.x + ( coin.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
       spriteY     = segment.p1.screen.y - coin.offsetY*height;      
       
+      texture     = _texture_road[coin.source];
+
       road=(coin.offset==0)?0:(coin.offset<0?1:2);
 
       Render.sprite(_scene_road.getChildAt(index_draw*3+road),
-                    _texture_road[coin.source], 
-                    // _texture_scene[0]['1-tree-1.png'], 
+                    texture,
                     spriteX, spriteY, 
                     spriteScale,drawDistance-n);
 
@@ -466,15 +469,15 @@ function render() {
     for(i=0;i<segment.obstacles.length;++i){
       
       obstacle=segment.obstacles[i];
-      spriteScale = segment.p1.project.y*height*RoadRatio*RoadSpriteWScale*SpriteScale*(1-obstacle.offsetY);
+      spriteScale = segment.p1.project.y*height*RoadRatio*RoadSpriteWScale*SpriteScale*1.2*(1-obstacle.offsetY);
       spriteX     = segment.p1.screen.x + ( obstacle.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
       spriteY     = segment.p1.screen.y- obstacle.offsetY*height;      
       
+      texture     = _texture_road[obstacle.source];
       road=(obstacle.offset==0)?0:(obstacle.offset<0?1:2);
 
       Render.sprite(_scene_road.getChildAt(index_draw*3+road),
-                    _texture_road[obstacle.source], 
-                    // _texture_scene[0]['1-tree-1.png'], 
+                    texture,
                     spriteX, spriteY, 
                     spriteScale,drawDistance-n);
 
@@ -624,9 +627,9 @@ function resetSprites() {
   
   var n, i;
 
-
-  // scene 1
-  addSprite(20,SPRITES1.START[0],-1);
+  let offsetZ=startGateZ/segmentLength;
+  addSprite(offsetZ,GATE.START,0);
+  addSprite(sceneSegment[totalScene-1]-offsetZ,GATE.END,0);
 
   for(var scene_=0;scene_<totalScene;++scene_){
 
@@ -636,9 +639,10 @@ function resetSprites() {
     let option_=Math.round(Math.random()*(i<1?5:4));
           
     for(var i=start_seg;i<end_seg;++i){
-       
+
       if(i%(segmentPerDraw)!=0) continue;
- 
+      if(i<offsetZ || i>sceneSegment[totalScene-1]-offsetZ) continue;
+
       for(var j=0;j<2;++j){
         
         let dir=sidePosition[j];
@@ -743,6 +747,8 @@ function resetCars() {
 
 function resetCoins(){
 
+  let offsetZ=startGateZ/segmentLength;
+
   for(var scene_=0;scene_<totalScene;++scene_){
 
     let start_seg=scene_<1?0:sceneSegment[scene_-1];
@@ -767,6 +773,8 @@ function resetCoins(){
         
     for(var i=0;i<arr.length;++i){
         
+        if(arr[i]<offsetZ || arr[i]>sceneSegment[totalScene-1]-offsetZ) continue;
+
         if(Math.random()*(2+totalScene-scene_)<1) 
             offset=Util.randomChoice(onRoadPosition);
 
@@ -780,6 +788,8 @@ function resetCoins(){
   }
 }
 function resetObstacles(){
+
+    let offsetZ=startGateZ/segmentLength;
 
   for(var scene_=0;scene_<totalScene;++scene_){
 
@@ -800,6 +810,9 @@ function resetObstacles(){
 
 
     for(var i=0;i<arr.length;++i){
+
+          if(arr[i]<offsetZ || arr[i]>sceneSegment[totalScene-1]-offsetZ) continue;
+
 
         let pos_=[];
         let coin_pos=null;
