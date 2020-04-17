@@ -23,7 +23,7 @@ function gotoPage(page_){
 		case '_game':
 			hideItem($('#_button_rank'));
 			hideItem($('#_score'));			
-			setupGame();
+			if(_cur_page==='_color') setupGame();			
 			break;
 		case '_rank':
 		case '_lottery':

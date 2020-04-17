@@ -51,10 +51,11 @@ var Render = {
 
   //---------------------------------------------------------------------------
 
-  background: function(background_sprite, width, height, rotation, offset) {
+  background: function(background_sprite, width, height, rotation, offsetX,offsetY) {
 
     rotation = rotation || 0;
-    offset   = offset   || 0;
+    offsetX   = offsetX   || 0;
+    offsetY = offsetY ||0;
 
     var imageW = background_sprite.texture.width/2;
     var imageH = background_sprite.texture.height;
@@ -64,13 +65,14 @@ var Render = {
     // var sourceW = Math.min(imageW, layer.x+layer.w-sourceX);
     // var sourceH = imageH;
     
-    var destX = 0;
-    var destY = offset;
+    // var destX = 0;
+    // var destY = offsetX;
     // var destW = Math.floor(width * (sourceW/imageW));
     // var destH = height;
 
 
     background_sprite.tilePosition.x=-sourceX;
+    background_sprite.tilePosition.y=-(background_sprite.texture.height*.5*background_sprite.tileScale.y-height*MoutainRatio);//-(1.0-RoadRatio)*height);
     //TODO:
     // ctx.drawImage(background, sourceX, sourceY, sourceW, sourceH, destX, destY, destW, destH);
     // if (sourceW < imageW)

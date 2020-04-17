@@ -212,7 +212,7 @@ function update(dt) {
         spriteW = .5;
         if(Util.overlap(playerX, .5, sprite.offsetX + spriteW/2 * (sprite.offset > 0 ? 1 : -1), spriteW)){
             console.log('---------- bump!'+firstSegment.index+' ------------');
-            life=life-1;
+            // life=life-1;
             sprite.offsetY+=CoinFlyVel;
             if(life<=0){
               endGame();
@@ -363,8 +363,8 @@ function render() {
   // ctx.clearRect(0, 0, width, height);
 
   //TODO:
-  Render.background(_sky, width, height, skyOffset,  resolution * skySpeed  * playerY);
-  Render.background(_mountain, width, height, hillOffset, resolution * hillSpeed * playerY);
+  Render.background(_sky, width, height, skyOffset,  resolution * skySpeed  * playerY, baseSegment.index/sceneSegment[totalScene-1]);
+  Render.background(_mountain, width, height, hillOffset, resolution * hillSpeed * playerY,0);
   // Render.background(background, width, height, BACKGROUND.TREES, treeOffset, resolution * treeSpeed * playerY);
 
   
@@ -454,7 +454,7 @@ function render() {
       coin=segment.coins[i];
       spriteScale = segment.p1.project.y*height*RoadRatio*RoadSpriteXScale*SpriteScale*(1-coin.offsetY);
       spriteX     = segment.p1.screen.x + ( coin.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
-      spriteY     = segment.p1.screen.y - coin.offsetY*height;      
+      spriteY     = segment.p1.screen.y - Util.easeInOut(0,1,coin.offsetY)*height;      
       
       texture     = _texture_road[coin.source];
 
@@ -471,7 +471,7 @@ function render() {
       obstacle=segment.obstacles[i];
       spriteScale = segment.p1.project.y*height*RoadRatio*RoadSpriteWScale*SpriteScale*1.2*(1-obstacle.offsetY);
       spriteX     = segment.p1.screen.x + ( obstacle.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
-      spriteY     = segment.p1.screen.y- obstacle.offsetY*height;      
+      spriteY     = segment.p1.screen.y-  Util.easeInOut(0,1,obstacle.offsetY)*height;      
       
       texture     = _texture_road[obstacle.source];
       road=(obstacle.offset==0)?0:(obstacle.offset<0?1:2);
@@ -604,7 +604,9 @@ function resetRoad() {
 
   addStraight(sceneSegment[0]);
   addStraight(sceneSegment[1]-sceneSegment[0]);
-  addStraight(sceneSegment[2]-sceneSegment[1]);
+
+  let offsetZ=startGateZ/segmentLength;
+  addStraight(sceneSegment[2]-sceneSegment[1]+offsetZ);
   // addSCurves();
   // addCurve(ROAD.LENGTH.SHORT, ROAD.CURVE.MEDIUM, ROAD.HILL.NONE);
 
@@ -629,7 +631,7 @@ function resetSprites() {
 
   let offsetZ=startGateZ/segmentLength;
   addSprite(offsetZ,GATE.START,0);
-  addSprite(sceneSegment[totalScene-1]-offsetZ,GATE.END,0);
+  addSprite(sceneSegment[totalScene-1],GATE.GOAL,0);
 
   for(var scene_=0;scene_<totalScene;++scene_){
 
@@ -640,7 +642,7 @@ function resetSprites() {
           
     for(var i=start_seg;i<end_seg;++i){
 
-      if(i%(segmentPerDraw)!=0) continue;
+      if(i%(segmentPerDraw/2)!=0) continue;
       if(i<offsetZ || i>sceneSegment[totalScene-1]-offsetZ) continue;
 
       for(var j=0;j<2;++j){
