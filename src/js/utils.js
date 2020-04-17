@@ -68,8 +68,11 @@ var Util = {
 
     p.screen.scale = d_/p.camera.z;
 
-    let xp=p.camera.x*cameraDepth/p.camera.z;
+    let xp=p.camera.x*d_/p.camera.z;
     let yp=p.camera.y*d_/p.camera.z;
+    if(yp>1){
+      // console.log(yp);
+    }
 
     p.project.x=xp;
     p.project.y=Math.abs(yp);
@@ -165,7 +168,7 @@ var Dom = {
 //=========================================================================
 
 var Game = {  // a modified version of the game loop from my previous boulderdash game - see http://codeincomplete.com/posts/2011/10/25/javascript_boulderdash/#gameloop
-
+  id:0,
   run: function(options) {
 
       options.ready(); // tell caller to initialize itself because images are loaded and we're ready to rumble
@@ -188,14 +191,18 @@ var Game = {  // a modified version of the game loop from my previous boulderdas
           gdt = gdt - step;
           update(step);
         }
-        render();
+       
         // stats.update();
         last = now;
-        requestAnimationFrame(frame);
+
+        id=requestAnimationFrame(frame);
       }
       frame(); // lets get this party started
       // Game.playMusic();
     // });
+  },
+  stop:function(){
+    cancelAnimationFrame(id);
   },
   //---------------------------------------------------------------------------
   setKeyListener: function(keys) {
@@ -278,7 +285,7 @@ var SPRITES2={
   BRIDGE:      ['2-bridge.png'],
   HOUSE: {left:['2-house3-left.png','2-house4-left.png','2-house5-left.png','2-house6-left.png'], 
           right:['2-house3-right.png','2-house4-right.png','2-house5-right.png','2-house6-right.png']}, 
-  LIGHT: {left:['2-light-right.png'], right:['2-light-left.png']}  
+  LIGHT: {left:['2-light-left.png'], right:['2-light-right.png']}  
 };
 
 var SPRITES3={
@@ -290,3 +297,8 @@ var SPRITES3={
           right:[]}, 
   UMBRELLA: ['3-umbrella1.png','3-umbrella2.png','3-umbrella3.png','3-umbrella4.png']
 };
+
+var GATE={
+  START:'start.png',
+  GOAL:'goal.png'
+}

@@ -10,7 +10,7 @@ var Render = {
     let p=1.0/drawDistance;
     index%=drawDistance;
 
-    let i=Math.floor(index)%8;
+    let i=Math.floor(index)%mDrawSegment;
     uv.update(new Float32Array([color,index*p,
                                 color,(index+1)*p,
                                 color,(index+1)*p,                                
@@ -110,7 +110,7 @@ var Render = {
 
   //---------------------------------------------------------------------------
 
-  player: function(width, height, resolution, roadWidth, sprites, speedPercent, scale, destX, destY, steer, updown) {
+  player: function(resolution, speedPercent, scale, destX, destY, steer) {
 
     var bounce = (1.5 * Math.random() * speedPercent * resolution) * Util.randomChoice([-1,1]);
     
@@ -141,8 +141,8 @@ var Render = {
     var offsetY=-1;
     var clipY=0;
 
-    var destW  = (_car.texture.width * scale * width/2) * (_spriteScale * roadWidth);
-    var destH  = (_car.texture.height * scale * width/2) * (_spriteScale * roadWidth);
+    var destW  = _car.texture.width*scale;
+    var destH  = _car.texture.height*scale;
 
     destX = destX + (destW * (offsetX || 0));
     destY = destY + (destH * (offsetY || 0));

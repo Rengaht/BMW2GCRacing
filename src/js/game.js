@@ -14,7 +14,8 @@ var _shader_road,_shader_lane,_shader_rumble;
 var _windowWidth,_windowHeight;
 var RoadRatio=.6;
 var MoutainRatio=.124;
-var _spriteScale;
+var CarScale;
+var SpriteScale=1.0/513;
 
 var PolyPerSeg=4+(lanes-1);
 
@@ -38,7 +39,6 @@ function onload(){
 	    { keys: [KEY.RIGHT, KEY.D], mode: 'down', action: function() { keyRight  = true;  } },
 	    { keys: [KEY.LEFT,  KEY.A], mode: 'up',   action: function() { keyLeft   = false; } },
 	    { keys: [KEY.RIGHT, KEY.D], mode: 'up',   action: function() { keyRight  = false; } }]);
-
 
 }
 function setupPixi(){
@@ -83,8 +83,7 @@ function loadTexture(){
 			.add('scene1','asset/img/sprite/scene1.json')
 			.add('scene2','asset/img/sprite/scene2.json')
 			.add('scene3','asset/img/sprite/scene3.json')
-			.add('start_sign','asset/img/start.png')
-			.add('goal_sign','asset/img/goal.png')
+			.add('gate','asset/img/gate.json')
 			.load(loadFinish);
 
 }
@@ -210,8 +209,20 @@ function loadFinish(loader,resources_){
 	_background.addChild(_scene_road);
 	_background.addChild(_car);
 
-	_spriteScale=0.3*(1/_car.texture.width);
-	// _app.ticker.add(delta=>gameLoop(delta));
+	CarScale=width/1800;
+
+   _app.ticker.add(function(delta){
+
+   		if(segments.length<1) return;
+   		
+   		let dt=_app.ticker.deltaMS/1000;
+
+   		// while(dt>step){
+   			update(dt);
+   		// 	dt-=step;
+   		// }
+   		render();
+   });
 	
 }
 function setupCarSprite(color_){
@@ -234,28 +245,28 @@ function setupCarSprite(color_){
 function setupGame(){
 
 	// show hint
-	showItem($('#_hint'));
-	setupCarSprite(_driver_color);
+	reset();
+    
 
-	Game.run({
-	  render: render, 
-	  update: update,
-	  step: step,
-	  ready: function() {
-	    reset();
+	_app.ticker.start();
 
-	    indexScene=0;
-	   	setupScene(indexScene);
-	  }
-	});
+	// Game.run({
+	//   render: render, 
+	//   update: update,
+	//   step: step,
+	//   ready: function() {
+	//     reset();
+	//     indexScene=0;
+	//    	setupScene(indexScene);
+	//   }
+	// });
 
 
 }
 
 function startGame(){
 
-	hideItem($('#_hint'));
-		
+	hideItem($('#_hint'));		
 	setTimeout(function(){
 		
 		//TODO: countdown here 
@@ -296,11 +307,14 @@ function createQuadGeometry(x1, y1, x2, y2, x3, y3, x4, y4){
   life=MaxLife;
   currentLapTime=0;
   speed=0;
+  lastSegment=0;
+  setupScene(0);
+  playerX=0;
 
   updateHud();
   
   cameraDepth            = 1 / Math.tan((fieldOfView/2) * Math.PI/180);
-  playerZ                = (cameraHeight * cameraDepth);
+  playerZ                = (cameraHeight * 1);
   resolution             = height/480;
   roadWidth				 = height*RoadRatio/cameraDepth;
   
@@ -313,20 +327,29 @@ function createQuadGeometry(x1, y1, x2, y2, x3, y3, x4, y4){
 	  	dk.push((yproj[i])*(((i+1)*segmentLength*segmentPerDraw-cameraDepth)/cameraHeight));
 	  }
   }
-  if(segments.length==0)
+  // if(segments.length==0)
     resetRoad(); // only rebuild road when necessary
 
+   showItem($('#_hint'));
+	setupCarSprite(_driver_color);
+
+	indexScene=0;
+	setupScene(indexScene);
 }
 
 function endGame(){
 
-if(!isPlaying) return;
+  if(!isPlaying) return;
+
+  _app.ticker.stop();
 
   console.log("------------- End Game "+formatTime(currentLapTime)+"-------------");
   isPlaying=false;
-
   setDriverScore(score);
-  showItem($('#_score'));
-  showItem($('#_button_rank'));
+
+  setTimeout(function(){
+	  showItem($('#_score'));
+	  showItem($('#_button_rank'));
+  },2000);
 }
 
