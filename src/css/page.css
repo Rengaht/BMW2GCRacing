@@ -85,6 +85,7 @@ input,select{
 	top:85px;
 	left:64px;
 	width:3%;
+	cursor: pointer;
 }
 #_driver{
 	background-image: url(../../asset/img/ui/BG_info.png);	
@@ -222,7 +223,7 @@ input,select{
 	height:36%;
 	transform-origin:76% 76%;
 	transform:rotate(45deg);
-	
+
 	transition: .5s ease-in-out;
 }
 #_speed_value{
@@ -249,6 +250,7 @@ input,select{
 	position: absolute;
 	top:35%;
 	width:100%;
+	cursor: pointer;
 }
 #_hint>img{
 	width:60%;

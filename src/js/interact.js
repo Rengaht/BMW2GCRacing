@@ -1,8 +1,9 @@
 var _cur_page='HOME';
+var _pre_page='HOME';
 var _driver_name;
 var _driver_color='blue';
 
-function gotoPage(page_){
+function gotoPage(page_,sound_){
 	
 	if(_cur_page===page_) return;
 
@@ -26,10 +27,12 @@ function gotoPage(page_){
 			setDriverColor('blue');
 			hideItem($('#_button_rank'));
 			break;
-		case '_game':
-			hideItem($('#_button_rank'));
-			hideItem($('#_score'));			
-			if(_cur_page==='_color') setupGame();			
+		case '_game':				
+			if(_cur_page==='_color'){
+				hideItem($('#_button_rank'));
+				hideItem($('#_score'));	
+				setupGame();			
+			}
 			break;
 		case '_rank':
 		case '_lottery':
@@ -37,9 +40,24 @@ function gotoPage(page_){
 			break;
 	}
 
+	switch(sound_){
+		case 'bb':
+			_sound_fx['button_large'].play();
+			break;
+		case 'sb':
+			_sound_fx['button_small'].play();
+			break;
+	}
+
 	hideItem($('#'+_cur_page));
 	showItem($('#'+page_));
 
+	if(page_==='_game'&& _cur_page==='_rank'){
+		showItem($('#_button_rank'));
+		showItem($('#_score'));	
+	}
+
+	_pre_page=_cur_page;
 	_cur_page=page_;
 
 }
@@ -76,10 +94,13 @@ function showItem(item_){
 function onDriverNameClick(){
 
 	let val=$('#_input_driver').val();
-	if(val.length<1) return;
+	if(val.length<1){
+		_sound_fx['button_disable'].play();
+		return;
+	}
 
 	setDriverName(val);
-	gotoPage('_color');
+	gotoPage('_color','bb');
 }
 
 function setDriverName(set_){
@@ -90,6 +111,8 @@ function setDriverName(set_){
 function setDriverColor(set_){
 
 	if(set_===_driver_color) return;
+
+	_sound_fx['button_small'].play();
 
 	hideItem($('#_button_'+_driver_color+'_selected'));
 	hideItem($('#_img_car_color_'+_driver_color));
@@ -111,4 +134,8 @@ function sendInfo(){
 
 
 
+}
+
+function onRankBackClick(){
+	gotoPage(_pre_page,'sb');
 }

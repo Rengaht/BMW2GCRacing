@@ -20,16 +20,16 @@
 </head>
 <body onload="onload();">
 	 
-	<img id="_button_rank" src="asset/img/ui/button_rank.png" class="Button" onclick="gotoPage('_rank')"/>
+	<img id="_button_rank" src="asset/img/ui/button_rank.png" class="Button" onclick="gotoPage('_rank','sb')"/>
 		
 	<div id="_home" class="PageContainer">
 		<img id="_game_logo" src="asset/img/ui/game_logo.png" class="Center"/>
 		<div class="BottomWrapper">
-			<img id="_button_start" class="Button Center" onclick="gotoPage('_driver')" src="asset/img/ui/button_start.png"/>		
+			<img id="_button_start" class="Button Center" onclick="gotoPage('_driver','bb')" src="asset/img/ui/button_start.png"/>		
 		</div>
 	</div>
 	<div id="_driver" class="PageContainer hidden close">
-		<img class="ButtonBack" onclick='gotoPage("_home")' src="asset/img/ui/button_back.png"/>
+		<img class="ButtonBack" onclick="gotoPage('_home','sb')" src="asset/img/ui/button_back.png"/>
 		<div id="_flag_top" class="Flag Center">
 			<div id="_hint_driver_name" class="FontT2 MiddleBlue">Enter Driver's Name</div>
 			<div>
@@ -43,7 +43,7 @@
 		</div>
 	</div>
 	<div id="_color" class="PageContainer hidden close">
-		<img id="_button_back_home" class="ButtonBack" onclick='gotoPage("_driver")'  src="asset/img/ui/button_back.png"/>
+		<img id="_button_back_home" class="ButtonBack" onclick='gotoPage("_driver","sb")'  src="asset/img/ui/button_back.png"/>
 		<div id="_flag_bottom" class="Flag Center">
 			<div id="_hint_car_color" class="FontT2 LightBlue">CHOOSE THE COLOR</div>			
 		</div>
@@ -73,7 +73,7 @@
 			
 		</div>
 		<div class="BottomWrapper">
-			<img id="_button_go" class="Button Center" onclick="gotoPage('_game')" src="asset/img/ui/button_go_normal.png"/>		
+			<img id="_button_go" class="Button Center" onclick="gotoPage('_game','bb')" src="asset/img/ui/button_go_normal.png"/>		
 			</div>		
 		</div>
 	</div>
@@ -141,8 +141,8 @@
 				</div>
 				<img id="_car_complete" class="FrontCar" src="asset/img/ui/frontcar-1.png"/>
 				<div id="_complete_button_wrapper" class="BottomWrapper">
-					<img class="Button" src="asset/img/ui/button_home_normal.png" onclick="gotoPage('_home')"/>
-					<img class="Button" src="asset/img/ui/button_lottery_normal.png" onclick="gotoPage('_lottery')"/>
+					<img class="Button" src="asset/img/ui/button_home_normal.png" onclick="gotoPage('_home','bb')"/>
+					<img class="Button" src="asset/img/ui/button_lottery_normal.png" onclick="gotoPage('_lottery','bb')"/>
 				</div>
 			</div>
 			</div>
@@ -150,7 +150,7 @@
 	</div>
 	
 	<div id="_lottery" class="PageContainer hidden close">
-		<img class="ButtonBack" onclick='gotoPage("_game")' src="asset/img/ui/button_back.png"/>
+		<img class="ButtonBack" onclick='gotoPage("_game","sb")' src="asset/img/ui/button_back.png"/>
 		<div id="_lottery_title" class="Center LightBlue FontT1">
 			<span>輸入資料參加抽獎</span>
 		</div>
@@ -235,7 +235,7 @@
 		</div>
 	</div>
 	<div id="_rank" class="PageContainer hidden close">
-		<img class="ButtonBack" onclick='gotoPage("_game")' src="asset/img/ui/button_back.png"/>
+		<img class="ButtonBack" onclick='onRankBackClick()' src="asset/img/ui/button_back.png"/>
 		<div class="Center">
 			<div class="FontT1 LightBlue">BEST RUNNERS</div>
 			<div class="WaveTitle FontT2 MiddleBlue">

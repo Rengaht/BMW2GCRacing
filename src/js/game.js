@@ -394,9 +394,9 @@ function loadSound(){
 		loop:true
 	});
 
-	_sound_fx['button_large']=new Howl({src:['asset/sound/engine.mp3']});
-	_sound_fx['button_small']=new Howl({src:['asset/sound/engine.mp3']});
-	_sound_fx['button_disable']=new Howl({src:['asset/sound/engine.mp3']});
+	_sound_fx['button_large']=new Howl({src:['asset/sound/button_large.mp3']});
+	_sound_fx['button_small']=new Howl({src:['asset/sound/button_small.mp3']});
+	_sound_fx['button_disable']=new Howl({src:['asset/sound/button_disable.mp3']});
 	
 	_sound_fx['light_count']=new Howl({src:['asset/sound/light_count.wav']});
 
