@@ -4,19 +4,22 @@ var Render = {
 
     var quad=_road.getChildAt(index);
     const buffer=quad.geometry.getBuffer('aVertexPosition');
-    buffer.update(new Float32Array([x1, y1, x2, y2, x3, y3,
-                                    x3, y3, x4, y4,x1, y1]));    
+    // buffer.update(new Float32Array([x1, y1, x2, y2, x3, y3,
+    //                                 x1, y1,x3, y3,x4, y4]));    
+    buffer.update(new Float32Array([x1, y1, x2, y2, x3, y3,x4, y4]));    
     const uv=quad.geometry.getBuffer('aTextureCoord');
-    let p=1.0/drawDistance;
-    index%=drawDistance;
+    
+    let p=1.0/segmentPerDraw;
+    
+    let i=Math.floor(index/PolyPerSeg)%segmentPerDraw;
+    uv.update(new Float32Array([color,i*p,
+                                color,(i+1)*p,
+                                color,(i+1)*p,
+                                color,i*p]));
+    // console.log(i*p);
+    // _shader_road.uniforms.vColor=color;
 
-    let i=Math.floor(index)%mDrawSegment;
-    uv.update(new Float32Array([color,index*p,
-                                color,(index+1)*p,
-                                color,(index+1)*p,                                
-                                color,(index+1)*p,
-                                color,(index)*p,
-                                color,index*p]));
+    
     // if(i%2==0) return;
      // uv.update(new Float32Array([0,1/drawDistance*index,
      //                              0,1/drawDistance*(index+1),

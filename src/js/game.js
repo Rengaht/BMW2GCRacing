@@ -139,34 +139,83 @@ function loadFinish(loader,resources_){
 						uniform mat3 translationMatrix;\
 						uniform mat3 uTextureMatrix;\
 						varying vec2 vTextureCoord;\
+						varying float vColor;\
+						uniform float width;\
+						uniform float height;\
+						float margin=10.0;\
+						float seglength=1.0/8.0;\
 						void main(void)\
 						{\
 							gl_Position.xyw = projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0);\
 							gl_Position.z = 0.0;\
-							vTextureCoord = aTextureCoord;\
+							float m=mod(aTextureCoord.y,seglength);\
+							vColor=aTextureCoord.x;\
+							vTextureCoord = vec2((.5+gl_Position.x)*width,aTextureCoord.y*200.0);\
 						}';
+		
 						// vTextureCoord = (uTextureMatrix * vec3(aTextureCoord, 1.0)).xy;
 	let frag_shader="varying vec2 vTextureCoord;\
+					varying float vColor;\
 					uniform vec4 uColor;\
 					uniform sampler2D uSampler;\
+					\
+					vec4 roadColor1=vec4(0.72,0.72,0.72,1.0);\
+					vec4 roadColor2=vec4(0.59,0.59,0.59,1.0);\
+					vec4 laneColor=vec4(1.0,1.0,1.0,1.0);\
+					vec4 grassColor1=vec4(0.5,0.91,0.56,1.0);\
+					vec4 grassColor2=vec4(0.26,0.78,0.5,1.0);\
+					vec4 red=vec4(1.0,0.0,0.0,1.0);\
+					vec4 blue=vec4(0.0,0.0,1.0,1.0);\
+					\
+					float pix=10.0;\
+					float margin=1.0/10.0;\
+					float seglength=200.0;\
+					bool isBorder(float x,float y){\
+						float xx=mod(x,pix*4.0)/pix;\
+						if(y<pix){\
+							if(xx>=1.0 && xx<=2.0) return true;\
+						}else if(y<pix*2.0 && y>=pix){\
+							if(xx<=1.0 || (xx>=2.0 && xx<=3.0)) return true;\
+						}else if(y>seglength-pix*2.0){\
+							if(y>seglength-pix){\
+								if(xx<=1.0) return true;\
+							}else{\
+								if(xx>=2.0 && xx<=3.0) return true;\
+							}\
+						}\
+						return false;\
+					}\
 					void main(void){\
-						 if(vTextureCoord.x<1.0){ gl_FragColor=vec4(0.72,0.72,0.72,1.0);}\
-						 else if(vTextureCoord.x<2.0){ gl_FragColor=vec4(0.59,0.59,0.59,1.0);}\
-						 else if(vTextureCoord.x<3.0){ gl_FragColor=vec4(1.0,1.0,1.0,1.0);}\
-						 else if(vTextureCoord.x<4.0){ gl_FragColor=vec4(0.5,0.91,0.56,1.0);}\
-						 else if(vTextureCoord.x<5.0){ gl_FragColor=vec4(0.26,0.78,0.5,1.0);}\
+						if(vColor<1.0){\
+							gl_FragColor=roadColor1;\
+							if(isBorder(vTextureCoord.x,vTextureCoord.y))\
+								gl_FragColor=roadColor2;\
+							\
+						}else if(vColor<2.0){\
+							gl_FragColor=roadColor2;\
+							if(isBorder(vTextureCoord.x,vTextureCoord.y))\
+								gl_FragColor=roadColor1;\
+							\
+						}else if(vColor<3.0){ gl_FragColor=laneColor;}\
+						else if(vColor<4.0){\
+						 gl_FragColor=grassColor1;\
+						 if(isBorder(vTextureCoord.x,vTextureCoord.y))\
+								gl_FragColor=grassColor2;\
+						}else if(vColor<5.0){\
+						 gl_FragColor=grassColor2;\
+						 if(isBorder(vTextureCoord.x,vTextureCoord.y))\
+								gl_FragColor=grassColor1;\
+						}else gl_FragColor=vec4(1.0,0.0,0.0,1.0);\
 					}";
 						//gl_FragColor = texture2D(uSampler, vTextureCoord) * uColor;\
-						// if(vTextureCoord.x<1.0){ gl_FragColor=vec4(0.72,0.72,0.72,1.0);}\
-						// else if(vTextureCoord.x<2.0){ gl_FragColor=vec4(0.59,0.59,0.59,1.0);}\
-						// else if(vTextureCoord.x<3.0){ gl_FragColor=vec4(1.0,1.0,1.0,1.0);}\
-						// else if(vTextureCoord.x<4.0){ gl_FragColor=vec4(0.5,0.91,0.56,1.0);}\
-						// else if(vTextureCoord.x<5.0){ gl_FragColor=vec4(0.26,0.78,0.5,1.0);}\
 						
 							
 	let uniforms={
 		uSampler:resources.road.texture,
-		uColor:new Float32Array([1.,1.,1.,1.])
+		uColor:new Float32Array([1.,1.,1.,1.]),
+		vColor:1.0,
+		width:width,
+		height:height
 	};
 	_shader_road=PIXI.Shader.from(vertex_shader,frag_shader,uniforms);
 	
@@ -341,14 +390,16 @@ function startGame(){
 
 function createQuadGeometry(x1, y1, x2, y2, x3, y3, x4, y4){
 
-	var vertices=[x1, y1, x2, y2, x3, y3,
-				  x3, y3, x4, y4,x1, y1];
+	var vertices=[x1, y1, x2, y2, x3, y3,x4, y4];
 
 	// var uvs=[0,x1,0,x1+.2,1,x1+.2,
 	// 		1,x1+.2,1,x1+.2,0,x1];
-	var uvs=[0,0,0,0,0,0,0,0,0,0,0];
+	var uvs=[0,0,
+			 0,1,
+			 1,1,
+			 1,0];
 	
-	var index=[0,1,2,3,4,5,6];
+	var index=[0,1,2,0,2,3];
 	
 	let geometry=new PIXI.Geometry();
 	geometry.addAttribute('aVertexPosition',vertices,2);
