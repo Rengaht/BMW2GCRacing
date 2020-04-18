@@ -260,7 +260,7 @@ var COLORS = {
 };
 var SPRITE_ROAD={
   COIN:   ['logo.png'],  
-  COMBO:  ['logo2-1.png'],
+  COMBO:  ['logo2-1.png','logo2-2.png'],
   CONE:   ['cone-1.png','cone-2.png','cone-3.png'],
   BLOCK:   ['block-1.png','block-2.png','block-3.png'],
   LIGHT:   ['light-1.png','light-2.png','light-3.png']

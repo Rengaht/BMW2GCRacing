@@ -17,7 +17,16 @@ var Render = {
                                 color,(index+1)*p,
                                 color,(index)*p,
                                 color,index*p]));
+    // if(i%2==0) return;
+     // uv.update(new Float32Array([0,1/drawDistance*index,
+     //                              0,1/drawDistance*(index+1),
+     //                              1,1/drawDistance*(index+1),                                  
+     //                              1,1/drawDistance*(index+1),
+     //                              1,1/drawDistance*index,
+     //                              0,1/drawDistance*index]));
    
+   // uv.update(new Float32Array([x1/width, 1/drawDistance*index, x2/width, 1/drawDistance*(index+1), x3/width, 1/drawDistance*(index+1),
+   //                            x3/width, 1/drawDistance*(index+1), x4/width, 1/drawDistance*index,x1/width,1/drawDistance*index]));
   },
 
   //---------------------------------------------------------------------------
@@ -36,6 +45,12 @@ var Render = {
     Render.polygon(n*PolyPerSeg+1,  x2-w2-r2, y2, x1-w1-r1, y1, x1-w1, y1, x2-w2, y2,  2);
     Render.polygon(n*PolyPerSeg+2,x2+w2+r2, y2, x1+w1+r1, y1, x1+w1, y1, x2+w2, y2,  2);
     Render.polygon(n*PolyPerSeg+3,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  Math.floor(index/segmentPerDraw)%2);
+    
+    // Render.polygon(n,  0, y2, 0, y1,width,y1,width,y2, 3+Math.floor(index/segmentPerDraw)%2);
+    
+    // Render.polygon(n,  x2-w2-r2, y2, x1-w1-r1, y1, x1-w1, y1, x2-w2, y2,  2);
+    // Render.polygon(n,x2+w2+r2, y2, x1+w1+r1, y1, x1+w1, y1, x2+w2, y2,  2);
+    // Render.polygon(n,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  Math.floor(index/segmentPerDraw)%2);
     
     if (color.lane) {
       lanew1 = w1*2/lanes;
@@ -81,9 +96,10 @@ var Render = {
 
   //---------------------------------------------------------------------------
 
-  sprite: function(sprite, texture, destX, destY, scale,zIndex){
+  sprite: function(sprite, texture, destX, destY, scale,zIndex,alpha){
 
     if(texture===undefined) return;
+    alpha=alpha||1;
 
     sprite.texture=texture;
     
@@ -102,12 +118,39 @@ var Render = {
     sprite.width=destW;
     sprite.height=destH;
     sprite.zIndex=zIndex;
+    sprite.alpha=alpha;
     // if(sprite.scale.y<0) sprite.scale.y=-sprite.scale.y;
       // return;
 
     sprite.visible=true;
     // _scene.addChild(sprite);
 
+  },
+  trafficLight(container,gateX,gateY,gateScale,zIndex){
+    
+    if(!container) return;
+
+
+    let gateW=1766*gateScale;
+    let gateH=626*gateScale;
+
+    gateX=gateX-gateW/2;
+    gateY=gateY-gateH;
+
+    let x=[0.11,0.91];
+    let y=[0.44,0.55,0.66];
+
+    for(var i=0;i<2;++i){
+      for(var j=0;j<3;++j){
+
+          let child=container.getChildAt(i*3+j);
+          child.x=gateX+x[i]*gateW;
+          child.y=gateY+y[j]*gateH;
+          child.height=child.width=gateScale*54;
+          child.zIndex=zIndex+1;
+      }
+    }
+    container.zIndex=zIndex+1;
   },
 
   //---------------------------------------------------------------------------

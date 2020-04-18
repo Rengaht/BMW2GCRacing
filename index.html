@@ -9,6 +9,8 @@
 	<script src="src/lib/pixi/5.2.0/pixi.js"></script>
 	<script src="src/lib/pixi/5.2.0/pixi-legacy.js"></script>
 	<script src="src/lib/jquery-3.3.1.min.js"></script>
+	<script src="src/lib/howler/howler.core.min.js"></script>  
+
 	<!-- <script src="src/lib/projection/pixi-projection.js"></script> -->
 	<script src="src/js/interact.js"></script>
 	<script src="src/js/utils.js"></script>
@@ -80,7 +82,7 @@
 		<div id="_game_frame"></div>
 		<div id="_speed_meter">
 			<img src="asset/img/ui/meter.png"/>
-			<div id="_speed_pointer"></div>
+			<img id="_speed_pointer" src="asset/img/ui/meter_pointer.png"/>
 			<div id="_speed_value" class="LightBlue FontSpeedMeter">160</div>
 		</div>
 		<div id="_driver_in_game">
@@ -106,7 +108,7 @@
 				<span id="_hud_score">888</span>
 			</div>			
 		</div>
-		<div id="_hint" onClick="startGame()">
+		<div id="_hint" onClick="startGame()" class="hidden close">
 			<img src="asset/img/ui/hint.png" class="Center"/>
 		</div>
 

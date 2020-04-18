@@ -2,15 +2,23 @@
 
 "goal.png":
 {
-	"frame": {"x":0,"y":0,"w":1994,"h":738},
+	"frame": {"x":0,"y":0,"w":1766,"h":626},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1994,"h":738},
-	"sourceSize": {"w":1994,"h":738}
+	"spriteSourceSize": {"x":0,"y":0,"w":1766,"h":626},
+	"sourceSize": {"w":1766,"h":626}
+},
+"light_cover.png":
+{
+	"frame": {"x":1766,"y":0,"w":54,"h":54},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":54,"h":54},
+	"sourceSize": {"w":54,"h":54}
 },
 "start.png":
 {
-	"frame": {"x":0,"y":738,"w":1766,"h":626},
+	"frame": {"x":0,"y":626,"w":1766,"h":626},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1766,"h":626},
@@ -21,8 +29,8 @@
 	"version": "1.0",
 	"image": "gate.png",
 	"format": "RGBA8888",
-	"size": {"w":1994,"h":1364},
+	"size": {"w":1820,"h":1252},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:923816c2a94260ba2bd366f1b14df98c:0a84c5306098ec875cbf70d21e297819:d4152bb21fb333e85be9d45e9d144416$"
+	"smartupdate": "$TexturePacker:SmartUpdate:2fe7865ec3ed2e78effc44536583ee8e:3d8c9fc6c74128917bda43a3da2f5727:d4152bb21fb333e85be9d45e9d144416$"
 }
 }

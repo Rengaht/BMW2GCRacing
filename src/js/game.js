@@ -3,11 +3,16 @@ var _app;
 
 var _background;
 var _sky,_mountain,_road,_car,_scene_side,_scene_road;
+var _container_traffic_light,_start_gate;
+var _index_traffic_light;
 
 var _texture_scene=[];
 var _texture_car;
 var _texture_road;
 var _last_car_pos;
+
+
+
 
 var _shader_road,_shader_lane,_shader_rumble;
 
@@ -19,13 +24,16 @@ var SpriteScale=1.0/513;
 
 var PolyPerSeg=4+(lanes-1);
 
+var _sound_bgm;
+var _sound_fx={};
+
 
 function onload(){
 
 	// setup pixi
 	setupPixi();	
 	loadTexture();
-	
+	loadSound();
 	// setup hud
 	hud={
 		speed:{ value: null, dom: $('#_speed_value')},
@@ -115,6 +123,13 @@ function loadFinish(loader,resources_){
 	_texture_road=resources.road_element.textures;
 	_texture_car=resources.car.textures;
 
+	_container_traffic_light=new PIXI.Container();
+	for(var i=0;i<6;++i){
+		_container_traffic_light.addChild(new PIXI.Sprite(resources.gate.textures['light_cover.png']));
+	}
+	setTrafficLight(0);
+	_start_gate=new PIXI.Sprite(resources.gate.textures['start.png']);
+
 	// load road
 	
 	let vertex_shader='precision highp float;\
@@ -135,13 +150,19 @@ function loadFinish(loader,resources_){
 					uniform vec4 uColor;\
 					uniform sampler2D uSampler;\
 					void main(void){\
-						if(vTextureCoord.x<1.0){ gl_FragColor=vec4(0.72,0.72,0.72,1.0);}\
-						else if(vTextureCoord.x<2.0){ gl_FragColor=vec4(0.59,0.59,0.59,1.0);}\
-						else if(vTextureCoord.x<3.0){ gl_FragColor=vec4(1.0,1.0,1.0,1.0);}\
-						else if(vTextureCoord.x<4.0){ gl_FragColor=vec4(0.5,0.91,0.56,1.0);}\
-						else if(vTextureCoord.x<5.0){ gl_FragColor=vec4(0.26,0.78,0.5,1.0);}\
+						 if(vTextureCoord.x<1.0){ gl_FragColor=vec4(0.72,0.72,0.72,1.0);}\
+						 else if(vTextureCoord.x<2.0){ gl_FragColor=vec4(0.59,0.59,0.59,1.0);}\
+						 else if(vTextureCoord.x<3.0){ gl_FragColor=vec4(1.0,1.0,1.0,1.0);}\
+						 else if(vTextureCoord.x<4.0){ gl_FragColor=vec4(0.5,0.91,0.56,1.0);}\
+						 else if(vTextureCoord.x<5.0){ gl_FragColor=vec4(0.26,0.78,0.5,1.0);}\
 					}";
 						//gl_FragColor = texture2D(uSampler, vTextureCoord) * uColor;\
+						// if(vTextureCoord.x<1.0){ gl_FragColor=vec4(0.72,0.72,0.72,1.0);}\
+						// else if(vTextureCoord.x<2.0){ gl_FragColor=vec4(0.59,0.59,0.59,1.0);}\
+						// else if(vTextureCoord.x<3.0){ gl_FragColor=vec4(1.0,1.0,1.0,1.0);}\
+						// else if(vTextureCoord.x<4.0){ gl_FragColor=vec4(0.5,0.91,0.56,1.0);}\
+						// else if(vTextureCoord.x<5.0){ gl_FragColor=vec4(0.26,0.78,0.5,1.0);}\
+						
 							
 	let uniforms={
 		uSampler:resources.road.texture,
@@ -208,6 +229,9 @@ function loadFinish(loader,resources_){
 	_background.addChild(_scene_side);
 	_background.addChild(_scene_road);
 	_background.addChild(_car);
+
+	_background.addChild(_start_gate);
+	_background.addChild(_container_traffic_light);
 
 	CarScale=width/1800;
 
@@ -278,18 +302,38 @@ function setupGame(){
 	setupScene(indexScene);
 
 	_app.ticker.start();
+
+	setTrafficLight(0);	
+	_sound_bgm.fade(0.5,1.0,1000);
 }
 
 function startGame(){
 
 	hideItem($('#_hint'));		
+
+	
+
 	setTimeout(function(){
-		
+		_sound_fx['light_count'].play();
 		//TODO: countdown here 
+		setTrafficLight(0);	
+		setTimeout(function(){
+			setTrafficLight(1);
+			
+		},1000);
+		setTimeout(function(){
+			setTrafficLight(2);
+		
+		},2000);
 
+		setTimeout(function(){
+			isPlaying=true;	
+			console.log("------------- Start Game -------------");	
+			_sound_bgm.seek(0);
+			_sound_bgm.play();	
+		},3000);
 
-		isPlaying=true;
-		console.log("------------- Start Game -------------");		
+		
 	},500);
 
 
@@ -302,15 +346,14 @@ function createQuadGeometry(x1, y1, x2, y2, x3, y3, x4, y4){
 
 	// var uvs=[0,x1,0,x1+.2,1,x1+.2,
 	// 		1,x1+.2,1,x1+.2,0,x1];
-	var uvs=[0,0.5,0,0.5,1,0.5,
-			1,0.5,1,0.5,0,0.5];
+	var uvs=[0,0,0,0,0,0,0,0,0,0,0];
 	
 	var index=[0,1,2,3,4,5,6];
 	
 	let geometry=new PIXI.Geometry();
 	geometry.addAttribute('aVertexPosition',vertices,2);
-	geometry.addAttribute('aTextureCoord',uvs);
-	// geometry.addIndex(index);
+	geometry.addAttribute('aTextureCoord',uvs,2);
+	geometry.addIndex(index);
 
 	return geometry;
 }
@@ -320,15 +363,50 @@ function endGame(){
 
   if(!isPlaying) return;
 
-  _app.ticker.stop();
+  _sound_fx['goal'].play();
+  _sound_bgm.fade(1.0,0,1500);
 
   console.log("------------- End Game "+formatTime(currentLapTime)+"-------------");
   isPlaying=false;
   setDriverScore(score);
 
   setTimeout(function(){
+
+  	   _app.ticker.stop();
+
 	  showItem($('#_score'));
 	  showItem($('#_button_rank'));
   },2000);
 }
 
+function setTrafficLight(set_){
+	for(var i=0;i<2;++i){
+		for(var j=0;j<3;++j){
+			if(j==set_) _container_traffic_light.getChildAt(i*3+j).visible=false;
+			else _container_traffic_light.getChildAt(i*3+j).visible=true;
+		}
+	}
+}
+
+function loadSound(){
+	_sound_bgm=new Howl({
+		src:['asset/sound/Running_Scared.mp3'],
+		loop:true
+	});
+
+	_sound_fx['button_large']=new Howl({src:['asset/sound/engine.mp3']});
+	_sound_fx['button_small']=new Howl({src:['asset/sound/engine.mp3']});
+	_sound_fx['button_disable']=new Howl({src:['asset/sound/engine.mp3']});
+	
+	_sound_fx['light_count']=new Howl({src:['asset/sound/light_count.wav']});
+
+	_sound_fx['coin']=new Howl({src:['asset/sound/coin_1.mp3']});
+	_sound_fx['combo']=new Howl({src:['asset/sound/combo_2.mp3']});
+	_sound_fx['bump']=new Howl({src:['asset/sound/bump_2.wav']});
+	
+	_sound_fx['horn']=new Howl({src:['asset/sound/engine.mp3']});
+	_sound_fx['engine']=new Howl({src:['asset/sound/engine.mp3']});
+
+	_sound_fx['goal']=new Howl({src:['asset/sound/goal.mp3']});
+	
+}

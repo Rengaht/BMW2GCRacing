@@ -13,6 +13,12 @@ function gotoPage(page_){
 			_driver_name="";
 			break;
 		case '_driver':
+
+			// if(!_sound_bgm.playing()){
+			// 	_sound_bgm.play();	
+			// 	_sound_bgm.volume(0.5);
+			// } 
+
 			hideItem($('#_button_rank'));			
 			$('#_input_driver').focus();
 			break;
