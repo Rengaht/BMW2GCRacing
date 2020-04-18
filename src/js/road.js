@@ -172,7 +172,7 @@ function update(dt) {
   if(playerSegment.index>=sceneSegment[indexScene]){
     if(indexScene<totalScene-1){
       setupScene(indexScene+1);
-      indexScene++;
+      // indexScene++;
     }
     else endGame();
   }
@@ -421,6 +421,7 @@ function render() {
     
 
     let index_draw=(baseSegment.index + n)%drawDistance;
+    let index_scene=findSegmentScene(segment.index);
     // for(i = 0 ; i < segment.cars.length ; i++) {
     //   car         = segment.cars[i];
     //   sprite      = car.sprite;
@@ -440,7 +441,7 @@ function render() {
 
       if(sprite.source===GATE.START || sprite.source===GATE.GOAL) 
         texture=resources.gate.textures[sprite.source];
-      else texture     = _texture_scene[indexScene][sprite.source];
+      else texture     = _texture_scene[index_scene][sprite.source];
 
       Render.sprite(_scene_side.getChildAt(index_draw*2+(sprite.offset<0?0:1)),                   
                     texture, 
@@ -499,6 +500,10 @@ function render() {
 
 function findSegment(z) {
   return segments[Math.floor(z/segmentLength) % segments.length]; 
+}
+function findSegmentScene(index){
+  for(var i=0;i<totalScene;++i)
+    if(index<sceneSegment[i]) return i;
 }
 
 //=========================================================================
@@ -638,19 +643,20 @@ function resetSprites() {
     let start_seg=scene_<1?0:sceneSegment[scene_-1];
     let end_seg=sceneSegment[scene_];
 
-    let option_=Math.round(Math.random()*(i<1?5:4));
-          
+    let option_=[Math.round(Math.random()*(scene_<1?5:4)),
+                 Math.round(Math.random()*(scene_<1?5:4))];
+
     for(var i=start_seg;i<end_seg;++i){
 
       if(i%(segmentPerDraw/2)!=0) continue;
-      if(i<offsetZ || i>sceneSegment[totalScene-1]-offsetZ) continue;
+      if(i<offsetZ) continue;
 
       for(var j=0;j<2;++j){
         
         let dir=sidePosition[j];
 
-        if(Math.random()*1.5<1){
-          let txt=getRandomSprite(scene_,option_,dir);
+        if(Math.random()*6>1){
+          let txt=getRandomSprite(scene_,option_[j],dir);
 
           if(txt===SPRITES2.BRIDGE[0]) dir=0;
           if(txt!=null) addSprite(i,txt,dir);
@@ -658,7 +664,7 @@ function resetSprites() {
 
 
         if(Math.random()*5<1)
-          option_=Math.round(Math.random()*(i<1?5:4));
+          option_[j]=Math.round(Math.random()*(scene_<1?5:4));
 
 
       }
@@ -775,7 +781,7 @@ function resetCoins(){
         
     for(var i=0;i<arr.length;++i){
         
-        if(arr[i]<offsetZ || arr[i]>sceneSegment[totalScene-1]-offsetZ) continue;
+        if(arr[i]<offsetZ) continue;
 
         if(Math.random()*(2+totalScene-scene_)<1) 
             offset=Util.randomChoice(onRoadPosition);
@@ -813,7 +819,7 @@ function resetObstacles(){
 
     for(var i=0;i<arr.length;++i){
 
-          if(arr[i]<offsetZ || arr[i]>sceneSegment[totalScene-1]-offsetZ) continue;
+          if(arr[i]<offsetZ) continue;
 
 
         let pos_=[];

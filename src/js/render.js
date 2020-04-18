@@ -72,7 +72,7 @@ var Render = {
 
 
     background_sprite.tilePosition.x=-sourceX;
-    background_sprite.tilePosition.y=-(background_sprite.texture.height*.5*background_sprite.tileScale.y-height*MoutainRatio);//-(1.0-RoadRatio)*height);
+    background_sprite.tilePosition.y=-offsetY*(background_sprite.texture.height*background_sprite.tileScale.y-background_sprite.height);
     //TODO:
     // ctx.drawImage(background, sourceX, sourceY, sourceW, sourceH, destX, destY, destW, destH);
     // if (sourceW < imageW)
