@@ -62,7 +62,7 @@ for(var i=0;i<totalScene;++i){
   sceneLapsedInterval.push(tmp);
 }
 
-var sceneSpeedRatio=[1,1.25,1.6,2.2];
+var sceneSpeedRatio=[0,1.25,1.6,2.2];
 var lengthScene=500; // segment count for scene 1
 var BaseSpeed  =lengthScene*segmentLength/(sceneInterval[0]*(sceneSpeedRatio[0]+sceneSpeedRatio[1])/2);
 var isPlaying=false;
@@ -116,9 +116,12 @@ function update(dt) {
   if(isPlaying){
 
     position = Math.min(position+dt * speed, trackLength);
-    speed=Math.min(speed+dt * accel,sceneSpeedRatio[indexScene+1]*BaseSpeed);
+    if(speed<BaseSpeed*.5) speed=Math.min(speed+dt * accel*5,sceneSpeedRatio[indexScene+1]*BaseSpeed);
+    else speed=Math.min(speed+dt * accel,sceneSpeedRatio[indexScene+1]*BaseSpeed);
     currentLapTime+=dt;
 
+  }else{
+    speed=Math.max(speed-accel*120*dt,0);
   }
 
 
@@ -249,6 +252,14 @@ function update(dt) {
 
   
   lastPlayerSegment=playerSegment.index;
+
+  if(indexScene>0){
+    let dest_=baseSegment.index-sceneSegment[indexScene-1];
+    if(dest_<=40){
+      setShaderUniforms(indexScene-1,indexScene,Math.min(1,dest_/30));  
+    }
+    
+  }
   updateHud();
 }
 
@@ -902,5 +913,28 @@ function setupScene(index){
   accel=(sceneSpeedRatio[index+1]*BaseSpeed-speed)/sceneInterval[index];
   console.log("v= "+speed+"  a= "+accel);
 
-
+  
 }
+function lerpColor(c1,c2,inter){
+  return new Float32Array([Util.interpolate(c1[0],c2[0],inter),
+                          Util.interpolate(c1[1],c2[1],inter),
+                          Util.interpolate(c1[2],c2[2],inter),
+                          Util.interpolate(c1[3],c2[3],inter)]);
+}
+function setShaderUniforms(index1,index2,inter){
+
+  console.log(index1+' '+index2+''+inter);
+
+  _shader_road.uniforms.roadColor1=lerpColor(SceneColor[index1].roadColor1,SceneColor[index2].roadColor1,inter);
+  _shader_road.uniforms.roadColor2=lerpColor(SceneColor[index1].roadColor2,SceneColor[index2].roadColor2,inter);
+  _shader_road.uniforms.laneColor1=lerpColor(SceneColor[index1].laneColor1,SceneColor[index2].laneColor1,inter);
+  _shader_road.uniforms.laneColor2=lerpColor(SceneColor[index1].laneColor2,SceneColor[index2].laneColor2,inter);
+  _shader_road.uniforms.grassColor1=lerpColor(SceneColor[index1].grassColor1,SceneColor[index2].grassColor1,inter);
+  _shader_road.uniforms.grassColor2=lerpColor(SceneColor[index1].grassColor2,SceneColor[index2].grassColor2,inter);
+  _shader_road.uniforms.grassColor3=lerpColor(SceneColor[index1].grassColor3,SceneColor[index2].grassColor3,inter);
+  _shader_road.uniforms.grassColor4=lerpColor(SceneColor[index1].grassColor4,SceneColor[index2].grassColor4,inter);
+  _shader_road.uniforms.sideColor1=lerpColor(SceneColor[index1].sideColor1,SceneColor[index2].sideColor1,inter);
+  _shader_road.uniforms.sideColor2=lerpColor(SceneColor[index1].sideColor2,SceneColor[index2].sideColor2,inter);
+}
+
+

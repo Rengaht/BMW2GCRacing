@@ -1,3 +1,45 @@
+function colorArray(arr_){
+	return new Float32Array(arr_.map(x=>x/255));
+}
+
+var SceneColor=[
+{
+	roadColor1:colorArray([185,184,185,255]),
+	roadColor2:colorArray([151,150,150,255]),
+	laneColor1:colorArray([255,255,255,255]),
+	laneColor2:colorArray([227,227,227,255]),
+	grassColor1:colorArray([82,188,127,255]),
+	grassColor2:colorArray([144,204,136,255]),
+	grassColor3:colorArray([82,188,127,255]),
+	grassColor4:colorArray([144,204,136,255]),
+	sideColor1:colorArray([228,58,56,255]),
+	sideColor2:colorArray([250,229,221,255])
+},
+{
+	roadColor1:colorArray([14,74,94,255]),
+	roadColor2:colorArray([0,53,79,255]),
+	laneColor1:colorArray([254,229,110,255]),
+	laneColor2:colorArray([15,180,223,255]),
+	grassColor1:colorArray([45,44,130,255]),
+	grassColor2:colorArray([30,67,153,255]),
+	grassColor3:colorArray([45,44,130,255]),
+	grassColor4:colorArray([30,67,153,255]),
+	sideColor1:colorArray([195,124,180,255]),
+	sideColor2:colorArray([255,245,229,255])
+},
+{
+	roadColor1:colorArray([131,82,161,255]),
+	roadColor2:colorArray([106,84,163,255]),
+	laneColor1:colorArray([124,209,233,255]),
+	laneColor2:colorArray([76,166,221,255]),
+	grassColor1:colorArray([229,211,181,255]),
+	grassColor2:colorArray([255,235,207,255]),
+	grassColor3:colorArray([125,207,218,255]),
+	grassColor4:colorArray([89,167,220,255]),
+	sideColor1:colorArray([131,45,145,255]),
+	sideColor2:colorArray([230,50,147,255])
+}];
+
 let vertex_shader='precision highp float;\
 		attribute vec2 aVertexPosition;\
 		attribute vec2 aTextureCoord;\

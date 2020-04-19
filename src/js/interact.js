@@ -2,6 +2,7 @@ var _cur_page='HOME';
 var _pre_page='HOME';
 var _driver_name;
 var _driver_color='blue';
+const ClickBorder=0.5;
 
 function gotoPage(page_,sound_){
 	
@@ -139,3 +140,20 @@ function sendInfo(){
 function onRankBackClick(){
 	gotoPage(_pre_page,'sb');
 }
+
+function onGameClick(event){
+	
+	if(!isPlaying) return;
+
+	var x=event.offsetX/width;
+    // var y=event.offsetY/height;
+    // console.log(x/width+","+y/height);
+
+    if(x<ClickBorder) keyLeft=true;
+  	else if(x>1.0-ClickBorder) keyRight=true;
+}
+function onGameMouseUp(event){
+	keyLeft=0;
+	keyRight=0;
+}
+
