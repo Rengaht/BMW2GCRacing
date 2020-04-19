@@ -74,16 +74,30 @@ var Render = {
           lanex1 + l1/2, y1, 
           lanex2 + l2/2, y2, 
            2,uv_index);
+
+        Render.polygon(n*PolyPerSeg+5,
+          lanex2-lanew2+l2 - l2/2, y2,
+          lanex1-lanew1+l1 - l1/2, y1, 
+          lanex1-lanew1+l1 + l1/2, y1, 
+          lanex2-lanew2+l2+ l2/2, y2, 
+           7,uv_index);
         
         lanex1+=lanew1;
         lanex2+=lanew2;
 
-        Render.polygon(n*PolyPerSeg+5,
+        Render.polygon(n*PolyPerSeg+6,
           lanex2 + l2/2, y2, 
           lanex1 + l1/2, y1, 
           lanex1 - l1/2, y1, 
           lanex2 - l2/2, y2,
            2,uv_index);
+
+         Render.polygon(n*PolyPerSeg+7,
+          lanex2+lanew2-l2 + l2/2, y2, 
+          lanex1+lanew1-l1 + l1/2, y1, 
+          lanex1+lanew1-l1 - l1/2, y1, 
+          lanex2+lanew2-l2 - l2/2, y2,
+           7,uv_index);
     }
     
     Render.fog(0, y1, width, y2-y1, fog);
@@ -241,6 +255,6 @@ var Render = {
   },
 
   rumbleWidth:     function(projectedRoadWidth, lanes) { return projectedRoadWidth/Math.max(6,  2*lanes); },
-  laneMarkerWidth: function(projectedRoadWidth, lanes) { return projectedRoadWidth/Math.max(32, 8*lanes); }
+  laneMarkerWidth: function(projectedRoadWidth, lanes) { return projectedRoadWidth/Math.max(24, 6*lanes); }
 
 }

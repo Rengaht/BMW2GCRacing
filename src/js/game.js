@@ -22,7 +22,7 @@ var MoutainRatio=.124;
 var CarScale;
 var SpriteScale=1.0/513;
 
-var PolyPerSeg=4+(lanes-1);
+var PolyPerSeg=6+(lanes-1);
 
 var _sound_bgm;
 var _sound_fx={};
@@ -195,7 +195,7 @@ function loadFinish(loader,resources_){
 							\
 						}else if(vColor<3.0){\
 							gl_FragColor=laneColor;\
-						 	if(vTextureCoord.y*sidelength>sidelength-pix) gl_FragColor-=shadowColor/2.0;\
+							if(vTextureCoord.y*sidelength>sidelength-pix) gl_FragColor-=shadowColor/2.0;\
 						}else if(vColor<4.0){\
 						 gl_FragColor=grassColor1;\
 						 if(isBorder(vTextureCoord.x,vTextureCoord.z))\
@@ -212,6 +212,9 @@ function loadFinish(loader,resources_){
 							if(vTextureCoord.z<.33 ||vTextureCoord.z>.66) gl_FragColor=sideColor2;\
 							else gl_FragColor=sideColor1;\
 							if(vTextureCoord.y*sidelength>sidelength-pix) gl_FragColor-=shadowColor;\
+						}else if(vColor<8.0){\
+							gl_FragColor=laneColor-shadowColor/4.0;\
+							if(vTextureCoord.y*sidelength>sidelength-pix) gl_FragColor-=shadowColor/2.0;\
 						}\
 					}";
 						//gl_FragColor = texture2D(uSampler, vTextureCoord) * uColor;\
