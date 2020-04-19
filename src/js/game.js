@@ -138,46 +138,43 @@ function loadFinish(loader,resources_){
 						uniform mat3 projectionMatrix;\
 						uniform mat3 translationMatrix;\
 						uniform mat3 uTextureMatrix;\
-						varying vec2 vTextureCoord;\
+						varying vec3 vTextureCoord;\
 						varying float vColor;\
-						uniform float width;\
-						uniform float height;\
-						float margin=10.0;\
-						float seglength=1.0/8.0;\
 						void main(void)\
 						{\
 							gl_Position.xyw = projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0);\
 							gl_Position.z = 0.0;\
-							float m=mod(aTextureCoord.y,seglength);\
-							vColor=aTextureCoord.x;\
-							vTextureCoord = vec2((.5+gl_Position.x)*width,aTextureCoord.y*200.0);\
+							vColor=floor(aTextureCoord.x);\
+							vTextureCoord = vec3(aVertexPosition.x,(aTextureCoord.x-vColor)/.5,aTextureCoord.y);\
 						}';
 		
 						// vTextureCoord = (uTextureMatrix * vec3(aTextureCoord, 1.0)).xy;
-	let frag_shader="varying vec2 vTextureCoord;\
+	let frag_shader="varying vec3 vTextureCoord;\
 					varying float vColor;\
 					uniform vec4 uColor;\
 					uniform sampler2D uSampler;\
+					uniform float width;\
 					\
 					vec4 roadColor1=vec4(0.72,0.72,0.72,1.0);\
 					vec4 roadColor2=vec4(0.59,0.59,0.59,1.0);\
 					vec4 laneColor=vec4(1.0,1.0,1.0,1.0);\
 					vec4 grassColor1=vec4(0.5,0.91,0.56,1.0);\
 					vec4 grassColor2=vec4(0.26,0.78,0.5,1.0);\
-					vec4 red=vec4(1.0,0.0,0.0,1.0);\
-					vec4 blue=vec4(0.0,0.0,1.0,1.0);\
+					vec4 sideColor1=vec4(1.0,0.0,0.0,1.0);\
+					vec4 sideColor2=vec4(1.0,1.0,1.0,1.0);\
+					vec4 shadowColor=vec4(0.6,0.6,0.6,0.0);\
 					\
 					float pix=10.0;\
-					float margin=1.0/10.0;\
-					float seglength=200.0;\
+					float seglength=400.0;\
+					float sidelength=60.0;\
 					bool isBorder(float x,float y){\
 						float xx=mod(x,pix*4.0)/pix;\
-						if(y<pix){\
-							if(xx>=1.0 && xx<=2.0) return true;\
-						}else if(y<pix*2.0 && y>=pix){\
+						if(y*seglength<pix){\
 							if(xx<=1.0 || (xx>=2.0 && xx<=3.0)) return true;\
-						}else if(y>seglength-pix*2.0){\
-							if(y>seglength-pix){\
+						}else if(y*seglength<pix*2.0 && y*seglength>=pix){\
+							if(xx>=1.0 && xx<=2.0) return true;\
+						}else if(y*seglength>seglength-pix*2.0){\
+							if(y*seglength>seglength-pix){\
 								if(xx<=1.0) return true;\
 							}else{\
 								if(xx>=2.0 && xx<=3.0) return true;\
@@ -188,24 +185,34 @@ function loadFinish(loader,resources_){
 					void main(void){\
 						if(vColor<1.0){\
 							gl_FragColor=roadColor1;\
-							if(isBorder(vTextureCoord.x,vTextureCoord.y))\
+							if(isBorder(vTextureCoord.x,vTextureCoord.z))\
 								gl_FragColor=roadColor2;\
 							\
 						}else if(vColor<2.0){\
 							gl_FragColor=roadColor2;\
-							if(isBorder(vTextureCoord.x,vTextureCoord.y))\
+							if(isBorder(vTextureCoord.x,vTextureCoord.z))\
 								gl_FragColor=roadColor1;\
 							\
-						}else if(vColor<3.0){ gl_FragColor=laneColor;}\
-						else if(vColor<4.0){\
+						}else if(vColor<3.0){\
+							gl_FragColor=laneColor;\
+						 	if(vTextureCoord.y*sidelength>sidelength-pix) gl_FragColor-=shadowColor/2.0;\
+						}else if(vColor<4.0){\
 						 gl_FragColor=grassColor1;\
-						 if(isBorder(vTextureCoord.x,vTextureCoord.y))\
+						 if(isBorder(vTextureCoord.x,vTextureCoord.z))\
 								gl_FragColor=grassColor2;\
 						}else if(vColor<5.0){\
 						 gl_FragColor=grassColor2;\
-						 if(isBorder(vTextureCoord.x,vTextureCoord.y))\
+						 if(isBorder(vTextureCoord.x,vTextureCoord.z))\
 								gl_FragColor=grassColor1;\
-						}else gl_FragColor=vec4(1.0,0.0,0.0,1.0);\
+						}else if(vColor<6.0){\
+							if(vTextureCoord.z<.33 ||vTextureCoord.z>.66) gl_FragColor=sideColor1;\
+							else gl_FragColor=sideColor2;\
+							if(vTextureCoord.y*sidelength>sidelength-pix) gl_FragColor-=shadowColor;\
+						}else if(vColor<7.0){\
+							if(vTextureCoord.z<.33 ||vTextureCoord.z>.66) gl_FragColor=sideColor2;\
+							else gl_FragColor=sideColor1;\
+							if(vTextureCoord.y*sidelength>sidelength-pix) gl_FragColor-=shadowColor;\
+						}\
 					}";
 						//gl_FragColor = texture2D(uSampler, vTextureCoord) * uColor;\
 						
@@ -230,7 +237,7 @@ function loadFinish(loader,resources_){
 
  	for(var n=0;n<drawDistance;n++){
  		for(var i=0;i<PolyPerSeg;++i){
- 			_road.addChild(new PIXI.Mesh(createQuadGeometry(n/drawDistance,0,
+ 			_road.addChild(new PIXI.Mesh(createQuadGeometry((n%segmentPerDraw)/segmentPerDraw,0,0,
  															0,0,0,0,0,0),
  										_shader_road));
 	 	}
@@ -388,16 +395,16 @@ function startGame(){
 
 }
 
-function createQuadGeometry(x1, y1, x2, y2, x3, y3, x4, y4){
+function createQuadGeometry(index,x1, y1, x2, y2, x3, y3, x4, y4){
 
 	var vertices=[x1, y1, x2, y2, x3, y3,x4, y4];
 
 	// var uvs=[0,x1,0,x1+.2,1,x1+.2,
 	// 		1,x1+.2,1,x1+.2,0,x1];
-	var uvs=[0,0,
-			 0,1,
-			 1,1,
-			 1,0];
+	var uvs=[0,index+1.0/segmentPerDraw,
+			 0,index,
+			 1,index,
+			 1,index+1.0/segmentPerDraw];
 	
 	var index=[0,1,2,0,2,3];
 	

@@ -1,8 +1,11 @@
 var Render = {
 
-  polygon: function(index,x1, y1, x2, y2, x3, y3, x4, y4, color) {
+  polygon: function(index,x1, y1, x2, y2, x3, y3, x4, y4, color,uv_index) {
 
     var quad=_road.getChildAt(index);
+    if(!quad) 
+      return;
+
     const buffer=quad.geometry.getBuffer('aVertexPosition');
     // buffer.update(new Float32Array([x1, y1, x2, y2, x3, y3,
     //                                 x1, y1,x3, y3,x4, y4]));    
@@ -11,11 +14,11 @@ var Render = {
     
     let p=1.0/segmentPerDraw;
     
-    let i=Math.floor(index/PolyPerSeg)%segmentPerDraw;
-    uv.update(new Float32Array([color,i*p,
-                                color,(i+1)*p,
-                                color,(i+1)*p,
-                                color,i*p]));
+    let i=parseFloat(Math.floor(index/PolyPerSeg)%segmentPerDraw);
+    uv.update(new Float32Array([color,uv_index+p,
+                                color,uv_index,
+                                color+.5,uv_index,
+                                color+.5,uv_index+p]));
     // console.log(i*p);
     // _shader_road.uniforms.vColor=color;
 
@@ -43,11 +46,14 @@ var Render = {
         lanew1, lanew2, lanex1, lanex2, lane;
     
     let n=index%drawDistance;
-    Render.polygon(n*PolyPerSeg,  0, y2, 0, y1,width,y1,width,y2, 3+Math.floor(index/segmentPerDraw)%2);
+    let uv_index=(index%segmentPerDraw)/segmentPerDraw;
+    let seg_index=Math.floor(index/segmentPerDraw)%2;
+    Render.polygon(n*PolyPerSeg,  0, y2, 0, y1,width,y1,width,y2, 3+seg_index,uv_index);
     
-    Render.polygon(n*PolyPerSeg+1,  x2-w2-r2, y2, x1-w1-r1, y1, x1-w1, y1, x2-w2, y2,  2);
-    Render.polygon(n*PolyPerSeg+2,x2+w2+r2, y2, x1+w1+r1, y1, x1+w1, y1, x2+w2, y2,  2);
-    Render.polygon(n*PolyPerSeg+3,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  Math.floor(index/segmentPerDraw)%2);
+    Render.polygon(n*PolyPerSeg+1,  x2-w2-r2, y2, x1-w1-r1, y1, x1-w1, y1, x2-w2, y2,  5+seg_index,uv_index);
+    Render.polygon(n*PolyPerSeg+2,  x2+w2+r2, y2, x1+w1+r1, y1, x1+w1, y1, x2+w2, y2,  5+seg_index,uv_index);
+
+    Render.polygon(n*PolyPerSeg+3,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  seg_index,uv_index);
     
     // Render.polygon(n,  0, y2, 0, y1,width,y1,width,y2, 3+Math.floor(index/segmentPerDraw)%2);
     
@@ -55,13 +61,29 @@ var Render = {
     // Render.polygon(n,x2+w2+r2, y2, x1+w1+r1, y1, x1+w1, y1, x2+w2, y2,  2);
     // Render.polygon(n,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  Math.floor(index/segmentPerDraw)%2);
     
-    if (color.lane) {
+    if((n+segmentPerDraw/2)%(segmentPerDraw*2)<segmentPerDraw){
       lanew1 = w1*2/lanes;
       lanew2 = w2*2/lanes;
       lanex1 = x1 - w1 + lanew1;
       lanex2 = x2 - w2 + lanew2;
-      for(lane = 1 ; lane < lanes ; lanex1 += lanew1, lanex2 += lanew2, lane++)
-        Render.polygon(n*PolyPerSeg+3+lane,lanex1 - l1/2, y1, lanex1 + l1/2, y1, lanex2 + l2/2, y2, lanex2 - l2/2, y2, 2);
+      // let start_lane=
+      // for(lane = 1 ; lane < lanes ; lanex1 += lanew1, lanex2 += lanew2, lane++)
+        Render.polygon(n*PolyPerSeg+4,
+          lanex2 - l2/2, y2,
+          lanex1 - l1/2, y1, 
+          lanex1 + l1/2, y1, 
+          lanex2 + l2/2, y2, 
+           2,uv_index);
+        
+        lanex1+=lanew1;
+        lanex2+=lanew2;
+
+        Render.polygon(n*PolyPerSeg+5,
+          lanex2 + l2/2, y2, 
+          lanex1 + l1/2, y1, 
+          lanex1 - l1/2, y1, 
+          lanex2 - l2/2, y2,
+           2,uv_index);
     }
     
     Render.fog(0, y1, width, y2-y1, fog);
