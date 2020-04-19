@@ -11,7 +11,46 @@ var _texture_car;
 var _texture_road;
 var _last_car_pos;
 
-
+function colorArray(arr_){
+	return new Float32Array(arr_.map(x=>x/255));
+}
+var SceneColor=[
+{
+	roadColor1:colorArray([185,184,185,255]),
+	roadColor2:colorArray([151,150,150,255]),
+	laneColor1:colorArray([255,255,255,255]),
+	laneColor2:colorArray([227,227,227,255]),
+	grassColor1:colorArray([82,188,127,255]),
+	grassColor2:colorArray([144,204,136,255]),
+	grassColor3:colorArray([82,188,127,255]),
+	grassColor4:colorArray([144,204,136,255]),
+	sideColor1:colorArray([228,58,56,255]),
+	sideColor2:colorArray([250,229,221,255])
+},
+{
+	roadColor1:colorArray([14,74,94,255]),
+	roadColor2:colorArray([0,53,79,255]),
+	laneColor1:colorArray([254,229,110,255]),
+	laneColor2:colorArray([15,180,223,255]),
+	grassColor1:colorArray([45,44,130,255]),
+	grassColor2:colorArray([30,67,153,255]),
+	grassColor3:colorArray([45,44,130,255]),
+	grassColor4:colorArray([30,67,153,255]),
+	sideColor1:colorArray([195,124,180,255]),
+	sideColor2:colorArray([255,245,229,255])
+},
+{
+	roadColor1:colorArray([131,82,161,255]),
+	roadColor2:colorArray([106,84,163,255]),
+	laneColor1:colorArray([124,209,233,255]),
+	laneColor2:colorArray([76,166,221,255]),
+	grassColor1:colorArray([229,211,181,255]),
+	grassColor2:colorArray([255,235,207,255]),
+	grassColor3:colorArray([125,207,218,255]),
+	grassColor4:colorArray([89,167,220,255]),
+	sideColor1:colorArray([131,45,145,255]),
+	sideColor2:colorArray([230,50,147,255])
+}];
 
 
 var _shader_road,_shader_lane,_shader_rumble;
@@ -131,101 +170,22 @@ function loadFinish(loader,resources_){
 	_start_gate=new PIXI.Sprite(resources.gate.textures['start.png']);
 
 	// load road
-	
-	let vertex_shader='precision highp float;\
-						attribute vec2 aVertexPosition;\
-						attribute vec2 aTextureCoord;\
-						uniform mat3 projectionMatrix;\
-						uniform mat3 translationMatrix;\
-						uniform mat3 uTextureMatrix;\
-						varying vec3 vTextureCoord;\
-						varying float vColor;\
-						void main(void)\
-						{\
-							gl_Position.xyw = projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0);\
-							gl_Position.z = 0.0;\
-							vColor=floor(aTextureCoord.x);\
-							vTextureCoord = vec3(aVertexPosition.x,(aTextureCoord.x-vColor)/.5,aTextureCoord.y);\
-						}';
-		
-						// vTextureCoord = (uTextureMatrix * vec3(aTextureCoord, 1.0)).xy;
-	let frag_shader="varying vec3 vTextureCoord;\
-					varying float vColor;\
-					uniform vec4 uColor;\
-					uniform sampler2D uSampler;\
-					uniform float width;\
-					\
-					vec4 roadColor1=vec4(0.72,0.72,0.72,1.0);\
-					vec4 roadColor2=vec4(0.59,0.59,0.59,1.0);\
-					vec4 laneColor=vec4(1.0,1.0,1.0,1.0);\
-					vec4 grassColor1=vec4(0.5,0.91,0.56,1.0);\
-					vec4 grassColor2=vec4(0.26,0.78,0.5,1.0);\
-					vec4 sideColor1=vec4(1.0,0.0,0.0,1.0);\
-					vec4 sideColor2=vec4(1.0,1.0,1.0,1.0);\
-					vec4 shadowColor=vec4(0.6,0.6,0.6,0.0);\
-					\
-					float pix=10.0;\
-					float seglength=400.0;\
-					float sidelength=60.0;\
-					bool isBorder(float x,float y){\
-						float xx=mod(x,pix*4.0)/pix;\
-						if(y*seglength<pix){\
-							if(xx<=1.0 || (xx>=2.0 && xx<=3.0)) return true;\
-						}else if(y*seglength<pix*2.0 && y*seglength>=pix){\
-							if(xx>=1.0 && xx<=2.0) return true;\
-						}else if(y*seglength>seglength-pix*2.0){\
-							if(y*seglength>seglength-pix){\
-								if(xx<=1.0) return true;\
-							}else{\
-								if(xx>=2.0 && xx<=3.0) return true;\
-							}\
-						}\
-						return false;\
-					}\
-					void main(void){\
-						if(vColor<1.0){\
-							gl_FragColor=roadColor1;\
-							if(isBorder(vTextureCoord.x,vTextureCoord.z))\
-								gl_FragColor=roadColor2;\
-							\
-						}else if(vColor<2.0){\
-							gl_FragColor=roadColor2;\
-							if(isBorder(vTextureCoord.x,vTextureCoord.z))\
-								gl_FragColor=roadColor1;\
-							\
-						}else if(vColor<3.0){\
-							gl_FragColor=laneColor;\
-							if(vTextureCoord.y*sidelength>sidelength-pix) gl_FragColor-=shadowColor/2.0;\
-						}else if(vColor<4.0){\
-						 gl_FragColor=grassColor1;\
-						 if(isBorder(vTextureCoord.x,vTextureCoord.z))\
-								gl_FragColor=grassColor2;\
-						}else if(vColor<5.0){\
-						 gl_FragColor=grassColor2;\
-						 if(isBorder(vTextureCoord.x,vTextureCoord.z))\
-								gl_FragColor=grassColor1;\
-						}else if(vColor<6.0){\
-							if(vTextureCoord.z<.33 ||vTextureCoord.z>.66) gl_FragColor=sideColor1;\
-							else gl_FragColor=sideColor2;\
-							if(vTextureCoord.y*sidelength>sidelength-pix) gl_FragColor-=shadowColor;\
-						}else if(vColor<7.0){\
-							if(vTextureCoord.z<.33 ||vTextureCoord.z>.66) gl_FragColor=sideColor2;\
-							else gl_FragColor=sideColor1;\
-							if(vTextureCoord.y*sidelength>sidelength-pix) gl_FragColor-=shadowColor;\
-						}else if(vColor<8.0){\
-							gl_FragColor=laneColor-shadowColor/4.0;\
-							if(vTextureCoord.y*sidelength>sidelength-pix) gl_FragColor-=shadowColor/2.0;\
-						}\
-					}";
-						//gl_FragColor = texture2D(uSampler, vTextureCoord) * uColor;\
-						
-							
 	let uniforms={
 		uSampler:resources.road.texture,
 		uColor:new Float32Array([1.,1.,1.,1.]),
 		vColor:1.0,
 		width:width,
-		height:height
+		height:height,
+		roadColor1:SceneColor[indexScene].roadColor1,
+	    roadColor2:SceneColor[indexScene].roadColor2,
+	    laneColor1:SceneColor[indexScene].laneColor1,
+	    laneColor2:SceneColor[indexScene].laneColor2,
+	    grassColor1:SceneColor[indexScene].grassColor1,
+	    grassColor2:SceneColor[indexScene].grassColor2,
+	    grassColor3:SceneColor[indexScene].grassColor3,
+	    grassColor4:SceneColor[indexScene].grassColor4,
+	    sideColor1:SceneColor[indexScene].sideColor1,
+	    sideColor2:SceneColor[indexScene].sideColor2
 	};
 	_shader_road=PIXI.Shader.from(vertex_shader,frag_shader,uniforms);
 	

@@ -398,7 +398,9 @@ function render() {
 
   for(n = 0 ; n < drawDistance ; n++) {
 
-    segment        = segments[(baseSegment.index + n) % segments.length];
+    if((baseSegment.index + n)>segments.length-1) continue;
+
+    segment        = segments[(baseSegment.index + n)];
     // segment.looped = segment.index < baseSegment.index;
     // segment.fog    = Util.exponentialFog(n/drawDistance, fogDensity);
     // segment.clip   = maxy;
@@ -426,13 +428,15 @@ function render() {
                    segment.p2.screen.y,
                    segment.p2.screen.w,
                    segment.fog,
-                   segment.color);
+                   segment.scene);
 
     maxy = segment.p1.screen.y;
   }
 
   for(n=0;n<drawDistance;++n){
-    segment = segments[(baseSegment.index + n) % segments.length];
+    
+    if((baseSegment.index + n)>segments.length-1) continue;
+    segment = segments[(baseSegment.index + n)];
 
     
 
@@ -549,7 +553,7 @@ function findSegmentScene(index){
 
 function lastY() { return (segments.length == 0) ? 0 : segments[segments.length-1].p2.world.y; }
 
-function addSegment(curve, y) {
+function addSegment(curve, y,scene) {
   var n = segments.length;
   segments.push({
       index: n,
@@ -560,7 +564,8 @@ function addSegment(curve, y) {
        cars: [],
       coins:[],
   obstacles:[],
-      color: Math.floor(n/rumbleLength)%2 ? COLORS.DARK : COLORS.LIGHT
+      color: Math.floor(n/rumbleLength)%2 ? COLORS.DARK : COLORS.LIGHT,
+      scene: scene
   });
 }
 
@@ -570,16 +575,16 @@ function addSprite(n, texture, offset) {
 
 }
 
-function addRoad(enter, hold, leave, curve, y) {
+function addRoad(enter, hold, leave, curve, y,scene) {
   var startY   = lastY();
   var endY     = startY + (Util.toInt(y, 0) * segmentLength);
   var n, total = enter + hold + leave;
   for(n = 0 ; n < enter ; n++)
-    addSegment(Util.easeIn(0, curve, n/enter), Util.easeInOut(startY, endY, n/total));
+    addSegment(Util.easeIn(0, curve, n/enter), Util.easeInOut(startY, endY, n/total),scene);
   for(n = 0 ; n < hold  ; n++)
-    addSegment(curve, Util.easeInOut(startY, endY, (enter+n)/total));
+    addSegment(curve, Util.easeInOut(startY, endY, (enter+n)/total),scene);
   for(n = 0 ; n < leave ; n++)
-    addSegment(Util.easeInOut(curve, 0, n/leave), Util.easeInOut(startY, endY, (enter+hold+n)/total));
+    addSegment(Util.easeInOut(curve, 0, n/leave), Util.easeInOut(startY, endY, (enter+hold+n)/total),scene);
 }
 
 var ROAD = {
@@ -588,67 +593,67 @@ var ROAD = {
   CURVE:  { NONE: 0, EASY:    2, MEDIUM:    4, HARD:    6 }
 };
 
-function addStraight(num) {
+function addStraight(num,scene) {
   num = num || ROAD.LENGTH.MEDIUM;
-  addRoad(num, num, num, 0, 0);
+  addRoad(0, num, 0, 0, 0,scene);
 }
 
-function addHill(num, height) {
+function addHill(num, height,scene) {
   num    = num    || ROAD.LENGTH.MEDIUM;
   height = height || ROAD.HILL.MEDIUM;
-  addRoad(num, num, num, 0, height);
+  addRoad(num, num, num, 0, height,scene);
 }
 
-function addCurve(num, curve, height) {
+function addCurve(num, curve, height,scene) {
   num    = num    || ROAD.LENGTH.MEDIUM;
   curve  = curve  || ROAD.CURVE.MEDIUM;
   height = height || ROAD.HILL.NONE;
-  addRoad(num, num, num, curve, height);
+  addRoad(num, num, num, curve, height,scene);
 }
     
-function addLowRollingHills(num, height) {
+function addLowRollingHills(num, height,scene) {
   num    = num    || ROAD.LENGTH.SHORT;
   height = height || ROAD.HILL.LOW;
-  addRoad(num, num, num,  0,                height/2);
-  addRoad(num, num, num,  0,               -height);
-  addRoad(num, num, num,  ROAD.CURVE.EASY,  height);
-  addRoad(num, num, num,  0,                0);
-  addRoad(num, num, num, -ROAD.CURVE.EASY,  height/2);
-  addRoad(num, num, num,  0,                0);
+  addRoad(num, num, num,  0,                height/2,scene);
+  addRoad(num, num, num,  0,               -height,scene);
+  addRoad(num, num, num,  ROAD.CURVE.EASY,  height,scene);
+  addRoad(num, num, num,  0,                0,scene);
+  addRoad(num, num, num, -ROAD.CURVE.EASY,  height/2,scene);
+  addRoad(num, num, num,  0,                0,scene);
 }
 
-function addSCurves() {
-  addRoad(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM,  -ROAD.CURVE.EASY,    ROAD.HILL.NONE);
-  addRoad(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM,   ROAD.CURVE.MEDIUM,  ROAD.HILL.MEDIUM);
-  addRoad(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM,   ROAD.CURVE.EASY,   -ROAD.HILL.LOW);
-  addRoad(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM,  -ROAD.CURVE.EASY,    ROAD.HILL.MEDIUM);
-  addRoad(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM,  -ROAD.CURVE.MEDIUM, -ROAD.HILL.MEDIUM);
+function addSCurves(scene) {
+  addRoad(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM,  -ROAD.CURVE.EASY,    ROAD.HILL.NONE,scene);
+  addRoad(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM,   ROAD.CURVE.MEDIUM,  ROAD.HILL.MEDIUM,scene);
+  addRoad(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM,   ROAD.CURVE.EASY,   -ROAD.HILL.LOW,scene);
+  addRoad(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM,  -ROAD.CURVE.EASY,    ROAD.HILL.MEDIUM,scene);
+  addRoad(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM,  -ROAD.CURVE.MEDIUM, -ROAD.HILL.MEDIUM,scene);
 }
 
-function addBumps() {
-  addRoad(10, 10, 10, 0,  5);
-  addRoad(10, 10, 10, 0, -2);
-  addRoad(10, 10, 10, 0, -5);
-  addRoad(10, 10, 10, 0,  8);
-  addRoad(10, 10, 10, 0,  5);
-  addRoad(10, 10, 10, 0, -7);
-  addRoad(10, 10, 10, 0,  5);
-  addRoad(10, 10, 10, 0, -2);
+function addBumps(scene) {
+  addRoad(10, 10, 10, 0,  5,scene);
+  addRoad(10, 10, 10, 0, -2,scene);
+  addRoad(10, 10, 10, 0, -5,scene);
+  addRoad(10, 10, 10, 0,  8,scene);
+  addRoad(10, 10, 10, 0,  5,scene);
+  addRoad(10, 10, 10, 0, -7,scene);
+  addRoad(10, 10, 10, 0,  5,scene);
+  addRoad(10, 10, 10, 0, -2,scene);
 }
 
-function addDownhillToEnd(num) {
+function addDownhillToEnd(num,scene) {
   num = num || 200;
-  addRoad(num, num, num, -ROAD.CURVE.EASY, -lastY()/segmentLength);
+  addRoad(num, num, num, -ROAD.CURVE.EASY, -lastY()/segmentLength,scene);
 }
 
 function resetRoad() {
   segments = [];
 
-  addStraight(sceneSegment[0]);
-  addStraight(sceneSegment[1]-sceneSegment[0]);
+  addStraight(sceneSegment[0],0);
+  addStraight(sceneSegment[1]-sceneSegment[0],1);
 
   let offsetZ=startGateZ/segmentLength;
-  addStraight(sceneSegment[2]-sceneSegment[1]+offsetZ);
+  addStraight(sceneSegment[2]-sceneSegment[1]+offsetZ*2,2);
   // addSCurves();
   // addCurve(ROAD.LENGTH.SHORT, ROAD.CURVE.MEDIUM, ROAD.HILL.NONE);
 
@@ -896,4 +901,6 @@ function setupScene(index){
   speed=sceneSpeedRatio[index]*BaseSpeed;
   accel=(sceneSpeedRatio[index+1]*BaseSpeed-speed)/sceneInterval[index];
   console.log("v= "+speed+"  a= "+accel);
+
+
 }

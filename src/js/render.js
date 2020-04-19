@@ -1,10 +1,22 @@
 var Render = {
 
-  polygon: function(index,x1, y1, x2, y2, x3, y3, x4, y4, color,uv_index) {
+  polygon: function(index,x1, y1, x2, y2, x3, y3, x4, y4, color,uv_index,scene_) {
 
     var quad=_road.getChildAt(index);
     if(!quad) 
       return;
+
+
+    quad.shader.uniforms.roadColor1=SceneColor[scene_].roadColor1;
+    quad.shader.uniforms.roadColor2=SceneColor[scene_].roadColor2;
+    quad.shader.uniforms.laneColor1=SceneColor[scene_].laneColor1;
+    quad.shader.uniforms.laneColor2=SceneColor[scene_].laneColor2;
+    quad.shader.uniforms.grassColor1=SceneColor[scene_].grassColor1;
+    quad.shader.uniforms.grassColor2=SceneColor[scene_].grassColor2;
+    quad.shader.uniforms.grassColor3=SceneColor[scene_].grassColor3;
+    quad.shader.uniforms.grassColor4=SceneColor[scene_].grassColor4;
+    quad.shader.uniforms.sideColor1=SceneColor[scene_].sideColor1;
+    quad.shader.uniforms.sideColor2=SceneColor[scene_].sideColor2;
 
     const buffer=quad.geometry.getBuffer('aVertexPosition');
     // buffer.update(new Float32Array([x1, y1, x2, y2, x3, y3,
@@ -24,12 +36,10 @@ var Render = {
 
     
     // if(i%2==0) return;
-     // uv.update(new Float32Array([0,1/drawDistance*index,
-     //                              0,1/drawDistance*(index+1),
-     //                              1,1/drawDistance*(index+1),                                  
-     //                              1,1/drawDistance*(index+1),
-     //                              1,1/drawDistance*index,
-     //                              0,1/drawDistance*index]));
+     // uv.update(new Float32Array([0,uv_index+1.0/drawDistance,
+     //                              0,uv_index,
+     //                              1,uv_index,                                  
+     //                              1,uv_index+1.0/drawDistance]));
    
    // uv.update(new Float32Array([x1/width, 1/drawDistance*index, x2/width, 1/drawDistance*(index+1), x3/width, 1/drawDistance*(index+1),
    //                            x3/width, 1/drawDistance*(index+1), x4/width, 1/drawDistance*index,x1/width,1/drawDistance*index]));
@@ -37,7 +47,7 @@ var Render = {
 
   //---------------------------------------------------------------------------
 
-  segment: function(index,width, lanes, x1, y1, w1, x2, y2, w2, fog, color) {
+  segment: function(index,width, lanes, x1, y1, w1, x2, y2, w2, fog,scene) {
 
     var r1 = Render.rumbleWidth(w1, lanes),
         r2 = Render.rumbleWidth(w2, lanes),
@@ -47,13 +57,17 @@ var Render = {
     
     let n=index%drawDistance;
     let uv_index=(index%segmentPerDraw)/segmentPerDraw;
-    let seg_index=Math.floor(index/segmentPerDraw)%2;
-    Render.polygon(n*PolyPerSeg,  0, y2, 0, y1,width,y1,width,y2, 3+seg_index,uv_index);
+    // let uv_index=(index%drawDistance)/drawDistance;
     
-    Render.polygon(n*PolyPerSeg+1,  x2-w2-r2, y2, x1-w1-r1, y1, x1-w1, y1, x2-w2, y2,  5+seg_index,uv_index);
-    Render.polygon(n*PolyPerSeg+2,  x2+w2+r2, y2, x1+w1+r1, y1, x1+w1, y1, x2+w2, y2,  5+seg_index,uv_index);
+    let seg_index=Math.floor(index/segmentPerDraw)%2;
 
-    Render.polygon(n*PolyPerSeg+3,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  seg_index,uv_index);
+
+    Render.polygon(n*PolyPerSeg,  0, y2, 0, y1,width,y1,width,y2, 3+seg_index,uv_index,scene);
+    
+    Render.polygon(n*PolyPerSeg+1,  x2-w2-r2, y2, x1-w1-r1, y1, x1-w1, y1, x2-w2, y2,  5+seg_index,uv_index,scene);
+    Render.polygon(n*PolyPerSeg+2,  x2+w2+r2, y2, x1+w1+r1, y1, x1+w1, y1, x2+w2, y2,  5+seg_index,uv_index,scene);
+
+    Render.polygon(n*PolyPerSeg+3,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  seg_index,uv_index,scene);
     
     // Render.polygon(n,  0, y2, 0, y1,width,y1,width,y2, 3+Math.floor(index/segmentPerDraw)%2);
     
@@ -73,14 +87,14 @@ var Render = {
           lanex1 - l1/2, y1, 
           lanex1 + l1/2, y1, 
           lanex2 + l2/2, y2, 
-           2,uv_index);
+           2,uv_index,scene);
 
         Render.polygon(n*PolyPerSeg+5,
           lanex2-lanew2+l2 - l2/2, y2,
           lanex1-lanew1+l1 - l1/2, y1, 
           lanex1-lanew1+l1 + l1/2, y1, 
           lanex2-lanew2+l2+ l2/2, y2, 
-           7,uv_index);
+           7,uv_index,scene);
         
         lanex1+=lanew1;
         lanex2+=lanew2;
@@ -90,14 +104,14 @@ var Render = {
           lanex1 + l1/2, y1, 
           lanex1 - l1/2, y1, 
           lanex2 - l2/2, y2,
-           2,uv_index);
+           2,uv_index,scene);
 
          Render.polygon(n*PolyPerSeg+7,
           lanex2+lanew2-l2 + l2/2, y2, 
           lanex1+lanew1-l1 + l1/2, y1, 
           lanex1+lanew1-l1 - l1/2, y1, 
           lanex2+lanew2-l2 - l2/2, y2,
-           7,uv_index);
+           7,uv_index,scene);
     }
     
     Render.fog(0, y1, width, y2-y1, fog);
