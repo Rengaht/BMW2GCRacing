@@ -1,0 +1,44 @@
+.pageToTop{
+	animation: moveToTopFade .7s ease both;
+}
+.pageFromTop{
+	animation: moveFromTopFade .7s ease both;
+}
+.pageToBottom{
+	animation: moveToBottomFade .7s ease both; 
+}
+.pageFromBottom{
+	animation: moveFromBottomFade .7s ease both;
+}
+.pageToRight{
+	animation: moveToRightFade .7s ease both; 
+}
+.pageFromRight{
+	animation: moveFromRightFade .7s ease both;
+}
+.pageFromBase{
+	transform:translateY(0);
+}
+
+
+@keyframes moveToTopFade {
+	from { }
+	to { opacity: 1; -webkit-transform: translateY(-100%); transform: translateY(-100%); }
+}
+@keyframes moveFromTopFade {
+	from { opacity: 1; -webkit-transform: translateY(-100%); transform: translateY(-100%); }
+}
+@keyframes moveFromBottomFade {
+	from { opacity: 1; -webkit-transform: translateY(100%); transform: translateY(100%); }
+}
+@keyframes moveToBottomFade{
+	from { }
+	to { opacity: 1; -webkit-transform: translateY(100%); transform: translateY(100%); }
+}
+@keyframes moveFromRightFade {
+	from { opacity: 1; -webkit-transform: translateX(100%); transform: translateX(100%); }
+}
+@keyframes moveToRightFade{
+	from { }
+	to { opacity: 1; -webkit-transform: translateX(100%); transform: translateX(100%); }
+}

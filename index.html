@@ -4,6 +4,7 @@
 	<title>THE 2 RACING CHALLENGE</title>
 
 	<link rel="stylesheet" type="text/css" href="src/css/font.css">
+	<link rel="stylesheet" type="text/css" href="src/css/transition.css">
 	<link rel="stylesheet" type="text/css" href="src/css/page.css">
 		
 	<script src="src/lib/pixi/5.2.0/pixi.js"></script>
@@ -22,15 +23,16 @@
 <body onload="onload();">
 	 
 	<img id="_button_rank" src="asset/img/ui/button_rank.png" class="Button" onclick="gotoPage('_rank','sb')"/>
-		
+	
+	<img id="_button_back" class="Button ButtonBack hidden close" onclick="onButtonBackClick()" src="asset/img/ui/button_back.png"/>
+			
 	<div id="_home" class="PageContainer">
 		<img id="_game_logo" src="asset/img/ui/game_logo.png" class="Center"/>
 		<div class="BottomWrapper">
 			<img id="_button_start" class="Button Center" onclick="gotoPage('_driver','bb')" src="asset/img/ui/button_start.png"/>		
 		</div>
 	</div>
-	<div id="_driver" class="PageContainer hidden close">
-		<img class="ButtonBack" onclick="gotoPage('_home','sb')" src="asset/img/ui/button_back.png"/>
+	<div id="_driver" class="PageContainer close">
 		<div id="_flag_top" class="Flag Center">
 			<div id="_hint_driver_name" class="FontT2 MiddleBlue">Enter Driver's Name</div>
 			<div>
@@ -43,8 +45,7 @@
 			</div>		
 		</div>
 	</div>
-	<div id="_color" class="PageContainer hidden close">
-		<img id="_button_back_home" class="ButtonBack" onclick='gotoPage("_driver","sb")'  src="asset/img/ui/button_back.png"/>
+	<div id="_color" class="PageContainer close">
 		<div id="_flag_bottom" class="Flag Center">
 			<div id="_hint_car_color" class="FontT2 LightBlue">CHOOSE THE COLOR</div>			
 		</div>
@@ -55,31 +56,31 @@
 			<img id="_img_car_color_white" class="FrontCar hidden close" src="asset/img/ui/frontcar-4.png"/>		
 		</div>
 		<div class="ColorButtonWrapper">			
-			<div class="ColorButton" onClick="setDriverColor('blue')">
+			<div id="_button_blue" class="Button ColorButton" onClick="setDriverColor('blue')">
 				<img src="asset/img/ui/button_blue.png" class="Button"/>
 				<img id="_button_blue_selected" src="asset/img/ui/button_color_select.png"/>
 			</div>
-			<div class="ColorButton" onClick="setDriverColor('red')">
+			<div id="_button_red" class="Button ColorButton" onClick="setDriverColor('red')">
 				<img src="asset/img/ui/button_red.png" class="Button"/>
 				<img id="_button_red_selected" src="asset/img/ui/button_color_select.png" " class="hidden close"/>
 			</div>
-			<div class="ColorButton" onClick="setDriverColor('gray')">
+			<div id="_button_gray" class="Button ColorButton" onClick="setDriverColor('gray')">
 				<img src="asset/img/ui/button_gray.png" class="Button"/>
 				<img id="_button_gray_selected" src="asset/img/ui/button_color_select.png" " class="hidden close"/>
 			</div>
-			<div class="ColorButton" onClick="setDriverColor('white')">
+			<div id="_button_white" class="Button ColorButton" onClick="setDriverColor('white')">
 				<img src="asset/img/ui/button_white.png" class="Button"/>
 				<img id="_button_white_selected" src="asset/img/ui/button_color_select.png" " class="hidden close"/>
 			</div>
 			
 		</div>
 		<div class="BottomWrapper">
-			<img id="_button_go" class="Button Center" onclick="gotoPage('_game','bb')" src="asset/img/ui/button_go_normal.png"/>		
+			<img id="_button_go" class="Button Center" onclick="onButtonGoClick()" src="asset/img/ui/button_go_normal.png"/>		
 			</div>		
 		</div>
 	</div>
 	
-	<div id="_game" class="PageContainer hidden close" onmousedown="onGameClick(event)" onmouseup="onGameMouseUp(event)">
+	<div id="_game" class="PageContainer close" onmousedown="onGameClick(event)" onmouseup="onGameMouseUp(event)">
 		<div id="_game_frame"></div>
 		<div id="_speed_meter">
 			<img src="asset/img/ui/meter.png"/>
@@ -109,12 +110,12 @@
 				<span id="_hud_score">888</span>
 			</div>			
 		</div>
-		<div id="_hint" onClick="startGame()" class="hidden close">
+		<div id="_hint" onClick="startGame()" class="Button hidden close">
 			<img src="asset/img/ui/hint.png" class="Center"/>
 		</div>
 
 		<div id="_score" class="PageContainer hidden close">
-			<div id="_score_board" class="Center">
+			<div id="_score_board" class="Center close">
 				<div style="position:relative;width:100%;height:100%">
 				<div class="FontT1 Orange">CONGRADULATIONS !!!</div>
 				<div id="_info_complete" class="FontText">
@@ -150,8 +151,7 @@
 		</div>
 	</div>
 	
-	<div id="_lottery" class="PageContainer hidden close">
-		<img class="ButtonBack" onclick='gotoPage("_game","sb")' src="asset/img/ui/button_back.png"/>
+	<div id="_lottery" class="PageContainer close">
 		<div id="_lottery_title" class="Center LightBlue FontT1">
 			<span>輸入資料參加抽獎</span>
 		</div>
@@ -235,8 +235,7 @@
 			</div>		
 		</div>
 	</div>
-	<div id="_rank" class="PageContainer hidden close">
-		<img class="ButtonBack" onclick='onRankBackClick()' src="asset/img/ui/button_back.png"/>
+	<div id="_rank" class="PageContainer close">
 		<div class="Center">
 			<div class="FontT1 LightBlue">BEST RUNNERS</div>
 			<div class="WaveTitle FontT2 MiddleBlue">

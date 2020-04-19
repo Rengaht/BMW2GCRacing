@@ -273,7 +273,6 @@ function setupGame(){
 	// if(segments.length==0)
 	resetRoad(); // only rebuild road when necessary
 
-	showItem($('#_hint'));
 	setupCarSprite(_driver_color);
 
 	indexScene=0;
@@ -355,8 +354,13 @@ function endGame(){
 
   	   _app.ticker.stop();
 
-	  showItem($('#_score'));
-	  showItem($('#_button_rank'));
+  	   showItem($('#_score'));
+  	   showItem($('#_button_rank'));
+  	   		
+  	   setTimeout(function(){
+  	   		movePage($('#_score_board'),'pageFromTop');
+	   },100);
+
   },2000);
 }
 

@@ -923,7 +923,7 @@ function lerpColor(c1,c2,inter){
 }
 function setShaderUniforms(index1,index2,inter){
 
-  console.log(index1+' '+index2+''+inter);
+  // console.log(index1+' '+index2+''+inter);
 
   _shader_road.uniforms.roadColor1=lerpColor(SceneColor[index1].roadColor1,SceneColor[index2].roadColor1,inter);
   _shader_road.uniforms.roadColor2=lerpColor(SceneColor[index1].roadColor2,SceneColor[index2].roadColor2,inter);

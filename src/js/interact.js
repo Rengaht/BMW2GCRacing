@@ -1,5 +1,5 @@
-var _cur_page='HOME';
-var _pre_page='HOME';
+var _cur_page='_home';
+var _pre_page='_home';
 var _driver_name;
 var _driver_color='blue';
 const ClickBorder=0.5;
@@ -8,36 +8,81 @@ function gotoPage(page_,sound_){
 	
 	if(_cur_page===page_) return;
 
+	switch(_cur_page){
+		case '_home':
+			if(page_!=='_rank') movePage($('#'+_cur_page),'pageToTop');
+			break;
+		case '_lottery':
+		case '_rank':
+			movePage($('#'+_cur_page),'pageToRight');
+			break;
+		case '_driver':
+			if(page_!=='_home') movePage($('#'+_cur_page),'pageToTop');
+			break;
+		case '_color':
+			if(page_==='_game') movePage($('#'+_cur_page),'pageToTop');
+			else movePage($('#'+_cur_page),'pageToBottom');
+			break;
+		case 'game':
+			if(page_==='home'){
+				hideItem($('#_score'));
+				movePage($('#_score_board'),'pageToTop');	
+			} 
+	  		break;
+	}
+
 	switch(page_){
 		case '_home':
+			if(_cur_page!=='_rank')
+				movePage($('#'+page_),'pageFromTop');
+
 			showItem($('#_button_rank'));
+			hideItem($('#_button_back'));
+			
 			$('#_input_driver').val("");
 			_driver_name="";
 			break;
 		case '_driver':
-
-			// if(!_sound_bgm.playing()){
-			// 	_sound_bgm.play();	
-			// 	_sound_bgm.volume(0.5);
-			// } 
-
+			if(_cur_page==='_home')
+				movePage($('#'+page_),'pageFromBase');
+			else
+				movePage($('#'+page_),'pageFromTop');
+			
 			hideItem($('#_button_rank'));			
+			showItem($('#_button_back'));
+			
 			$('#_input_driver').focus();
 			break;
 		case '_color':
-			setDriverColor('blue');
+			movePage($('#'+page_),'pageFromBottom');
+			showItem($('#_button_back'));
 			hideItem($('#_button_rank'));
+			
+			setDriverColor('blue');
 			break;
 		case '_game':				
+			movePage($('#'+page_),'pageFromBase');
+			hideItem($('#_button_back'));
+			
 			if(_cur_page==='_color'){
 				hideItem($('#_button_rank'));
 				hideItem($('#_score'));	
+				movePage($('#_score_board'),'pageToTop');
+	  			showItem($('#_hint'));
+	
 				setupGame();			
+			}else{
+				showItem($('#_button_rank'));
+				showItem($('#_score'));
+				movePage($('#_score_board'),'pageFromBase');
+	  
 			}
 			break;
 		case '_rank':
 		case '_lottery':
+			movePage($('#'+page_),'pageFromRight');
 			hideItem($('#_button_rank'));
+			showItem($('#_button_back'));
 			break;
 	}
 
@@ -50,13 +95,9 @@ function gotoPage(page_,sound_){
 			break;
 	}
 
-	hideItem($('#'+_cur_page));
-	showItem($('#'+page_));
+	// hideItem($('#'+_cur_page));
+	// showItem($('#'+page_));
 
-	if(page_==='_game'&& _cur_page==='_rank'){
-		showItem($('#_button_rank'));
-		showItem($('#_score'));	
-	}
 
 	_pre_page=_cur_page;
 	_cur_page=page_;
@@ -66,33 +107,59 @@ function gotoPage(page_,sound_){
 
 function hideItem(item_){
 	
-	if(item_.hasClass('hidden')) return;	
+	if(item_.hasClass('hidden') && item_.hasClass('close')) return;	
 	
-	item_.find('Button').addClass('Disable');
-
+	item_.find('.Button').addClass('Disable');
+	
 	item_.addClass('hidden');
 	item_.children().addClass('hidden');
 	
 	setTimeout(function(){
 		item_.addClass('close');
 		item_.children().addClass('close');
-	
 	},600);
 }
 function showItem(item_){
 	
-	if(!item_.hasClass('hidden')) return;
+	if(!item_.hasClass('hidden') && !item_.hasClass('close')) return;
 	
 	item_.removeClass('close');
-	item_.children().not("#_score").removeClass('close');
+	item_.children().removeClass('close');
 	
 	setTimeout(function(){		
 		item_.removeClass('hidden');		
-		item_.children().not("#_score").removeClass('hidden');
+		item_.children().removeClass('hidden');
 	},10);
 }
 
+function movePage(page_,direction){
+	
+	animEndEventName='animationend';
+	// if(!page_.hasClass(direction)) page_.removeClass(direction);
+
+	// if(direction.indexOf('From')>-1){
+	if(page_.hasClass('close')) page_.removeClass('close');
+	page_.find('.Button').addClass('Disable');
+	
+
+	page_.addClass(direction);
+	setTimeout(function(){
+		page_.off(animEndEventName);
+
+		if(direction.indexOf('From')==-1){
+			if(!page_.hasClass('close')) page_.addClass('close');
+		}
+		
+		page_.removeClass(direction);// endCurrPage = true;
+		page_.find('.Button').removeClass('Disable');
+
+	},700);
+}
+
+
 function onDriverNameClick(){
+
+	if($('#_button_ok').hasClass('Disable')) return;
 
 	let val=$('#_input_driver').val();
 	if(val.length<1){
@@ -111,6 +178,8 @@ function setDriverName(set_){
 }
 function setDriverColor(set_){
 
+	if($('#_button_'+set_).hasClass('Disable')) return;
+
 	if(set_===_driver_color) return;
 
 	_sound_fx['button_small'].play();
@@ -124,6 +193,11 @@ function setDriverColor(set_){
 	_driver_color=set_;
 
 }
+function onButtonGoClick(){
+	if($('#_button_go').hasClass('Disable')) return;
+	gotoPage('_game','bb');
+}
+
 function setDriverScore(set_){
 
 	// TODO: upload score & get rank
@@ -133,12 +207,24 @@ function setDriverScore(set_){
 }
 function sendInfo(){
 
-
+	if($('#_button_send').hasClass('Disable')) return;
+	gotoPage('_game','bb');
 
 }
 
-function onRankBackClick(){
+function onButtonBackClick(){
+
+	if($('#_button_back').hasClass('Disable')) return;
+
 	gotoPage(_pre_page,'sb');
+			
+	// switch(_cur_page){
+	// 	case '_rank':
+	// 		gotoPage(_pre_page,'sb');
+	// 		break;
+	// 	case '_driver':
+	// 		gotoPage()
+	// }
 }
 
 function onGameClick(event){

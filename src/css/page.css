@@ -51,6 +51,10 @@ input,select{
 	background-repeat: no-repeat;
 	cursor: pointer;
 	max-height:11vh;
+	transition: opacity .2s ease-out;
+}
+.Button.Disable{
+	opacity: .8;
 }
 .hidden{
 	opacity: 0;
@@ -61,18 +65,55 @@ input,select{
 }
 .PageContainer{
 	position: absolute;
-    top: 0;
+    /*top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: 0;*/
+    top:0;
+    width:100%;
+    height:100%;
     background-size: cover;	
     background-position: center center;
+
+    transform:translateY(0%);
+    transition: top 0s ease-in-out;
+}
+.PageContainer.hidden{
+	/*opacity: 0;*/
+	top:-100vh;
+	transition: top 1s ease-in-out;
+}
+.PageContainer.close{
+	top:0vh;
 }
 
-/* page home */
+/* pages */
 #_home{
 	background-image: url(../../asset/img/ui/BG_home.png);
+	z-index: 4;
 }
+#_color{
+	background-image: url(../../asset/img/ui/BG_car.png);	
+	z-index: 2;
+	animation-timing-function: linear !important;
+}
+#_driver{
+	background-image: url(../../asset/img/ui/BG_info.png);
+	z-index: 3;	
+	animation-timing-function: linear !important;
+}
+#_lottery{
+	background-color: #001368;
+	z-index: 5;
+}
+#_rank{
+	background-image:url(../../asset/img/ui/BG_rank.png);
+	padding-top:85px;
+	z-index: 6;
+}
+
+
+/* page home */
 #_game_logo{
 	top:134px;
 	max-height:23%;
@@ -86,9 +127,12 @@ input,select{
 	left:64px;
 	width:3%;
 	cursor: pointer;
+	z-index: 100;
+
+	transition:opacity .5s ease-out .7s;
 }
-#_driver{
-	background-image: url(../../asset/img/ui/BG_info.png);	
+.ButtonBack.hidden{
+	transition:opacity .4s ease-out 0s;
 }
 .Flag{
 	position: relative;
@@ -131,9 +175,6 @@ input,select{
 	vertical-align: middle;
 }
 /* page color */
-#_color{
-	background-image: url(../../asset/img/ui/BG_car.png);	
-}
 #_flag_bottom{
 	height:72vh;
 	top:0; 
@@ -304,9 +345,6 @@ input,select{
 
 
 /* lottery */
-#_lottery{
-	background-color: #001368;
-}
 #_lottery_title{
 	margin-top:85px;
 }
@@ -356,10 +394,6 @@ input,select{
 }
 
 /* rank page */
-#_rank{
-	background-image:url(../../asset/img/ui/BG_rank.png);
-	padding-top:85px;
-}
 
 .WaveTitle>span{
 	margin-left:10px;
@@ -398,4 +432,10 @@ input,select{
 	top:0;
 	right:6%;
 	z-index: 100;
+
+	transition:opacity .5s ease-out .7s;
 }
+#_button_rank.hidden{
+	transition:opacity .4s ease-out;	
+}
+
