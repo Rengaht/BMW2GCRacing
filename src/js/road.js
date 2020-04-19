@@ -62,8 +62,8 @@ for(var i=0;i<totalScene;++i){
   sceneLapsedInterval.push(tmp);
 }
 
-var sceneSpeedRatio=[0,1.25,1.6,2.2];
-var lengthScene=500; // segment count for scene 1
+var sceneSpeedRatio=[0,1.25,1.5,2];
+var lengthScene=400; // segment count for scene 1
 var BaseSpeed  =lengthScene*segmentLength/(sceneInterval[0]*(sceneSpeedRatio[0]+sceneSpeedRatio[1])/2);
 var isPlaying=false;
 var maxSpeed=BaseSpeed*sceneSpeedRatio[sceneSpeedRatio.length-1];
@@ -82,10 +82,10 @@ var score=0;
 var MaxLife=3;
 var life=MaxLife;
 
-var totalCars      = [5,10,20];               // total number of cars on the road
-var totalCoins     = [20,40,60];
-var totalCombos    = [5,8,15];
-var totalObstacles = [5,15,25];
+var totalCars      = [5,8,12];               // total number of cars on the road
+var totalCoins     = [150,250,300];
+var totalCombos    = [10,20,30];
+var totalObstacles = [5,12,15];
 
 var sidePosition=[-2,2,0];
 var onRoadPosition = [-1,0,1];
@@ -210,7 +210,7 @@ function update(dt) {
         spriteW = .5;
 
         if(Util.overlap(playerX, .5, sprite.offsetX + spriteW/2 * (sprite.offset > 0 ? 1 : -1), spriteW)){
-            console.log('---------- got coin! '+playerSegment.index+'------------');
+            // console.log('---------- got coin! '+playerSegment.index+'------------');
             score+=firstSegment.coins[n].score;
             sprite.offsetY+=CoinFlyVel;
             if(firstSegment.coins[n].score>1) _sound_fx['combo'].play();
@@ -221,7 +221,7 @@ function update(dt) {
         sprite = firstSegment.obstacles[n];
         spriteW = .5;
         if(Util.overlap(playerX, .5, sprite.offsetX + spriteW/2 * (sprite.offset > 0 ? 1 : -1), spriteW)){
-            console.log('---------- bump!'+firstSegment.index+' ------------');
+            // console.log('---------- bump!'+firstSegment.index+' ------------');
             // life=life-1;
             sprite.offsetY+=CoinFlyVel;
             _sound_fx['bump'].play();
@@ -545,7 +545,12 @@ function render() {
     }
     for(i = 0 ; i < segment.cars.length ; i++) {
       car         = segment.cars[i];
-      texture      = resources.other_car.textures[car.source];
+
+      sprite = (Math.abs(car.offsetX-playerX)<.5)?OTHER_CAR[car.color].center:
+               (car.offsetX<playerX)?OTHER_CAR[car.color].left:
+               OTHER_CAR[car.color].right;
+     
+      texture      = resources.other_car.textures[sprite];
       
       spriteScale = segment.p1.project.y*height*RoadRatio*RoadSpriteWScale*SpriteScale*1.2*(1-car.offsetY);
       spriteX     = segment.p1.screen.x + ( car.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
@@ -824,7 +829,7 @@ function resetCars(){
   for(var scene_=0;scene_<totalScene;++scene_){
     
     let start_seg=scene_<1?offsetZ:sceneSegment[scene_-1];
-    let end_seg=sceneSegment[scene_];
+    let end_seg=(scene_==totalScene-1?-offsetZ:0)+sceneSegment[scene_];
 
     for(var n = 0 ; n<totalCars[scene_] ; n++){
 
@@ -832,8 +837,8 @@ function resetCars(){
       z      = Math.floor(Math.random()*(end_seg-start_seg)+start_seg)*segmentLength;
       
       color=Math.floor(Math.random()*3);
-      sprite = OTHER_CAR[color].center;
-      speed  = maxSpeed/8 + Math.random() * maxSpeed/8;
+      sprite = offset<0?OTHER_CAR[color].left:(offset>0?OTHER_CAR[color].right:OTHER_CAR[color].center);
+      speed  = sceneSpeedRatio[scene_]/2 + Math.random() * BaseSpeed;
     
       car = { offsetX: offset, 
               offsetY:0,
@@ -857,7 +862,7 @@ function resetCoins(){
 
   for(var scene_=0;scene_<totalScene;++scene_){
 
-    let start_seg=scene_<1?0:sceneSegment[scene_-1];
+    let start_seg=scene_<1?offsetZ:sceneSegment[scene_-1];
     let end_seg=sceneSegment[scene_];
 
     var count=totalCoins[scene_]+totalCombos[scene_];
@@ -875,22 +880,31 @@ function resetCoins(){
 
     arr.sort((a,b)=>a-b);
 
-    let offset=Util.randomChoice(onRoadPosition);
+    let dir=Math.floor(Math.random()*onRoadPosition.length);
+      
+    var added=0;
+    for(var i=0;i<arr.length && added<count;++i){
         
-    for(var i=0;i<arr.length;++i){
         
-        if(arr[i]<offsetZ) continue;
+        if(Math.random()*(1+totalScene-scene_)<1) 
+            dir=Math.floor(Math.random()*onRoadPosition.length);
 
-        if(Math.random()*(2+totalScene-scene_)<1) 
-            offset=Util.randomChoice(onRoadPosition);
+        let mm=Math.random()*2<1?1:Math.floor(Math.random()*2+1);
+        for(var k=0;k<mm;++k){
 
-        let coin={offsetX:offset,
-                  offsetY:0,
-                  source:(combo.indexOf(arr[i])>-1)?'logo2-1.png':'logo.png',
-                  score:(combo.indexOf(arr[i])>-1)?5:1};
+          let off=onRoadPosition[(dir+k)%3];
+          let coin={offsetX:off,
+                    offsetY:0,
+                    source:(combo.indexOf(arr[i])>-1)?'logo2-1.png':'logo.png',
+                    score:(combo.indexOf(arr[i])>-1)?5:1};
 
-        segments[arr[i]].coins.push(coin);
+          segments[arr[i]].coins.push(coin);
+          added++;
+        }
+
     }
+    console.log(added+" coins added!");
+
   }
 }
 function resetObstacles(){
@@ -899,7 +913,7 @@ function resetObstacles(){
 
   for(var scene_=0;scene_<totalScene;++scene_){
 
-    let start_seg=scene_<1?0:sceneSegment[scene_-1];
+    let start_seg=scene_<1?offsetZ:sceneSegment[scene_-1];
     let end_seg=sceneSegment[scene_];
 
     var count=totalObstacles[scene_];
@@ -911,23 +925,26 @@ function resetObstacles(){
     } 
     
     shuffleArray(arr);
-    arr=arr.slice(0,count);
-    arr.sort((a,b)=>a-b);
+    // arr=arr.slice(0,count);
+    // arr.sort((a,b)=>a-b);
 
-
-    for(var i=0;i<arr.length;++i){
-
-          if(arr[i]<offsetZ) continue;
-
-
+    var added=0;
+    for(var i=0;i<count;++i){
+        
         let pos_=[];
-        let coin_pos=null;
-        if(segments[arr[i]].coins.length>0){
-          coin_pos=segments[arr[i]].coins[0].offset;
-        }
         for(var k=0;k<onRoadPosition.length;++k){
-          if(onRoadPosition[k]!=coin_pos) pos_.push(onRoadPosition[k]);
+          
+          let off=onRoadPosition[k];
+          
+          if(segmentHasCoin(arr[i],off)) continue;
+          for(var d=0;d<segmentPerDraw/2;++d){
+              if(segmentHasCoin(arr[i]-d,off)||segmentHasCoin(arr[i]+d,off)) continue;
+          }
+          pos_.push(onRoadPosition[k]);
+          break;
         }
+
+        if(pos_.length<1) continue;
 
         let offset=Util.randomChoice(pos_);
         let obstacle={offsetX:offset,
@@ -935,11 +952,23 @@ function resetObstacles(){
                       source:(Math.random()*2<1)?'cone-'+(scene_+1)+'.png':'block-'+(scene_+1)+'.png'};
 
         segments[arr[i]].obstacles.push(obstacle);
+        added++;
+
     }
+    console.log(added+" obstacles added!");
 
   }
 }
+function segmentHasCoin(index,offset){
 
+  if(index<0 || index>segments.length-1) return false;
+
+  let seg=segments[index];
+  for(var i=0;i<seg.coins.length;++i){
+    if(seg.coins[i].offsetX==offset) return true;
+  }
+  return false;
+}
 
 
 function shuffleArray(array){

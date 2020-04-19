@@ -153,7 +153,7 @@ function movePage(page_,direction){
 		page_.removeClass(direction);// endCurrPage = true;
 		page_.find('.Button').removeClass('Disable');
 
-	},700);
+	},400);
 }
 
 
@@ -189,6 +189,8 @@ function setDriverColor(set_){
 	
 	showItem($('#_button_'+set_+'_selected'));
 	showItem($('#_img_car_color_'+set_));
+
+	$('#_car_complete').attr('src','asset/img/ui/frontcar_'+set+'.png');
 	
 	_driver_color=set_;
 
