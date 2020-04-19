@@ -222,11 +222,11 @@ function update(dt) {
         spriteW = .5;
         if(Util.overlap(playerX, .5, sprite.offsetX + spriteW/2 * (sprite.offset > 0 ? 1 : -1), spriteW)){
             // console.log('---------- bump!'+firstSegment.index+' ------------');
-            // life=life-1;
+            life=life-1;
             sprite.offsetY+=CoinFlyVel;
             _sound_fx['bump'].play();
 
-            if(life<=0) endGame();
+            // if(life<=0) endGame();
             break;
         }
     }
@@ -240,11 +240,11 @@ function update(dt) {
     carW = .5;
     if (speed > car.speed) {
       if (Util.overlap(playerX, .5, car.offset, carW, 0.8)){
-        // life=life-1;
+        life=life-1;
         car.offsetY+=CoinFlyVel;
         _sound_fx['bump'].play();
 
-        if(life<=0) endGame();
+        // if(life<=0) endGame();
 
         break;
       }
@@ -355,7 +355,7 @@ function updateHud(){
 
   let seg_offset=playerZ/segmentLength;
   updateHudElement('time', formatTime(sceneLapsedInterval[totalScene-1]*Math.max(0,1-(lastPlayerSegment-seg_offset)/(sceneSegment[totalScene-1]-seg_offset))));  
-  updateHudElement('life', life);
+  updateHudElement('life',Math.max(0,life));
   updateHudElement('score',pad(score,4));
 }
 

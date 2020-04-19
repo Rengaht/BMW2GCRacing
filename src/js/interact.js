@@ -190,7 +190,7 @@ function setDriverColor(set_){
 	showItem($('#_button_'+set_+'_selected'));
 	showItem($('#_img_car_color_'+set_));
 
-	$('#_car_complete').attr('src','asset/img/ui/frontcar_'+set+'.png');
+	$('#_car_complete').attr('src','asset/img/ui/frontcar_'+set_+'.png');
 	
 	_driver_color=set_;
 
