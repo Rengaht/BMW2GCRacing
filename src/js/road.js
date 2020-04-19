@@ -82,7 +82,7 @@ var score=0;
 var MaxLife=3;
 var life=MaxLife;
 
-var totalCars      = [5,20,30];               // total number of cars on the road
+var totalCars      = [5,10,20];               // total number of cars on the road
 var totalCoins     = [20,40,60];
 var totalCombos    = [5,8,15];
 var totalObstacles = [5,15,25];
@@ -111,6 +111,8 @@ var hud = null;
 
 function update(dt) {
 
+  var n, car, carW, sprite, spriteW;
+  var playerSegment = findSegment(position+playerZ);
   
 
   if(isPlaying){
@@ -120,14 +122,13 @@ function update(dt) {
     else speed=Math.min(speed+dt * accel,sceneSpeedRatio[indexScene+1]*BaseSpeed);
     currentLapTime+=dt;
 
+    updateCars(dt, playerSegment, playerW);
+
   }else{
     speed=Math.max(speed-accel*120*dt,0);
   }
 
 
-  var n, car, carW, sprite, spriteW;
-  var playerSegment = findSegment(position+playerZ);
-  
   if(playerSegment.index>sceneSegment[indexScene]){
     if(indexScene<totalScene-1) setupScene(indexScene+1);    
     else{
@@ -172,7 +173,10 @@ function update(dt) {
         if(segment.obstacles[i].offsetY>0)
             segment.obstacles[i].offsetY=Math.min(segment.obstacles[i].offsetY+CoinFlyVel,1);        
     }
-
+    for(var i=0;i<segment.cars.length;i++){
+        if(segment.cars[i].offsetY>0)
+            segment.cars[i].offsetY=Math.min(segment.cars[i].offsetY+CoinFlyVel,1);        
+    }
   }
 
   // var playerW       = SPRITES.PLAYER_STRAIGHT.w * SPRITES.SCALE;
@@ -182,8 +186,7 @@ function update(dt) {
   var startPosition = position;
 
  
-  updateCars(dt, playerSegment, playerW);
-
+  
   
 
   if (keyLeft)
@@ -223,21 +226,26 @@ function update(dt) {
             sprite.offsetY+=CoinFlyVel;
             _sound_fx['bump'].play();
 
-            if(life<=0){
-              endGame();
-            }
+            if(life<=0) endGame();
+            break;
         }
     }
   }
 
 
+  // TODO: check car overlap
   for(n = 0 ; n < playerSegment.cars.length ; n++) {
+
     car  = playerSegment.cars[n];
-    carW = car.sprite.w * SPRITES.SCALE;
+    carW = .5;
     if (speed > car.speed) {
-      if (Util.overlap(playerX, playerW, car.offset, carW, 0.8)) {
-        // speed    = car.speed * (car.speed/speed);
-        // position = Util.increase(car.z, -playerZ, trackLength);
+      if (Util.overlap(playerX, .5, car.offset, carW, 0.8)){
+        // life=life-1;
+        car.offsetY+=CoinFlyVel;
+        _sound_fx['bump'].play();
+
+        if(life<=0) endGame();
+
         break;
       }
     }
@@ -266,25 +274,33 @@ function update(dt) {
 //-------------------------------------------------------------------------
 
 function updateCars(dt, playerSegment, playerW) {
+  
+
+  // TODO: update cars
+
   var n, car, oldSegment, newSegment;
   for(n = 0 ; n < cars.length ; n++) {
+    
     car         = cars[n];
     oldSegment  = findSegment(car.z);
+    
     car.offset  = car.offset + updateCarOffset(car, oldSegment, playerSegment, playerW);
     car.z       = Util.increase(car.z, dt * car.speed, trackLength);
     car.percent = Util.percentRemaining(car.z, segmentLength); // useful for interpolation during rendering phase
     newSegment  = findSegment(car.z);
+    
     if (oldSegment != newSegment) {
       index = oldSegment.cars.indexOf(car);
       oldSegment.cars.splice(index, 1);
       newSegment.cars.push(car);
     }
+
   }
 }
 
 function updateCarOffset(car, carSegment, playerSegment, playerW) {
 
-  var i, j, dir, segment, otherCar, otherCarW, lookahead = 20, carW = car.sprite.w * SPRITES.SCALE;
+  var i, j, dir, segment, otherCar, otherCarW, lookahead = 20;
 
   // optimization, dont bother steering around other cars when 'out of sight' of the player
   if ((carSegment.index - playerSegment.index) > drawDistance)
@@ -293,7 +309,7 @@ function updateCarOffset(car, carSegment, playerSegment, playerW) {
   for(i = 1 ; i < lookahead ; i++) {
     segment = segments[(carSegment.index+i)%segments.length];
 
-    if ((segment === playerSegment) && (car.speed > speed) && (Util.overlap(playerX, playerW, car.offset, carW, 1.2))) {
+    if ((segment === playerSegment) && (car.speed > speed) && (Util.overlap(playerX, .5, car.offset, .5, 1.2))) {
       if (playerX > 0.5)
         dir = -1;
       else if (playerX < -0.5)
@@ -305,8 +321,8 @@ function updateCarOffset(car, carSegment, playerSegment, playerW) {
 
     for(j = 0 ; j < segment.cars.length ; j++) {
       otherCar  = segment.cars[j];
-      otherCarW = otherCar.sprite.w * SPRITES.SCALE;
-      if ((car.speed > otherCar.speed) && Util.overlap(car.offset, carW, otherCar.offset, otherCarW, 1.2)) {
+      // otherCarW = otherCar.sprite.w * SPRITES.SCALE;
+      if ((car.speed > otherCar.speed) && Util.overlap(car.offset, .5, otherCar.offset, .5, 1.2)) {
         if (otherCar.offset > 0.5)
           dir = -1;
         else if (otherCar.offset < -0.5)
@@ -453,14 +469,6 @@ function render() {
 
     let index_draw=(baseSegment.index + n)%drawDistance;
     let index_scene=findSegmentScene(segment.index);
-    // for(i = 0 ; i < segment.cars.length ; i++) {
-    //   car         = segment.cars[i];
-    //   sprite      = car.sprite;
-    //   spriteScale = Util.interpolate(segment.p1.screen.scale, segment.p2.screen.scale, car.percent);
-    //   spriteX     = Util.interpolate(segment.p1.screen.x,     segment.p2.screen.x,     car.percent) + (spriteScale * car.offset * roadWidth * width/2);
-    //   spriteY     = Util.interpolate(segment.p1.screen.y,     segment.p2.screen.y,     car.percent);
-    //   Render.sprite(ctx, width, height, resolution, roadWidth, sprites, car.sprite, spriteScale, spriteX, spriteY, -0.5, -1, segment.clip);
-    // }
 
     for(i = 0 ; i < segment.sprites.length ; i++) {
 
@@ -534,6 +542,21 @@ function render() {
                     spriteX, spriteY, 
                     spriteScale,drawDistance-n,alpha);
 
+    }
+    for(i = 0 ; i < segment.cars.length ; i++) {
+      car         = segment.cars[i];
+      texture      = resources.other_car.textures[car.source];
+      
+      spriteScale = segment.p1.project.y*height*RoadRatio*RoadSpriteWScale*SpriteScale*1.2*(1-car.offsetY);
+      spriteX     = segment.p1.screen.x + ( car.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
+      spriteY     = segment.p1.screen.y-  Util.easeInOut(0,1,car.offsetY)*height;      
+      
+      road=(car.offset==0)?0:(car.offset<0?1:2);
+
+      Render.sprite(_scene_road.getChildAt(index_draw*3+road),
+                    texture,
+                    spriteX, spriteY, 
+                    spriteScale,drawDistance-n,alpha);
     }
 
 
@@ -672,7 +695,7 @@ function resetRoad() {
   resetCoins();
   resetObstacles();
   
-  //resetCars();
+  resetCars();
 
 
   segments[findSegment(playerZ).index + 2].color = COLORS.START;
@@ -791,19 +814,41 @@ function getRandomSprite(index_,opt_,dir_){
   return txt;
 }
 
-function resetCars() {
+function resetCars(){
+
+  let offsetZ=startGateZ/segmentLength;
+  
   cars = [];
-  var n, car, segment, offset, z, sprite, speed;
-  for (var n = 0 ; n < totalCars ; n++) {
-    offset = Math.random() * Util.randomChoice([-0.8, 0.8]);
-    z      = Math.floor(Math.random() * segments.length) * segmentLength;
-    sprite = Util.randomChoice(SPRITES.CARS);
-    speed  = maxSpeed/4 + Math.random() * maxSpeed/(sprite == SPRITES.SEMI ? 4 : 2);
-    car = { offset: offset, z: z, sprite: sprite, speed: speed };
-    segment = findSegment(car.z);
-    segment.cars.push(car);
-    cars.push(car);
+  var n, car, segment, offset, z, sprite, speed,color;
+  
+  for(var scene_=0;scene_<totalScene;++scene_){
+    
+    let start_seg=scene_<1?offsetZ:sceneSegment[scene_-1];
+    let end_seg=sceneSegment[scene_];
+
+    for(var n = 0 ; n<totalCars[scene_] ; n++){
+
+      offset = Util.randomChoice(onRoadPosition);
+      z      = Math.floor(Math.random()*(end_seg-start_seg)+start_seg)*segmentLength;
+      
+      color=Math.floor(Math.random()*3);
+      sprite = OTHER_CAR[color].center;
+      speed  = maxSpeed/8 + Math.random() * maxSpeed/8;
+    
+      car = { offsetX: offset, 
+              offsetY:0,
+              z: z, 
+              source: sprite, 
+              speed: speed, color:color };
+    
+      segment = findSegment(car.z);
+      segment.cars.push(car);
+      cars.push(car);
+    
+    }
+
   }
+
 }
 
 function resetCoins(){

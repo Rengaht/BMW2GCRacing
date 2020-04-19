@@ -300,4 +300,16 @@ var SPRITES3={
 var GATE={
   START:'start.png',
   GOAL:'goal.png'
-}
+};
+
+var OTHER_CAR=[
+  {
+    left:'other1-left.png',center:'other1-center.png',right:'other1-right.png'
+  },
+  {
+    left:'other2-left.png',center:'other2-center.png',right:'other2-right.png'
+  },
+  {
+    left:'other3-left.png',center:'other3-center.png',right:'other3-right.png'
+  }];
+
