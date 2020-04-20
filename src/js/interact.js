@@ -260,24 +260,23 @@ function sendInfo(){
 
 	if($('#_button_send').hasClass('Disable')) return;
 
-	_uuid="b939e1d7-c0f2-4c14-8d5c-26407812d356";
-
-	$.ajax({
-		url:'https://script.google.com/a/mmlab.tw/macros/s/AKfycbzTi1GAFLpblMLuUP7rfK-KO3F7L6I2SbDDXb95YA/exec',
-		data:{
-			"uuid":_uuid,
-			"name":$('#_input_lottery_name').val(),
-			"gender":$('#_input_lottery_gender').val(),
-			"age":$('#_input_lottery_age').val(),
-			"phone":$('#_input_lottery_phone').val(),
-			"email":$('#_input_lottery_email').val(),
-			"trial":_trial_selected,
-			"store":$('#_input_lottery_store').val()
-		},
-		success:function(response){
-			console.log(response);
-		}
-	});
+	
+	// $.ajax({
+	// 	url:'https://script.google.com/a/mmlab.tw/macros/s/AKfycbzTi1GAFLpblMLuUP7rfK-KO3F7L6I2SbDDXb95YA/exec',
+	// 	data:{
+	// 		"uuid":_uuid,
+	// 		"name":$('#_input_lottery_name').val(),
+	// 		"gender":$('#_input_lottery_gender').val(),
+	// 		"age":$('#_input_lottery_age').val(),
+	// 		"phone":$('#_input_lottery_phone').val(),
+	// 		"email":$('#_input_lottery_email').val(),
+	// 		"trial":_trial_selected,
+	// 		"store":$('#_input_lottery_store').val()
+	// 	},
+	// 	success:function(response){
+	// 		console.log(response);
+	// 	}
+	// });
 
 	gotoPage('_game','bb');
 

@@ -47,6 +47,9 @@ function onload(){
 	    { keys: [KEY.RIGHT, KEY.D], mode: 'up',   action: function() { keyRight  = false; } }]);
 
 	 window.addEventListener('resize', resize);
+
+	  document.getElementById('_game').addEventListener('pointerdown',onGameClick,false);
+	 document.getElementById('_game').addEventListener('pointerup',onGameMouseUp,false);
 }
 function resize(){
 	clearTimeout(_resize_timeout);
@@ -335,8 +338,9 @@ function startGame(){
 		setTimeout(function(){
 			isPlaying=true;	
 			console.log("------------- Start Game -------------");	
-			_sound_bgm.seek(0);
+			
 			_sound_bgm.play();	
+			_sound_bgm.seek(0);
 		},3000);
 
 		

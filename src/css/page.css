@@ -115,11 +115,25 @@ input,select{
 
 
 /* page home */
-#_game_logo{
-	max-height:46%;
+.GameLogo{
+	position: relative;
 	margin-top:50px;
+	width:54vh;
+	height:46vh;	
 }
-
+.GameLogo>img{
+	position: absolute;
+	left:0;
+	height:100%;
+}
+.LogoGlow{
+	animation: fadein 1s infinite;
+}
+@keyframes fadein {
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
 /* page driver */
 .ButtonBack{
 	position: absolute;
@@ -576,4 +590,12 @@ input,select{
 	top:40px;
 	right:40px;
 	max-height:18%;
+}
+
+.DisableSelect{
+    user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
 }

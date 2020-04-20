@@ -28,16 +28,20 @@
 	<img id="_button_back" class="Button ButtonBack hidden close" onclick="onButtonBackClick()" src="asset/img/ui/button_back.png"/>
 			
 	<div id="_home" class="PageContainer">
-		<img id="_game_logo" src="asset/img/ui/game_logo.png" class="Center"/>
+		<div class="GameLogo Center">
+			<img src="asset/img/ui/game_logo_glow.png" class="LogoGlow"/>
+			<img id="_game_logo" src="asset/img/ui/game_logo.png"/>
+		</div>
+
 		<div class="BottomWrapper">
 			<img id="_button_start" class="Button Center" onclick="gotoPage('_driver','bb')" src="asset/img/ui/button_start.png"/>		
 		</div>
 	</div>
 	<div id="_driver" class="PageContainer close">
 		<div id="_flag_top" class="Flag Center">
-			<div id="_hint_driver_name" class="FontT2 MiddleBlue">Enter Driver's Name</div>
+			<div id="_hint_driver_name" class="FontT2 MiddleBlue DisableSelect">Enter Driver's Name</div>
 			<div>
-				<span id="_driver_title" class="FontText">DRIVER</span>	
+				<span id="_driver_title" class="FontText DisableSelect">DRIVER</span>	
 				<input type="text" id="_input_driver" maxlength="6" class="FontT1 LightBlue" placeholder="YOUR NAME..." />
 			</div>			
 		</div>
@@ -48,7 +52,7 @@
 	</div>
 	<div id="_color" class="PageContainer close">
 		<div id="_flag_bottom" class="Flag Center">
-			<div id="_hint_car_color" class="FontT2 LightBlue">CHOOSE THE COLOR</div>			
+			<div id="_hint_car_color" class="FontT2 LightBlue DisableSelect">CHOOSE THE COLOR</div>			
 		</div>
 		<div class="ColorCarWrapper">
 			<img id="_img_car_color_blue" class="FrontCar" src="asset/img/ui/frontcar_blue.png"/>		
@@ -86,15 +90,15 @@
 		<div id="_speed_meter">
 			<img src="asset/img/ui/meter.png"/>
 			<img id="_speed_pointer" src="asset/img/ui/meter_pointer.png"/>
-			<div id="_speed_value" class="LightBlue FontSpeedMeter">160</div>
+			<div id="_speed_value" class="LightBlue FontSpeedMeter DisableSelect">160</div>
 		</div>
 		<div id="_driver_in_game">
-			<div class="LightBlue FontText">DRIVER</div>
-			<div id="_driver_name_in_game" class="LightBlue FontT3">KAREN</div>
+			<div class="LightBlue FontText DisableSelect">DRIVER</div>
+			<div id="_driver_name_in_game" class="LightBlue FontT3 DisableSelect">KAREN</div>
 			<img src="asset/img/ui/line_name.png" style="width:17vw"/>
 		</div>
 		<div id="_hud" class="FontT2 DeepBlue">
-			<div class="HudElement">
+			<div class="HudElement DisableSelect">
 				<span>LIFE</span>
 				<span id="_life_star">
 					<img src="asset/img/ui/star.png"/>
@@ -102,11 +106,11 @@
 					<img src="asset/img/ui/star.png"/>
 				</span>
 			</div>
-			<div class="HudElement">
+			<div class="HudElement DisableSelect">
 				<span>TIME</span>
 				<span id="_hud_time">00:60</span>
 			</div>
-			<div class="HudElement">
+			<div class="HudElement DisableSelect">
 				<span>SCORE</span>
 				<span id="_hud_score">888</span>
 			</div>			
@@ -118,23 +122,23 @@
 		<div id="_score" class="PageContainer hidden close">
 			<div id="_score_board" class="Center">
 				<div class="BoardWrapper">					
-					<div id="_congradulation"class="FontT1 Orange">CONGRADULATIONS !!!</div>
+					<div id="_congradulation"class="FontT1 Orange DisableSelect">CONGRADULATIONS !!!</div>
 					<div id="_info_complete" class="FontText">
-						<div class="ScoreElement">
+						<div class="ScoreElement DisableSelect">
 							<div>
 								<span>DIRVER</span>
 								<img src="asset/img/ui/line_complete_name.png"/>
 							</div>
 							<div id="_driver_name_complete" class="FontT1 LightBlue">KAREN</div>
 						</div>
-						<div class="ScoreElement">
+						<div class="ScoreElement DisableSelect">
 							<div>
 								<span>SCORE</span>
 								<img src="asset/img/ui/line_complete_score.png"/>
 							</div>
 							<div id="_score_complete" class="FontT1 MiddleBlue">888</div>
 						</div>
-						<div class="ScoreElement">
+						<div class="ScoreElement DisableSelect">
 							<div>
 								<span>RANK</span>
 								<img src="asset/img/ui/line_complete_score.png"/>
@@ -292,8 +296,8 @@
 		</div>
 	</div>
 	<div id="_rank" class="PageContainer close">
-		<img src="asset/img/ui/game_logo.png" id="_rank_logo"/>
-		<div id="_rank_info" class="Center FontInfo LightBlue">
+		<img src="asset/img/ui/game_logo_rank.png" id="_rank_logo"/>
+		<div id="_rank_info" class="Center FontInfo LightBlue DisableSelect">
 			<div class="RankItem">
 				<span>1.</span><span>KAREN</span><span>8888</span>
 			</div>
