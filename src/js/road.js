@@ -350,7 +350,7 @@ function updateHud(){
   updateHudElement('speed',Math.round(map_speed));
   
   // update speed meter
-  let speed_angle=Util.interpolate(-50,135,map_speed/200);
+  let speed_angle=Util.interpolate(-65,135,map_speed/200);
   $('#_speed_pointer').css('transform','rotate('+speed_angle+'deg)');
 
   let seg_offset=playerZ/segmentLength;

@@ -24,7 +24,7 @@ var PolyPerSeg=6+(lanes-1);
 
 var _sound_bgm;
 var _sound_fx={};
-
+var _resize_timeout;
 
 function onload(){
 
@@ -46,7 +46,35 @@ function onload(){
 	    { keys: [KEY.LEFT,  KEY.A], mode: 'up',   action: function() { keyLeft   = false; } },
 	    { keys: [KEY.RIGHT, KEY.D], mode: 'up',   action: function() { keyRight  = false; } }]);
 
+	 window.addEventListener('resize', resize);
 }
+function resize(){
+	clearTimeout(_resize_timeout);
+	_resize_timeout=setTimeout(doResize,100);
+}
+function doResize(){
+	var ww_ = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; 
+  	var wh_ = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+  	console.log('window size:'+ww_+' x '+wh_);
+
+  	_windowWidth=width=ww_;
+  	_windowHeight=height=wh_;
+
+  	if(_app){
+  		
+  		_sky.width=_windowWidth;
+  		_sky.height=_windowHeight*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]);	
+		_sky.tileScale.x=_sky.tileScale.y=_windowWidth/resources.sky.texture.width;
+	
+		_mountain.width=_windowWidth;
+		_mountain.height=_windowHeight*MoutainRatio;
+		_mountain.y=_windowHeight*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]-MoutainRatio);
+		_mountain.tileScale.x=_mountain.tileScale.y=_windowHeight*MoutainRatio/resources.mountain.texture.height;	
+
+		 _app.renderer.resize(ww_,wh_);
+  	}
+}
+
 function setupPixi(){
 	Container = PIXI.Container;
 	autoDetectRenderer = PIXI.autoDetectRenderer;

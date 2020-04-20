@@ -2,6 +2,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>THE 2 RACING CHALLENGE</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<link rel="stylesheet" type="text/css" href="src/css/font.css">
 	<link rel="stylesheet" type="text/css" href="src/css/transition.css">
@@ -115,75 +116,124 @@
 		</div>
 
 		<div id="_score" class="PageContainer hidden close">
-			<div id="_score_board" class="Center close">
-				<div style="position:relative;width:100%;height:100%">
-				<div class="FontT1 Orange">CONGRADULATIONS !!!</div>
-				<div id="_info_complete" class="FontText">
-					<div class="ScoreElement">
-						<div>
-							<span>DIRVER</span>
-							<img src="asset/img/ui/line_complete_name.png"/>
+			<div id="_score_board" class="Center">
+				<div class="BoardWrapper">					
+					<div id="_congradulation"class="FontT1 Orange">CONGRADULATIONS !!!</div>
+					<div id="_info_complete" class="FontText">
+						<div class="ScoreElement">
+							<div>
+								<span>DIRVER</span>
+								<img src="asset/img/ui/line_complete_name.png"/>
+							</div>
+							<div id="_driver_name_complete" class="FontT1 LightBlue">KAREN</div>
 						</div>
-						<div id="_driver_name_complete" class="FontT1 LightBlue">KAREN</div>
-					</div>
-					<div class="ScoreElement">
-						<div>
-							<span>SCORE</span>
-							<img src="asset/img/ui/line_complete_score.png"/>
+						<div class="ScoreElement">
+							<div>
+								<span>SCORE</span>
+								<img src="asset/img/ui/line_complete_score.png"/>
+							</div>
+							<div id="_score_complete" class="FontT1 MiddleBlue">888</div>
 						</div>
-						<div id="_score_complete" class="FontT1 MiddleBlue">888</div>
-					</div>
-					<div class="ScoreElement">
-						<div>
-							<span>RANK</span>
-							<img src="asset/img/ui/line_complete_score.png"/>
+						<div class="ScoreElement">
+							<div>
+								<span>RANK</span>
+								<img src="asset/img/ui/line_complete_score.png"/>
+							</div>
+							<div id="_rank_complete" class="FontT1 Orange">7</div>
 						</div>
-						<div id="_rank_complete" class="FontT1 Orange">7</div>
 					</div>
+					<img id="_car_complete" class="FrontCar" src="asset/img/ui/frontcar_blue.png"/>
+					<div id="_complete_button_wrapper" class="BottomWrapper">
+						<img class="Button" src="asset/img/ui/button_home_normal.png" onclick="gotoPage('_home','bb')"/>
+						<img class="Button" src="asset/img/ui/button_lottery_normal.png" onclick="gotoPage('_lottery','bb')"/>
+					</div>
+					<span class="BoardBorder"></span>
+					<span class="BoardBorder"></span>
+					<span class="BoardBorder"></span>
+					<img class="BoardBottomLeft" src="asset/img/ui/board_corner-1.png"/>
+					<img class="BoardBottomRight" src="asset/img/ui/board_corner-2.png"/>
+					
 				</div>
-				<img id="_car_complete" class="FrontCar" src="asset/img/ui/frontcar_blue.png"/>
-				<div id="_complete_button_wrapper" class="BottomWrapper">
-					<img class="Button" src="asset/img/ui/button_home_normal.png" onclick="gotoPage('_home','bb')"/>
-					<img class="Button" src="asset/img/ui/button_lottery_normal.png" onclick="gotoPage('_lottery','bb')"/>
-				</div>
-			</div>
 			</div>
 		</div>
 	</div>
 	
 	<div id="_lottery" class="PageContainer close">
-		<div id="_lottery_title" class="Center LightBlue FontT1">
+		<div id="_lottery_title" class="Center WaveTitle FontT2 LightBlue">
+			<img src="asset/img/ui/line_title.png"/>
 			<span>輸入資料參加抽獎</span>
+			<img src="asset/img/ui/line_title.png"/>
 		</div>
+		<div class="VerticalWrapper">
 		<div id="_lottery_info" class="Center FontInfo MiddleBlue">
 			<div class="LotteryColumn">
 				<div class="LotteryItem">
 					<span>姓名</span>
-					<input type="text" id="_input_lottery_name" class="FontInfo LightBlue"/>
+					<div class="FormInput">
+						<div class="FormInputWrapper">
+							<input type="text" id="_input_lottery_name" class="FontInfo LightBlue"/>
+							<img class="FormTopLeft" src="asset/img/ui/form_corner-1.png"/>
+							<img class="FormTopRight" src="asset/img/ui/form_corner-2.png"/>
+							<img class="FormBottomLeft" src="asset/img/ui/form_corner-2.png"/>
+							<img class="FormBottomRight" src="asset/img/ui/form_corner-1.png"/>
+						</div>
+					</div>
 				</div>
 				<div class="LotteryItem">
 					<span>性別</span>
-					<select id="_input_lottery_gender" class="FontInfo LightBlue">
-						<option value="男">男</option>
-						<option value="女">女</option>
-					</select>
+					<div class="FormInput">
+						<div class="FormInputWrapper">
+							<select id="_input_lottery_gender" class="FontInfo LightBlue">
+								<option value="男">男</option>
+								<option value="女">女</option>
+							</select>
+							<img class="FormTopLeft" src="asset/img/ui/form_corner-1.png"/>
+							<img class="FormTopRight" src="asset/img/ui/form_corner-2.png"/>
+							<img class="FormBottomLeft" src="asset/img/ui/form_corner-2.png"/>
+							<img class="FormBottomRight" src="asset/img/ui/form_corner-1.png"/>
+						</div>
+					</div>
 					<span>年齡</span>
-					<select id="_input_lottery_age" class="FontInfo LightBlue">
-						<option value="20-">20歲以下</option>
-						<option value="21-30">21-30歲</option>
-						<option value="31-40">31-40歲</option>
-						<option value="41-50">41-50歲</option>
-						<option value="51-60">51-60歲</option>
-						<option value="61-70">61-70歲</option>
-					</select>
+					<div class="FormInput">
+						<div class="FormInputWrapper">
+							<select id="_input_lottery_age" class="FontInfo LightBlue">
+								<option value="20-">20歲以下</option>
+								<option value="21-30">21-30歲</option>
+								<option value="31-40">31-40歲</option>
+								<option value="41-50">41-50歲</option>
+								<option value="51-60">51-60歲</option>
+								<option value="61-70">61-70歲</option>
+							</select>
+							<img class="FormTopLeft" src="asset/img/ui/form_corner-1.png"/>
+							<img class="FormTopRight" src="asset/img/ui/form_corner-2.png"/>
+							<img class="FormBottomLeft" src="asset/img/ui/form_corner-2.png"/>
+							<img class="FormBottomRight" src="asset/img/ui/form_corner-1.png"/>
+						</div>
+					</div>
 				</div>
 				<div class="LotteryItem">
 					<span>手機</span>
-					<input type="text" id="_input_lottery_phone" class="FontInfo LightBlue"/>
+					<div class="FormInput">
+						<div class="FormInputWrapper">
+							<input type="text" id="_input_lottery_phone" class="FontInfo LightBlue"/>
+							<img class="FormTopLeft" src="asset/img/ui/form_corner-1.png"/>
+							<img class="FormTopRight" src="asset/img/ui/form_corner-2.png"/>
+							<img class="FormBottomLeft" src="asset/img/ui/form_corner-2.png"/>
+							<img class="FormBottomRight" src="asset/img/ui/form_corner-1.png"/>
+						</div>
+					</div>
 				</div>
 				<div class="LotteryItem">
 					<span>信箱</span>
-					<input type="text" id="_input_lottery_email" class="FontInfo LightBlue"/>
+					<div class="FormInput">
+						<div class="FormInputWrapper">
+							<input type="text" id="_input_lottery_email" class="FontInfo LightBlue"/>
+							<img class="FormTopLeft" src="asset/img/ui/form_corner-1.png"/>
+							<img class="FormTopRight" src="asset/img/ui/form_corner-2.png"/>
+							<img class="FormBottomLeft" src="asset/img/ui/form_corner-2.png"/>
+							<img class="FormBottomRight" src="asset/img/ui/form_corner-1.png"/>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="LotteryColumn">
@@ -192,42 +242,48 @@
 				</div>
 				<div class="LotteryItem">
 					<span>試乘體驗</span>
-					<div id="_input_lottery_trial" class="radio FontInfo LightBlue">
-						<label class="radio">
-							<input type="radio" name="trial">當然好，我有興趣
-						</label>
-						<label class="radio" name="trial">
-							<input type="radio">否
-						</label>
-					</div>
+					<span id="_button_goto_trial_yes" class="RadioMark" onclick="onClickGotoTrial(true)"></span>
+					<span class="FontInfo LightBlue">當然好，我有興趣</span>
+					
+					<span id="_button_goto_trial_no" class="RadioMark" onclick="onClickGotoTrial(false)"></span>				
+					<span class="FontInfo LightBlue">否</span>
 				</div>
 				<div class="LotteryItem">
 					<span>門市</span>
-					<select id="_input_lottery_store" class="FontInfo LightBlue">
-						<option value="台北汎德 - 天母">台北汎德 - 天母</option>
-						<option value="台北汎德 - 敦南">台北汎德 - 敦南</option>
-						<option value="台北汎德 - 民生">台北汎德 - 民生</option>
-						<option value="台北汎德 - 濱江">台北汎德 - 濱江</option>
-						<option value="鎔德 - 內湖">鎔德 - 內湖</option>
-						<option value="依德 - 中和">依德 - 中和</option>
-						<option value="尚德 - 新莊">尚德 - 新莊</option>
-						<option value="大桐 - 桃園">大桐 - 桃園</option>
-						<option value="大桐 - 平鎮">大桐 - 平鎮</option>
-						<option value="中鎂 - 新竹">中鎂 - 新竹</option>
-						<option value="台中汎德 - 復興">台中汎德 - 復興</option>
-						<option value="台中汎德 - 文心">台中汎德 - 文心</option>
-						<option value="台中汎德 - 崇德">台中汎德 - 崇德</option>
-						<option value="長慶 - 南投">長慶 - 南投</option>
-						<option value="昌一 - 彰化">昌一 - 彰化</option>
-						<option value="賓歐 - 嘉義">賓歐 - 嘉義</option>
-						<option value="台南汎德 - 永華">台南汎德 - 永華</option>
-						<option value="台南汎德 - 永康">台南汎德 - 永康</option>
-						<option value="高雄汎德 - 新生">高雄汎德 - 新生</option>
-						<option value="高雄汎德 - 博愛">高雄汎德 - 博愛</option>
-						<option value="高雄汎德 - 屏東">高雄汎德 - 屏東</option>
-						<option value="來德 - 花蓮">來德 - 花蓮</option>
-					</select>
+					<div class="FormInput">
+						<div class="FormInputWrapper">
+						<select id="_input_lottery_store" class="FontInfo LightBlue">
+							<option value="台北汎德 - 天母">台北汎德 - 天母</option>
+							<option value="台北汎德 - 敦南">台北汎德 - 敦南</option>
+							<option value="台北汎德 - 民生">台北汎德 - 民生</option>
+							<option value="台北汎德 - 濱江">台北汎德 - 濱江</option>
+							<option value="鎔德 - 內湖">鎔德 - 內湖</option>
+							<option value="依德 - 中和">依德 - 中和</option>
+							<option value="尚德 - 新莊">尚德 - 新莊</option>
+							<option value="大桐 - 桃園">大桐 - 桃園</option>
+							<option value="大桐 - 平鎮">大桐 - 平鎮</option>
+							<option value="中鎂 - 新竹">中鎂 - 新竹</option>
+							<option value="台中汎德 - 復興">台中汎德 - 復興</option>
+							<option value="台中汎德 - 文心">台中汎德 - 文心</option>
+							<option value="台中汎德 - 崇德">台中汎德 - 崇德</option>
+							<option value="長慶 - 南投">長慶 - 南投</option>
+							<option value="昌一 - 彰化">昌一 - 彰化</option>
+							<option value="賓歐 - 嘉義">賓歐 - 嘉義</option>
+							<option value="台南汎德 - 永華">台南汎德 - 永華</option>
+							<option value="台南汎德 - 永康">台南汎德 - 永康</option>
+							<option value="高雄汎德 - 新生">高雄汎德 - 新生</option>
+							<option value="高雄汎德 - 博愛">高雄汎德 - 博愛</option>
+							<option value="高雄汎德 - 屏東">高雄汎德 - 屏東</option>
+							<option value="來德 - 花蓮">來德 - 花蓮</option>
+						</select>
+							<img class="FormTopLeft" src="asset/img/ui/form_corner-1.png"/>
+							<img class="FormTopRight" src="asset/img/ui/form_corner-2.png"/>
+							<img class="FormBottomLeft" src="asset/img/ui/form_corner-2.png"/>
+							<img class="FormBottomRight" src="asset/img/ui/form_corner-1.png"/>
+						</div>
+					</div>
 				</div>
+			</div>
 			</div>
 		</div>
 		<div class="BottomWrapper">
@@ -236,14 +292,7 @@
 		</div>
 	</div>
 	<div id="_rank" class="PageContainer close">
-		<div class="Center">
-			<div class="FontT1 LightBlue">BEST RUNNERS</div>
-			<div class="WaveTitle FontT2 MiddleBlue">
-				<img src="asset/img/ui/line_title.png"/>
-				<span>排行榜</span>
-				<img src="asset/img/ui/line_title.png"/>
-			</div>
-		</div>
+		<img src="asset/img/ui/game_logo.png" id="_rank_logo"/>
 		<div id="_rank_info" class="Center FontInfo LightBlue">
 			<div class="RankItem">
 				<span>1.</span><span>KAREN</span><span>8888</span>

@@ -110,14 +110,14 @@ input,select{
 	background-image:url(../../asset/img/ui/BG_rank.png);
 	padding-top:85px;
 	z-index: 6;
+	background-position: top;
 }
 
 
 /* page home */
 #_game_logo{
-	top:134px;
-	max-height:23%;
-	margin-top:134px;
+	max-height:46%;
+	margin-top:50px;
 }
 
 /* page driver */
@@ -306,11 +306,64 @@ input,select{
 	width:94%;
 	height:90%;
 
-	background-image: url(../../asset/img/ui/frame_complete.png);
+	/*background-image: url(../../asset/img/ui/frame_complete.png);
 	background-size: cover;
-	background-repeat: no-repeat;
+	background-repeat: no-repeat;*/
+	
 }
-#_score_board>div>div:first-child{
+.BoardWrapper{
+	position:relative;
+	width:100%;
+	height:100%;
+	background-color:#010F6D;
+}
+.BoardBorder:first-of-type{
+	position: absolute;
+	top:0;
+	bottom:8px;
+	left:-8;
+	width:16px;	
+	background-image: url(../../asset/img/ui/board_border-left.png);
+	background-repeat: repeat-y;
+	background-size: contain;
+}
+.BoardBorder:nth-of-type(2){
+	position: absolute;
+	top:0;
+	bottom:8px;
+	right:-8;
+	width:16px;	
+	background-image: url(../../asset/img/ui/board_border-right.png);
+	background-repeat: repeat-y;
+	background-size: contain;
+}
+.BoardBorder:nth-of-type(3){
+	position: absolute;
+	bottom:-8;
+	left:8px;
+	right:8px;
+	height:16px;
+	background-image: url(../../asset/img/ui/board_border-bottom.png);
+	background-repeat: repeat-x;
+	background-size: contain;
+}
+.BoardBottomLeft{
+	position: absolute;
+	bottom:-8;
+	left:-8;
+	width:16px;	
+	height:16px;
+}
+.BoardBottomRight{
+	position: absolute;
+	bottom:-8;
+	right:-8;
+	width:16px;	
+	height:16px;
+}
+
+
+#_congradulation{
 	position: relative;
 	top: 70px;
 	left:125px;
@@ -346,15 +399,19 @@ input,select{
 
 /* lottery */
 #_lottery_title{
-	margin-top:85px;
+	position: absolute;
+	width:100%;
+	top:85px;
+}
+.VerticalWrapper{
+	position: absolute;
+	height:100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 #_lottery_info{
-	
-	/*position: absolute;
-	top:200px;
-	bottom:200px;*/
 	width:80%;
-	margin-top:10%;
 
 	display:flex;
 	flex-direction: row;
@@ -366,7 +423,8 @@ input,select{
 	width: 50%;
 	display: flex;	
 	flex-direction: column;
-	justify-content: flex-start;
+	justify-content: space-between;
+	padding:20px;
 }
 .LotteryItem{
 	width:100%;
@@ -381,16 +439,90 @@ input,select{
 .LotteryItem>*{
 	margin-left:20px;
 }
-.LotteryItem>input,select{
+/*.LotteryItem>input,select{
 	flex-grow:1;
 	
 	margin-right: 35px;
 	background-color: transparent;
-}
+}*/
 .LotteryItem>p{
 
 	text-align: left;
 	line-height: 150%;
+}
+.FormInput{
+	border:3px solid #00B2FF;
+	flex-grow: 1;
+}
+.FormInput input,select{
+	background-color: transparent;
+	border:0px;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	width: 100%;
+}
+.FormInput select{
+	background: url(../../asset/img/ui/form_arrow.png) no-repeat right transparent;
+    background-size: 1rem .6rem;
+    -webkit-appearance: none;
+    padding-right: 1.5rem;
+
+    -webkit-appearance: none;
+  	appearance: none;
+  	background-color:#001368; 
+}
+.FormInput option{
+	background-color: 
+}
+.FormInputWrapper{
+	position: relative;
+	width: 100%;
+	height:100%;
+	background-color: transparent;
+	margin-right: .5rem;
+}
+.FormInputText{
+	background-color: #1B2495;
+}
+.FormTopLeft{
+	position: absolute;
+	top:-3px;
+	left:-3px;
+	width: 10px;
+	height:10px;
+}
+.FormTopRight{
+	position: absolute;
+	top:-3;
+	right:-3;
+	width: 10px;
+	height:10px;
+}
+.FormBottomLeft{
+	position: absolute;
+	bottom:-3;
+	left:-3;
+	width: 10px;
+	height:10px;
+}
+.FormBottomRight{
+	position: absolute;
+	bottom:-3;
+	right:-3;
+	width: 10px;
+	height:10px;
+}
+.RadioMark{
+	/*position: absolute;*/
+	width:1.5rem;
+	height:1.5rem;
+	background-image: url(../../asset/img/ui/radio.png);
+	background-repeat: no-repeat;
+	background-size: contain;
+	cursor: pointer;
+}
+.RadioMark.checked{
+	background-image: url(../../asset/img/ui/radio_check.png);
 }
 
 /* rank page */
@@ -407,12 +539,12 @@ input,select{
 	transform:scaleX(-1)  translateY(-.5rem);
 }
 #_rank_info{
-
-	width:37%;
-	margin-top:8%;
-	height:60%;
-	overflow: scroll;
-	overflow-x: hidden;
+	/*position: relative;*/
+	margin-top:10vw;
+	width:36vw;
+	height:44vw;
+	/*overflow: scroll;
+	overflow-x: hidden;*/
 }
 .RankItem:first-child,.RankItem:nth-child(2),.RankItem:nth-child(3),.RankItem:nth-child(4){
 	color:#FF8345;
@@ -439,3 +571,9 @@ input,select{
 	transition:opacity .4s ease-out;	
 }
 
+#_rank_logo{
+	position: fixed;
+	top:40px;
+	right:40px;
+	max-height:18%;
+}

@@ -4,6 +4,7 @@ var _driver_name;
 var _driver_color='blue';
 const ClickBorder=0.5;
 
+
 function gotoPage(page_,sound_){
 	
 	if(_cur_page===page_) return;
@@ -244,4 +245,15 @@ function onGameMouseUp(event){
 	keyLeft=0;
 	keyRight=0;
 }
+
+function onClickGotoTrial(set_){
+	if(set_){
+		$('#_button_goto_trial_yes').addClass('checked');
+		$('#_button_goto_trial_no').removeClass('checked');
+	}else{
+		$('#_button_goto_trial_yes').removeClass('checked');
+		$('#_button_goto_trial_no').addClass('checked');
+	}
+}
+
 
