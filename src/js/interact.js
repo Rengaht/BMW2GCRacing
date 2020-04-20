@@ -253,13 +253,15 @@ function sendScore(callback){
 		success:function(response){
 			_uuid=response.uid;
 			_rank=response.rank;
-			console.log('get uuid= ',response);
+
+			$('#_rank_complete').text(_rank);
+			
+			console.log(response);
 			callback();
 		}
 	});
 
 }
-sendScore();
 function sendInfo(){
 
 	if($('#_button_send').hasClass('Disable')) return;
