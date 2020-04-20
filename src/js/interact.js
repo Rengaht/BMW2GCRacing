@@ -2,6 +2,9 @@ var _cur_page='_home';
 var _pre_page='_home';
 var _driver_name;
 var _driver_color='blue';
+var _uuid;
+
+var _trial_selected=true;
 const ClickBorder=0.5;
 
 
@@ -40,8 +43,11 @@ function gotoPage(page_,sound_){
 			showItem($('#_button_rank'));
 			hideItem($('#_button_back'));
 			
-			$('#_input_driver').val("");
-			_driver_name="";
+			resetDriverColor();
+			setTimeout(function(){
+				$('#_input_driver').val("");			
+				_driver_name="";
+			},700);
 			break;
 		case '_driver':
 			if(_cur_page==='_home')
@@ -59,7 +65,9 @@ function gotoPage(page_,sound_){
 			showItem($('#_button_back'));
 			hideItem($('#_button_rank'));
 			
-			setDriverColor('blue');
+			setTimeout(function(){
+				setDriverColor('blue');
+			},700);
 			break;
 		case '_game':				
 			movePage($('#'+page_),'pageFromBase');
@@ -80,7 +88,12 @@ function gotoPage(page_,sound_){
 			}
 			break;
 		case '_rank':
+			movePage($('#'+page_),'pageFromRight');
+			hideItem($('#_button_rank'));
+			showItem($('#_button_back'));
+			break;
 		case '_lottery':
+			onClickGotoTrial(true);
 			movePage($('#'+page_),'pageFromRight');
 			hideItem($('#_button_rank'));
 			showItem($('#_button_back'));
@@ -154,7 +167,7 @@ function movePage(page_,direction){
 		page_.removeClass(direction);// endCurrPage = true;
 		page_.find('.Button').removeClass('Disable');
 
-	},400);
+	},700);
 }
 
 
@@ -196,6 +209,25 @@ function setDriverColor(set_){
 	_driver_color=set_;
 
 }
+function resetDriverColor(){
+
+	var set_='blue';
+	$('#_button_'+_driver_color+'_selected').addClass('hidden');
+	$('#_button_'+_driver_color+'_selected').addClass('close');
+
+	$('#_img_car_color_'+_driver_color).addClass('hidden');
+	$('#_img_car_color_'+_driver_color).addClass('close');
+	
+	$('#_button_'+set_+'_selected').removeClass('hidden');
+	$('#_button_'+set_+'_selected').removeClass('close');
+	
+	$('#_img_car_color_'+set_).removeClass('hidden');
+	$('#_img_car_color_'+set_).removeClass('close');
+
+	$('#_car_complete').attr('src','asset/img/ui/frontcar_'+set_+'.png');
+	
+	_driver_color=set_;
+}
 function onButtonGoClick(){
 	if($('#_button_go').hasClass('Disable')) return;
 	gotoPage('_game','bb');
@@ -208,9 +240,45 @@ function setDriverScore(set_){
 	$('#_score_complete').text(set_);	
 
 }
+function sendScore(){
+
+	$.ajax({
+		url:'https://script.google.com/macros/s/AKfycbzQvLdIIL5UHhEOH8Yu3yMoYpFG30WfeKI8V8whH2p2_7oCD1H1/exec',
+		data:{
+			"player":_driver_name,
+			"color":_driver_color,
+			"score":_score,			
+		},
+		success:function(response){
+			_uuid=response;
+			console.log('get uuid= ',response);
+		}
+	});
+
+}
 function sendInfo(){
 
 	if($('#_button_send').hasClass('Disable')) return;
+
+	_uuid="b939e1d7-c0f2-4c14-8d5c-26407812d356";
+
+	$.ajax({
+		url:'https://script.google.com/a/mmlab.tw/macros/s/AKfycbzTi1GAFLpblMLuUP7rfK-KO3F7L6I2SbDDXb95YA/exec',
+		data:{
+			"uuid":_uuid,
+			"name":$('#_input_lottery_name').val(),
+			"gender":$('#_input_lottery_gender').val(),
+			"age":$('#_input_lottery_age').val(),
+			"phone":$('#_input_lottery_phone').val(),
+			"email":$('#_input_lottery_email').val(),
+			"trial":_trial_selected,
+			"store":$('#_input_lottery_store').val()
+		},
+		success:function(response){
+			console.log(response);
+		}
+	});
+
 	gotoPage('_game','bb');
 
 }
@@ -219,15 +287,22 @@ function onButtonBackClick(){
 
 	if($('#_button_back').hasClass('Disable')) return;
 
-	gotoPage(_pre_page,'sb');
+	// gotoPage(_pre_page,'sb');
 			
-	// switch(_cur_page){
-	// 	case '_rank':
-	// 		gotoPage(_pre_page,'sb');
-	// 		break;
-	// 	case '_driver':
-	// 		gotoPage()
-	// }
+	switch(_cur_page){
+		case '_rank':
+			gotoPage(_pre_page,'sb');
+			break;
+		case '_driver':
+			gotoPage('_home','sb');
+			break;
+		case '_color':
+			gotoPage('_driver','sb');
+			break;
+		case '_lottery':
+			gotoPage('_game','sb');
+			break;
+	}
 }
 
 function onGameClick(event){
@@ -254,6 +329,8 @@ function onClickGotoTrial(set_){
 		$('#_button_goto_trial_yes').removeClass('checked');
 		$('#_button_goto_trial_no').addClass('checked');
 	}
+	_trial_selected=set_;
 }
+
 
 
