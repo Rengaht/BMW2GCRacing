@@ -240,43 +240,47 @@ function setDriverScore(set_){
 	$('#_score_complete').text(set_);	
 
 }
-function sendScore(){
+function sendScore(callback){
 
+	let data={
+		"player":_driver_name,
+		"color":_driver_color,
+		"score":score
+	};
 	$.ajax({
 		url:'https://script.google.com/macros/s/AKfycbzQvLdIIL5UHhEOH8Yu3yMoYpFG30WfeKI8V8whH2p2_7oCD1H1/exec',
-		data:{
-			"player":_driver_name,
-			"color":_driver_color,
-			"score":_score,			
-		},
+		data:data,
 		success:function(response){
-			_uuid=response;
+			_uuid=response.uid;
+			_rank=response.rank;
 			console.log('get uuid= ',response);
+			callback();
 		}
 	});
 
 }
+sendScore();
 function sendInfo(){
 
 	if($('#_button_send').hasClass('Disable')) return;
 
 	
-	// $.ajax({
-	// 	url:'https://script.google.com/a/mmlab.tw/macros/s/AKfycbzTi1GAFLpblMLuUP7rfK-KO3F7L6I2SbDDXb95YA/exec',
-	// 	data:{
-	// 		"uuid":_uuid,
-	// 		"name":$('#_input_lottery_name').val(),
-	// 		"gender":$('#_input_lottery_gender').val(),
-	// 		"age":$('#_input_lottery_age').val(),
-	// 		"phone":$('#_input_lottery_phone').val(),
-	// 		"email":$('#_input_lottery_email').val(),
-	// 		"trial":_trial_selected,
-	// 		"store":$('#_input_lottery_store').val()
-	// 	},
-	// 	success:function(response){
-	// 		console.log(response);
-	// 	}
-	// });
+	$.ajax({
+		url:'https://script.google.com/a/mmlab.tw/macros/s/AKfycbzTi1GAFLpblMLuUP7rfK-KO3F7L6I2SbDDXb95YA/exec',
+		data:{
+			"uuid":_uuid,
+			"name":$('#_input_lottery_name').val(),
+			"gender":$('#_input_lottery_gender').val(),
+			"age":$('#_input_lottery_age').val(),
+			"phone":$('#_input_lottery_phone').val(),
+			"email":$('#_input_lottery_email').val(),
+			"trial":_trial_selected,
+			"store":$('#_input_lottery_store').val()
+		},
+		success:function(response){
+			console.log(response);
+		}
+	});
 
 	gotoPage('_game','bb');
 

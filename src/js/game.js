@@ -385,13 +385,14 @@ function endGame(){
   setTimeout(function(){
 
   	   _app.ticker.stop();
-
-  	   showItem($('#_score'));
-  	   showItem($('#_button_rank'));
-  	   		
-  	   setTimeout(function(){
-  	   		movePage($('#_score_board'),'pageFromTop');
-	   },100);
+  	   sendScore(function(){
+	  	   	showItem($('#_score'));
+	  	   showItem($('#_button_rank'));
+	  	   		
+	  	   setTimeout(function(){
+	  	   		movePage($('#_score_board'),'pageFromTop');
+		   },100);	
+  	   });  	   
 
   },2000);
 }
