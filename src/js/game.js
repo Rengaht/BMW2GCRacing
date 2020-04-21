@@ -48,9 +48,36 @@ function onload(){
 
 	 window.addEventListener('resize', resize);
 
-	 document.getElementById('_game').addEventListener('pointerdown',onGameClick,false);
-	 document.getElementById('_game').addEventListener('pointerup',onGameMouseUp,false);
 
+	if(window.PointerEvent){
+		 document.getElementById('_game').addEventListener('pointerdown',onGameClick);
+		 document.getElementById('_game').addEventListener('pointerup',onGameMouseUp);
+	}
+	document.getElementById('_game_frame').addEventListener('touchstart',function(event){
+		event.preventDefault(); 
+		if(!isPlaying) return;
+
+		var x=event.pageX/width;
+		
+	    if(x<ClickBorder) keyLeft=true;
+	  	else if(x>1.0-ClickBorder) keyRight=true;
+	});
+	document.getElementById('_game_frame').addEventListener('touchend',function(event){
+		 event.preventDefault(); 
+
+		 keyLeft=false;
+		 keyRight=false;
+
+	});
+	
+	
+	document.getElementById('_game').addEventListener('mousedown',onGameClick);
+	document.getElementById('_game').addEventListener('mouseup',onGameMouseUp);	
+	
+	
+	// FastClick.attach(document.getElementById('_game'));
+	// document.getElementById('_game').addEventListener('click',onGameClick,false);
+	// document.getElementById('_game').addEventListener('touchend',onGameMouseUp,false);
 
 }
 function resize(){
@@ -60,6 +87,11 @@ function resize(){
 function doResize(){
 	var ww_ = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; 
   	var wh_ = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
+  	// var ww_ = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+  	// var wh_ = (window.innerHeight > 0) ? window.innerHeight : screen.height;
+  	
+
   	console.log('window size:'+ww_+' x '+wh_);
 
   	_windowWidth=width=ww_;
@@ -67,14 +99,16 @@ function doResize(){
 
   	if(_app){
   		
-  		_sky.width=_windowWidth;
-  		_sky.height=_windowHeight*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]);	
-		_sky.tileScale.x=_sky.tileScale.y=_windowWidth/resources.sky.texture.width;
+  		_sky.width=ww_;
+  		_sky.height=wh_*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]);	
+		_sky.tileScale.x=_sky.tileScale.y=ww_/resources.sky.texture.width;
 	
-		_mountain.width=_windowWidth;
-		_mountain.height=_windowHeight*MoutainRatio;
-		_mountain.y=_windowHeight*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]-MoutainRatio);
-		_mountain.tileScale.x=_mountain.tileScale.y=_windowHeight*MoutainRatio/resources.mountain.texture.height;	
+		_mountain.width=ww_;
+		_mountain.height=wh_*MoutainRatio;
+		_mountain.y=wh_*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]-MoutainRatio);
+		_mountain.tileScale.x=_mountain.tileScale.y=wh_*MoutainRatio/resources.mountain.texture.height;	
+
+
 
 		 _app.renderer.resize(ww_,wh_);
   	}
@@ -112,7 +146,7 @@ function setupPixi(){
 function loadTexture(){
 	
 	loader.add('sky','asset/img/texture-02.png')
-			.add('mountain','asset/img/texture-03.png')
+			.add('mountain','asset/img/mountain-1.png')
 			.add('road','asset/img/texture/txt-24.png')
 			.add('side_road','asset/img/texture/txt-27.png')
 			.add('ref','asset/img/ref.png')
@@ -140,9 +174,9 @@ function loadFinish(loader,resources_){
 	_mountain.y=_windowHeight*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]-MoutainRatio);
 	_mountain.tileScale.x=_mountain.tileScale.y=_windowHeight*MoutainRatio/resources.mountain.texture.height;	
 	
-	_ref=new PIXI.TilingSprite(resources.ref.texture,_windowWidth,_windowHeight);
-	_ref.tileScale.x=_ref.tileScale.y=Math.min(_windowWidth/resources.ref.texture.width,_windowHeight/resources.ref.texture.height);
-	_ref.tilePosition.x=_windowWidth*.5-_ref.tileScale.x*resources.ref.texture.width*.5;
+	// _ref=new PIXI.TilingSprite(resources.ref.texture,_windowWidth,_windowHeight);
+	// _ref.tileScale.x=_ref.tileScale.y=Math.min(_windowWidth/resources.ref.texture.width,_windowHeight/resources.ref.texture.height);
+	// _ref.tilePosition.x=_windowWidth*.5-_ref.tileScale.x*resources.ref.texture.width*.5;
 	
 	// sprite texture
 
@@ -227,7 +261,7 @@ function loadFinish(loader,resources_){
 
 	
 	// laod car texture
-	_car=new PIXI.Sprite(_texture_car['car1-left.png']);
+	_car=new PIXI.Sprite(_texture_car['car1-center.png']);
 	
 	_driver_color='blue';
 	setupCarSprite(_driver_color);
@@ -244,7 +278,7 @@ function loadFinish(loader,resources_){
 	_background.addChild(_start_gate);
 	_background.addChild(_container_traffic_light);
 
-	CarScale=width/1800;
+	
 
    _app.ticker.add(function(delta){
 
@@ -292,7 +326,9 @@ function setupGame(){
 	cameraDepth            = 1 / Math.tan((fieldOfView/2) * Math.PI/180);
 	// playerZ                = 15*segmentLength;
 	resolution             = height/480;
-	roadWidth				 = height*RoadRatio/cameraDepth;
+	roadWidth			   = height*RoadRatio/cameraDepth;
+
+	CarScale=roadWidth*2/3*.5/_car.width;
 
 	// roadWidth				 = width*0.65/(cameraDepth/segmentLength*(width/2));
 	// segmentLength			 = (zfar)/drawDistance;

@@ -7,17 +7,6 @@ var Render = {
       return;
 
 
-    // quad.shader.uniforms.roadColor1=SceneColor[scene_].roadColor1;
-    // quad.shader.uniforms.roadColor2=SceneColor[scene_].roadColor2;
-    // quad.shader.uniforms.laneColor1=SceneColor[scene_].laneColor1;
-    // quad.shader.uniforms.laneColor2=SceneColor[scene_].laneColor2;
-    // quad.shader.uniforms.grassColor1=SceneColor[scene_].grassColor1;
-    // quad.shader.uniforms.grassColor2=SceneColor[scene_].grassColor2;
-    // quad.shader.uniforms.grassColor3=SceneColor[scene_].grassColor3;
-    // quad.shader.uniforms.grassColor4=SceneColor[scene_].grassColor4;
-    // quad.shader.uniforms.sideColor1=SceneColor[scene_].sideColor1;
-    // quad.shader.uniforms.sideColor2=SceneColor[scene_].sideColor2;
-
     const buffer=quad.geometry.getBuffer('aVertexPosition');
     // buffer.update(new Float32Array([x1, y1, x2, y2, x3, y3,
     //                                 x1, y1,x3, y3,x4, y4]));    

@@ -195,7 +195,7 @@ function update(dt) {
     playerX = playerX + dx;
 
   // playerX = playerX - (dx * speedPercent * playerSegment.curve * centrifugal);
-  playerX = Util.limit(playerX, -1, 1);     // dont ever let it go too far out of bounds
+  playerX = Util.limit(playerX, -1.2, 1.2);     // dont ever let it go too far out of bounds
   
 
   // check coins and obstacles

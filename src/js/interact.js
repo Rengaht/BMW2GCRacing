@@ -62,7 +62,7 @@ function gotoPage(page_,sound_){
 			hideItem($('#_button_rank'));			
 			showItem($('#_button_back'));
 			
-			$('#_input_driver').focus();
+			$('#_input_driver').blur();
 			break;
 		case '_color':
 			movePage($('#'+page_),'pageFromBottom');
@@ -194,14 +194,16 @@ function onButtonStartClick(){
 function onDriverNameClick(){
 
 	if($('#_button_ok').hasClass('Disable')) return;
-	$('#_button_ok').addClass('Click');
+
 
 	let val=$('#_input_driver').val();
 	if(val.length<1){
+
 		_sound_fx['button_disable'].play();
 		return;
 	}
-
+	$('#_button_ok').addClass('Click');
+		
 	setDriverName(val);
 	gotoPage('_color','bb');
 }
@@ -335,7 +337,13 @@ function clearInfo(){
 function sendInfo(callback){
 
 	if($('#_button_send').hasClass('Disable')) return;
+
+	// check empty
+	
+
+
     $('#_button_send').addClass('Click');
+    _sound_fx['button_large'].play();
 
 	let data={
 		"uuid":_uuid,
@@ -353,12 +361,13 @@ function sendInfo(callback){
 		data:data,
 		success:function(response){			
 			console.log('update info: '+response);
-			
-			if(response==='success'){
+			var data=JSON.parse(response);
+
+			if(data.result==='success'){
 			
 				$('#_button_lottery').addClass('Disable');
 				if(callback) callback();			
-				gotoPage('_game','bb');			
+				gotoPage('_game','');			
 			}else{
 				alert('something wrong^^');	
 			}
@@ -397,7 +406,7 @@ function onButtonBackClick(){
 }
 
 function onGameClick(event){
-	
+	event.preventDefault(); 
 	if(!isPlaying) return;
 
 	var x=event.offsetX/width;
@@ -408,6 +417,7 @@ function onGameClick(event){
   	else if(x>1.0-ClickBorder) keyRight=true;
 }
 function onGameMouseUp(event){
+	event.preventDefault(); 
 	keyLeft=0;
 	keyRight=0;
 }

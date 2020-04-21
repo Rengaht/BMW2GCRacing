@@ -9,10 +9,13 @@
 }
 html{
 	font-size: 18px;
+	-webkit-text-size-adjust:none;
+	
 }
 @media (min-width: 2048px){
 	html{
-		font-size: 36px;
+		font-size: 32px;
+		-webkit-text-size-adjust:none;
 	}
 }
 .FontT1{
@@ -36,7 +39,7 @@ html{
 	letter-spacing:3px;
 }
 .FontInfo{
-	font-size: 1.22rem;
+	font-size: 1rem;
 	letter-spacing:1px;
 }
 

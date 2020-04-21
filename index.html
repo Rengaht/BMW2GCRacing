@@ -2,7 +2,8 @@
 <head>
 	<meta charset="utf-8">
 	<title>THE 2 RACING CHALLENGE</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="viewport" content="viewport-fit=cover, user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1,minimal-ui">
 
 	<link rel="stylesheet" type="text/css" href="src/css/font.css">
 	<link rel="stylesheet" type="text/css" href="src/css/transition.css">
@@ -12,7 +13,7 @@
 	<script src="src/lib/pixi/5.2.0/pixi-legacy.js"></script>
 	<script src="src/lib/jquery-3.3.1.min.js"></script>
 	<script src="src/lib/howler/howler.core.min.js"></script>  
-
+	<script src="src/lib/fastclick.js"></script> 
 	<!-- <script src="src/lib/projection/pixi-projection.js"></script> -->
 	<script src="src/js/interact.js"></script>
 	<script src="src/js/utils.js"></script>
@@ -87,7 +88,7 @@
 		</div>
 	</div>
 	
-	<div id="_game" class="PageContainer close" onmousedown="onGameClick(event)" onmouseup="onGameMouseUp(event)">
+	<div id="_game" class="PageContainer close">
 		<div id="_game_frame"></div>
 		<div id="_speed_meter">
 			<img src="asset/img/ui/meter.png"/>
@@ -123,29 +124,31 @@
 
 		<div id="_score" class="PageContainer hidden close">
 			<div id="_score_board" class="Center">
-				<div class="BoardWrapper">					
-					<div id="_congradulation"class="FontT1 Orange DisableSelect">CONGRADULATIONS !!!</div>
-					<div id="_info_complete" class="FontText">
-						<div class="ScoreElement DisableSelect">
-							<div>
-								<span>DIRVER</span>
-								<img src="asset/img/ui/line_complete_name.png"/>
+				<div class="BoardWrapper">			
+					<div id="_board_title">
+						<div id="_congradulation"class="FontT1 Orange DisableSelect">CONGRADULATIONS !!!</div>
+						<div id="_info_complete" class="FontText">
+							<div class="ScoreElement DisableSelect">
+								<div>
+									<span>DIRVER</span>
+									<img src="asset/img/ui/line_complete_name.png"/>
+								</div>
+								<div id="_driver_name_complete" class="FontT1 LightBlue">KAREN</div>
 							</div>
-							<div id="_driver_name_complete" class="FontT1 LightBlue">KAREN</div>
-						</div>
-						<div class="ScoreElement DisableSelect">
-							<div>
-								<span>SCORE</span>
-								<img src="asset/img/ui/line_complete_score.png"/>
+							<div class="ScoreElement DisableSelect">
+								<div>
+									<span>SCORE</span>
+									<img src="asset/img/ui/line_complete_score.png"/>
+								</div>
+								<div id="_score_complete" class="FontT1 MiddleBlue">888</div>
 							</div>
-							<div id="_score_complete" class="FontT1 MiddleBlue">888</div>
-						</div>
-						<div class="ScoreElement DisableSelect">
-							<div>
-								<span>RANK</span>
-								<img src="asset/img/ui/line_complete_score.png"/>
+							<div class="ScoreElement DisableSelect">
+								<div>
+									<span>RANK</span>
+									<img src="asset/img/ui/line_complete_score.png"/>
+								</div>
+								<div id="_rank_complete" class="FontT1 Orange">7</div>
 							</div>
-							<div id="_rank_complete" class="FontT1 Orange">7</div>
 						</div>
 					</div>
 					<img id="_car_complete" class="FrontCar" src="asset/img/ui/frontcar_blue.png"/>
@@ -221,7 +224,7 @@
 					<span>手機</span>
 					<div class="FormInput">
 						<div class="FormInputWrapper">
-							<input type="text" id="_input_lottery_phone" class="FontInfo LightBlue"/>
+							<input type="tel" id="_input_lottery_phone" class="FontInfo LightBlue"/>
 							<img class="FormTopLeft" src="asset/img/ui/form_corner-1.png"/>
 							<img class="FormTopRight" src="asset/img/ui/form_corner-2.png"/>
 							<img class="FormBottomLeft" src="asset/img/ui/form_corner-2.png"/>
@@ -233,7 +236,7 @@
 					<span>信箱</span>
 					<div class="FormInput">
 						<div class="FormInputWrapper">
-							<input type="text" id="_input_lottery_email" class="FontInfo LightBlue"/>
+							<input type="email" id="_input_lottery_email" class="FontInfo LightBlue"/>
 							<img class="FormTopLeft" src="asset/img/ui/form_corner-1.png"/>
 							<img class="FormTopRight" src="asset/img/ui/form_corner-2.png"/>
 							<img class="FormBottomLeft" src="asset/img/ui/form_corner-2.png"/>
@@ -302,37 +305,14 @@
 		<div id="_rank_info" class="Center FontInfo LightBlue DisableSelect">
 			<!-- <div class="RankItem">
 				<span>1.</span><span>KAREN</span><span>8888</span>
-			</div>
-			<div class="RankItem">
-				<span>2.</span><span>十元十元</span><span>8888</span>
-			</div>
-			<div class="RankItem">
-				<span>3.</span><span>RUBY RUBY</span><span>8888</span>
-			</div>
-			<div class="RankItem">
-				<span>4.</span><span>KAREN</span><span>8888</span>
-			</div>
-			<div class="RankItem">
-				<span>5.</span><span>PIPI</span><span>8888</span>
-			</div>
-			<div class="RankItem">
-				<span>6.</span><span>KAREN</span><span>8888</span>
-			</div>
-			<div class="RankItem">
-				<span>7.</span><span>HEY HEY HEY</span><span>8888</span>
-			</div>
-			<div class="RankItem">
-				<span>8.</span><span>KAREN</span><span>8888</span>
-			</div>
-			<div class="RankItem">
-				<span>9.</span><span>KAREN</span><span>8888</span>
-			</div>
-			<div class="RankItem">
-				<span>10.</span><span>KAREN</span><span>8888</span>
 			</div> -->
 		</div>
 	</div>
-
+	<div id="_hint_landscape" class="PageContainer">
+		<div class="VerticalWrapper" style="width:100%">
+			<img class="Center" src="asset/img/ui/hint_landscape.png"/>
+		</div>
+	</div>
 	<script src="src/js/game.js"></script>
 	
 
