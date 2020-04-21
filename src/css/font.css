@@ -10,7 +10,7 @@
 html{
 	font-size: 18px;
 	-webkit-text-size-adjust:none;
-	
+
 }
 @media (min-width: 2048px){
 	html{
@@ -39,7 +39,7 @@ html{
 	letter-spacing:3px;
 }
 .FontInfo{
-	font-size: 1rem;
+	font-size: 1.2rem;
 	letter-spacing:1px;
 }
 

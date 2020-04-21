@@ -74,11 +74,24 @@ function onload(){
 	document.getElementById('_game').addEventListener('mousedown',onGameClick);
 	document.getElementById('_game').addEventListener('mouseup',onGameMouseUp);	
 	
-	
-	// FastClick.attach(document.getElementById('_game'));
-	// document.getElementById('_game').addEventListener('click',onGameClick,false);
-	// document.getElementById('_game').addEventListener('touchend',onGameMouseUp,false);
+	$('#_input_driver').bind("change paste keyup",function(){
+		toggleNameError(false);		
+		$('#_input_driver').val($('#_input_driver').val().replace(/ /g,''));
+	});
 
+	$('#_input_lottery_name').bind("change paste keyup",function(){
+		toggleLotteryError(false);		
+		$('#_input_lottery_name').val($('#_input_lottery_name').val().replace(/ /g,''));
+	});
+	$('#_input_lottery_phone').bind("change paste keyup",function(){
+		toggleLotteryError(false);		
+		$(this).val($(this).val().replace(/[^\d]+/g,''));
+		$(this).val($(this).val().replace(/(\d{4})\-?(\d{3})\-?(\d{3})/,'$1-$2-$3'))
+	});
+	$('#_input_lottery_email').bind("change paste keyup",function(){
+		toggleLotteryError(false);		
+		$('#_input_lottery_email').val($('#_input_lottery_email').val().replace(/ /g,''));
+	});
 }
 function resize(){
 	clearTimeout(_resize_timeout);
@@ -262,7 +275,8 @@ function loadFinish(loader,resources_){
 	
 	// laod car texture
 	_car=new PIXI.Sprite(_texture_car['car1-center.png']);
-	
+	CarScale=width/3*.8/_texture_car['car1-center.png'].width;
+
 	_driver_color='blue';
 	setupCarSprite(_driver_color);
 	
@@ -328,8 +342,7 @@ function setupGame(){
 	resolution             = height/480;
 	roadWidth			   = height*RoadRatio/cameraDepth;
 
-	CarScale=roadWidth*2/3*.5/_car.width;
-
+	
 	// roadWidth				 = width*0.65/(cameraDepth/segmentLength*(width/2));
 	// segmentLength			 = (zfar)/drawDistance;
 

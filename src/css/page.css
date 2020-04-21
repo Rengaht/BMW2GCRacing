@@ -223,6 +223,12 @@ input,select{
    	border:0;  
 	vertical-align: middle;
 }
+.InputError{
+	position: absolute;
+	bottom: 18vh;	
+	width: 100%;
+}
+
 /* page color */
 #_flag_bottom{
 	height:72vh;
@@ -366,7 +372,7 @@ input,select{
 	max-height:100%;
 	background-color:#010F6D;
 	padding-top:70px;
-	padding-bottom: 20px;
+	padding-bottom: 50px;
 }
 
 .BoardBorder:first-of-type{
@@ -444,6 +450,9 @@ input,select{
 	flex-direction: column;
 	overflow: hidden;
 }
+.ScoreElement>div{
+	max-height: 3rem;
+}
 
 #_car_complete{
 	margin-top: 10px;
@@ -453,6 +462,7 @@ input,select{
 }
 #_complete_button_wrapper{
 	position: relative;
+	margin-top: 30px;
 }
 
 
@@ -472,7 +482,7 @@ input,select{
 #_lottery_info{
 	width:80%;
 	max-height:65%;
-	overflow-y: scroll;
+	overflow-y: auto;
 
 	display:flex;
 	flex-direction: row;
@@ -587,6 +597,10 @@ input,select{
 }
 .RadioMark.checked{
 	background-image: url(../../asset/img/ui/radio_check.png);
+}
+
+#_input_lottery_email{
+	text-transform: none;
 }
 
 /* rank page */

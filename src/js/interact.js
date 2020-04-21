@@ -195,16 +195,14 @@ function onDriverNameClick(){
 
 	if($('#_button_ok').hasClass('Disable')) return;
 
-
-	let val=$('#_input_driver').val();
-	if(val.length<1){
-
+	if(!checkNameInput()){
 		_sound_fx['button_disable'].play();
 		return;
 	}
+
 	$('#_button_ok').addClass('Click');
 		
-	setDriverName(val);
+	setDriverName($('#_input_driver').val());
 	gotoPage('_color','bb');
 }
 
@@ -339,10 +337,14 @@ function sendInfo(callback){
 	if($('#_button_send').hasClass('Disable')) return;
 
 	// check empty
-	
+	if(!checkLotteryInput()){
+		_sound_fx['button_disable'].play();
+		return;
+	}
 
-
+	toggleLotteryError(true,'傳送中...');
     $('#_button_send').addClass('Click');
+    $('#_button_send').addClass('Disable');
     _sound_fx['button_large'].play();
 
 	let data={
@@ -362,14 +364,19 @@ function sendInfo(callback){
 		success:function(response){			
 			console.log('update info: '+response);
 			var data=JSON.parse(response);
+			 $('#_button_send').removeClass('Disable');
 
 			if(data.result==='success'){
-			
-				$('#_button_lottery').addClass('Disable');
-				if(callback) callback();			
-				gotoPage('_game','');			
+				toggleLotteryError(true,'成功!');
+				
+				setTimeout(function(){
+					$('#_button_lottery').addClass('Disable');
+					if(callback) callback();			
+					gotoPage('_game','');			
+				},300);
+
 			}else{
-				alert('something wrong^^');	
+				toggleLotteryError(true,'something wrong^^');				
 			}
 		},
 		error:function(jqXHR, textStatus, errorThrown){
@@ -473,4 +480,52 @@ function updateRank(callback){
 			console.log(jqXHR);
 		}
 	});
+}
+
+function checkNameInput(){
+	var error_text="";
+	if($('#_input_driver').val().length<1) error_text=error_text+"*不可空白";
+	
+	$('#_input_driver').val($('#_input_driver').val().replace(/ /g,'').toUpperCase());
+	
+	toggleNameError(error_text.length>0,error_text);
+	return error_text.length==0;
+}
+function toggleNameError(show_,text_){
+	if(show_){
+		$('#_driver_input_error').text(text_);
+		$('#_driver_input_error').removeClass('hidden');
+		$('#_button_ok').addClass('Disabled');
+	}else{
+		$('#_driver_input_error').addClass('hidden');
+		$('#_button_ok').removeClass('Disabled');
+	}
+}
+
+function checkLotteryInput(){
+	var error_text="";
+	if($('#_input_lottery_name').val().length<1) error_text=error_text+"*姓名不可空白\n";
+
+	var mobileReg = /^09\d{2}-\d{3}-\d{3}$/;
+	// var phoneReg = /^\d{7,12}$/;
+	var input_phone_=$('#_input_lottery_phone').val();
+	if(input_phone_.length<12 || !mobileReg.test(input_phone_)) error_text=error_text+"*手機格式錯誤\n";
+
+	var emailRegx=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	var input_email=$('#_input_lottery_email').val().toLowerCase();
+    if(!emailRegx.test(input_email)) error_text=error_text+"*email格式錯誤\n";
+
+
+	toggleLotteryError(error_text.length>0,error_text);
+	return error_text.length==0;
+}
+function toggleLotteryError(show_,text_){
+	if(show_){
+		$('#_lottery_input_error').text(text_);
+		$('#_lottery_input_error').removeClass('hidden');
+		$('#_button_ok').addClass('Disabled');
+	}else{
+		$('#_lottery_input_error').addClass('hidden');
+		$('#_button_ok').removeClass('Disabled');
+	}
 }
