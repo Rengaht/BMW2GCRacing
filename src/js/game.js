@@ -387,14 +387,7 @@ function endGame(){
   setTimeout(function(){
 
   	   _app.ticker.stop();
-  	   sendScore(function(){
-	  	   showItem($('#_score'));
-	  	   showItem($('#_button_rank'));
-	  	   		
-	  	   setTimeout(function(){
-	  	   		movePage($('#_score_board'),'pageFromTop');
-		   },100);	
-  	   });  	   
+  	   sendScore(showScore);  	   
 
   },2000);
 }

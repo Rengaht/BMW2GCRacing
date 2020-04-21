@@ -40,9 +40,10 @@ function gotoPage(page_,sound_){
 			if(_cur_page!=='_rank')
 				movePage($('#'+page_),'pageFromTop');
 
+			$('#_button_start').removeClass('Click');
 			showItem($('#_button_rank'));
 			hideItem($('#_button_back'));
-			
+						
 			resetDriverColor();
 			setTimeout(function(){
 				$('#_input_driver').val("");			
@@ -55,6 +56,9 @@ function gotoPage(page_,sound_){
 			else
 				movePage($('#'+page_),'pageFromTop');
 			
+			$('#_button_ok').removeClass('Click');
+			$('#_button_back').removeClass('Click');
+
 			hideItem($('#_button_rank'));			
 			showItem($('#_button_back'));
 			
@@ -62,6 +66,10 @@ function gotoPage(page_,sound_){
 			break;
 		case '_color':
 			movePage($('#'+page_),'pageFromBottom');
+
+			$('#_button_go').removeClass('Click');
+			$('#_button_back').removeClass('Click');
+
 			showItem($('#_button_back'));
 			hideItem($('#_button_rank'));
 			
@@ -89,7 +97,9 @@ function gotoPage(page_,sound_){
 			break;
 		case '_rank':			
 			hideItem($('#_button_rank'));
-			movePage($('#'+page_),'pageFromRight');				
+			movePage($('#'+page_),'pageFromRight');	
+
+			$('#_button_back').removeClass('Click');			
 			showItem($('#_button_back'));			
 			updateRank();
 			break;
@@ -98,6 +108,9 @@ function gotoPage(page_,sound_){
 			onClickGotoTrial(true);
 			movePage($('#'+page_),'pageFromRight');
 			hideItem($('#_button_rank'));
+
+			$('#_button_send').removeClass('Click');    
+			$('#_button_back').removeClass('Click');
 			showItem($('#_button_back'));
 			break;
 	}
@@ -172,10 +185,16 @@ function movePage(page_,direction){
 	},700);
 }
 
+function onButtonStartClick(){
+	if($('#_button_start').hasClass('Disable')) return;
+	$('#_button_start').addClass('Click');
 
+	gotoPage('_driver','bb');
+}
 function onDriverNameClick(){
 
 	if($('#_button_ok').hasClass('Disable')) return;
+	$('#_button_ok').addClass('Click');
 
 	let val=$('#_input_driver').val();
 	if(val.length<1){
@@ -232,6 +251,8 @@ function resetDriverColor(){
 }
 function onButtonGoClick(){
 	if($('#_button_go').hasClass('Disable')) return;
+
+	$('#_button_go').addClass('Click');
 	gotoPage('_game','bb');
 }
 
@@ -242,6 +263,22 @@ function setDriverScore(set_){
 	$('#_score_complete').text(set_);	
 
 }
+function onButtonLotteryClick(){
+	if($('#_button_lottery').hasClass('Disable')) return;
+	$('#_button_lottery').addClass('Click');
+
+	gotoPage('_lottery','bb');
+}
+function onButtonHomeClick(){
+	
+	if($('#_button_home').hasClass('Disable')) return;
+	$('#_button_home').addClass('Click');
+
+	gotoPage('_home','bb');
+}
+
+
+
 function sendScore(callback){
 
 	let data={
@@ -264,12 +301,26 @@ function sendScore(callback){
 			callback();
 		},
 		error:function(jqXHR, textStatus, errorThrown){
-			alert('something wrong:(((((');
+			alert('something wrong^^');
 			console.log(jqXHR);
 		}
 	});
 
 }
+
+function showScore(){
+	showItem($('#_score'));
+	showItem($('#_button_rank'));
+	
+	$('#_button_home').removeClass('Click');
+	$('#_button_lottery').removeClass('Click');
+	$('#_button_lottery').removeClass('Disable');
+
+	setTimeout(function(){
+		movePage($('#_score_board'),'pageFromTop');
+   	},100);	
+}
+
 function clearInfo(){
 	$('#_input_lottery_name').val("");
 	$('#_input_lottery_gender').val("男");
@@ -284,6 +335,7 @@ function clearInfo(){
 function sendInfo(callback){
 
 	if($('#_button_send').hasClass('Disable')) return;
+    $('#_button_send').addClass('Click');
 
 	let data={
 		"uuid":_uuid,
@@ -301,12 +353,18 @@ function sendInfo(callback){
 		data:data,
 		success:function(response){			
 			console.log('update info: '+response);
-
-			if(callback) callback();			
-			gotoPage('_game','bb');			
+			
+			if(response==='success'){
+			
+				$('#_button_lottery').addClass('Disable');
+				if(callback) callback();			
+				gotoPage('_game','bb');			
+			}else{
+				alert('something wrong^^');	
+			}
 		},
 		error:function(jqXHR, textStatus, errorThrown){
-			alert('something wrong:(((((');
+			alert('something wrong^^');
 			console.log(jqXHR);
 		}
 	});
@@ -319,6 +377,7 @@ function onButtonBackClick(){
 
 	if($('#_button_back').hasClass('Disable')) return;
 
+	$('#_button_back').addClass('Click');
 	// gotoPage(_pre_page,'sb');
 			
 	switch(_cur_page){
@@ -400,7 +459,7 @@ function updateRank(callback){
 			if(callback) callback();
 		},
 		error:function(jqXHR, textStatus, errorThrown){
-			alert('something wrong:(((((');
+			alert('something wrong^^');
 			console.log(jqXHR);
 		}
 	});

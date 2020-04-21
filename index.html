@@ -25,7 +25,9 @@
 	 
 	<img id="_button_rank" src="asset/img/ui/button_rank.png" class="Button" onclick="gotoPage('_rank','sb')"/>
 	
-	<img id="_button_back" class="Button ButtonBack hidden close" onclick="onButtonBackClick()" src="asset/img/ui/button_back.png"/>
+	<div class="ButtonBack">
+		<img id="_button_back" class="Button hidden close" src="asset/img/ui/button_back.png" onclick="onButtonBackClick()"/>
+	</div>
 			
 	<div id="_home" class="PageContainer">
 		<div class="GameLogo Center">
@@ -34,7 +36,7 @@
 		</div>
 
 		<div class="BottomWrapper">
-			<img id="_button_start" class="Button Center" onclick="gotoPage('_driver','bb')" src="asset/img/ui/button_start.png"/>		
+			<img id="_button_start" class="Button Center" onclick="onButtonStartClick()" src="asset/img/ui/button_start.png"/>		
 		</div>
 	</div>
 	<div id="_driver" class="PageContainer close">
@@ -80,7 +82,7 @@
 			
 		</div>
 		<div class="BottomWrapper">
-			<img id="_button_go" class="Button Center" onclick="onButtonGoClick()" src="asset/img/ui/button_go_normal.png"/>		
+			<img id="_button_go" class="Button Center" onclick="onButtonGoClick()" src="asset/img/ui/button_go.png"/>		
 			</div>		
 		</div>
 	</div>
@@ -148,8 +150,8 @@
 					</div>
 					<img id="_car_complete" class="FrontCar" src="asset/img/ui/frontcar_blue.png"/>
 					<div id="_complete_button_wrapper" class="BottomWrapper">
-						<img class="Button" src="asset/img/ui/button_home_normal.png" onclick="gotoPage('_home','bb')"/>
-						<img class="Button" src="asset/img/ui/button_lottery_normal.png" onclick="gotoPage('_lottery','bb')"/>
+						<img id="_button_home" class="Button" src="asset/img/ui/button_home.png" onclick="onButtonHomeClick()"/>
+						<img id="_button_lottery" class="Button" src="asset/img/ui/button_lottery.png" onclick="onButtonLotteryClick()"/>
 					</div>
 					<span class="BoardBorder"></span>
 					<span class="BoardBorder"></span>
@@ -291,7 +293,7 @@
 			</div>
 		</div>
 		<div class="BottomWrapper">
-			<img id="_button_send" class="Button Center" onclick="sendInfo()" src="asset/img/ui/button_send_normal.png"/>
+			<img id="_button_send" class="Button Center" onclick="sendInfo()" src="asset/img/ui/button_send.png"/>
 			</div>		
 		</div>
 	</div>

@@ -31,6 +31,9 @@ input,select{
 .BottomWrapper{
 	position: absolute;
 	bottom: 6%;
+	max-height:11vh;
+	height:11vh;
+	overflow: hidden;
 	width: 100%;
 }
 
@@ -47,15 +50,23 @@ input,select{
 }
 
 .Button{
-	background-size:100% 100%;
-	background-repeat: no-repeat;
 	cursor: pointer;
-	max-height:11vh;
-	transition: opacity .2s ease-out;
+	transition: opacity .2s ease-out;	
 }
 .Button.Disable{
 	opacity: .8;
 }
+
+.BottomWrapper>.Button{
+	position: relative;
+	top:0;
+	height:200%;
+}
+.BottomWrapper>.Button.Click{
+	top:-100%;
+}
+
+
 .hidden{
 	opacity: 0;
 	transition:opacity .5s ease-out;
@@ -127,11 +138,14 @@ input,select{
 	height:100%;
 }
 .LogoGlow{
-	animation: fadein 1s infinite;
+	animation: fadein 2.5s infinite;
 }
 @keyframes fadein {
   0%   { opacity:1; }
-  50%  { opacity:0; }
+  40%  { opacity:0; }  
+  41% { opacity:1; } 
+  44%  { opacity:0; }  
+  45% { opacity:1; } 
   100% { opacity:1; }
 }
 /* page driver */
@@ -139,15 +153,27 @@ input,select{
 	position: absolute;
 	top:85px;
 	left:64px;
-	width:3%;
-	cursor: pointer;
-	z-index: 100;
+	
+	height:8%;
+	max-height: 100px;
 
+	z-index: 100;
 	transition:opacity .5s ease-out .7s;
+
+	overflow: hidden;
 }
-.ButtonBack.hidden{
+.ButtonBack>.Button{
+	position: relative;
+	top:0;
+	height:200%;
+}
+.ButtonBack>.Button.Click{
+	top:-100%;
+}
+#_button_back.hidden{
 	transition:opacity .4s ease-out 0s;
 }
+
 .Flag{
 	position: relative;
 	background-image: url(../../asset/img/ui/flag.png);
@@ -578,6 +604,7 @@ input,select{
 	top:0;
 	right:6%;
 	z-index: 100;
+	max-height:15vh;
 
 	transition:opacity .5s ease-out .7s;
 }
