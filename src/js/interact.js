@@ -87,12 +87,14 @@ function gotoPage(page_,sound_){
 	  
 			}
 			break;
-		case '_rank':
-			movePage($('#'+page_),'pageFromRight');
+		case '_rank':			
 			hideItem($('#_button_rank'));
-			showItem($('#_button_back'));
+			movePage($('#'+page_),'pageFromRight');				
+			showItem($('#_button_back'));			
+			updateRank();
 			break;
 		case '_lottery':
+			clearInfo();
 			onClickGotoTrial(true);
 			movePage($('#'+page_),'pageFromRight');
 			hideItem($('#_button_rank'));
@@ -251,40 +253,65 @@ function sendScore(callback){
 		url:'https://script.google.com/macros/s/AKfycbzQvLdIIL5UHhEOH8Yu3yMoYpFG30WfeKI8V8whH2p2_7oCD1H1/exec',
 		data:data,
 		success:function(response){
-			_uuid=response.uid;
-			_rank=response.rank;
+
+			var data=JSON.parse(response);
+			_uuid=data.uid;
+			_rank=data.rank;
 
 			$('#_rank_complete').text(_rank);
 			
-			console.log(response);
+			console.log('update score'+response);
 			callback();
+		},
+		error:function(jqXHR, textStatus, errorThrown){
+			alert('something wrong:(((((');
+			console.log(jqXHR);
 		}
 	});
 
 }
-function sendInfo(){
+function clearInfo(){
+	$('#_input_lottery_name').val("");
+	$('#_input_lottery_gender').val("男");
+	$('#_input_lottery_age').val("20-");
+	$('#_input_lottery_phone').val("");
+	$('#_input_lottery_email').val("");
+	
+	$('#_button_goto_trial_yes').addClass('checked');
+	$('#_button_goto_trial_no').removeClass('checked');
+	$('#_input_lottery_score').val("台北汎德 - 天母");
+}
+function sendInfo(callback){
 
 	if($('#_button_send').hasClass('Disable')) return;
 
+	let data={
+		"uuid":_uuid,
+		"name":$('#_input_lottery_name').val(),
+		"gender":$('#_input_lottery_gender').val(),
+		"age":$('#_input_lottery_age').val(),
+		"phone":$('#_input_lottery_phone').val(),
+		"email":$('#_input_lottery_email').val(),
+		"trial":_trial_selected,
+		"store":$('#_input_lottery_store').val()
+	};
 	
 	$.ajax({
-		url:'https://script.google.com/a/mmlab.tw/macros/s/AKfycbzTi1GAFLpblMLuUP7rfK-KO3F7L6I2SbDDXb95YA/exec',
-		data:{
-			"uuid":_uuid,
-			"name":$('#_input_lottery_name').val(),
-			"gender":$('#_input_lottery_gender').val(),
-			"age":$('#_input_lottery_age').val(),
-			"phone":$('#_input_lottery_phone').val(),
-			"email":$('#_input_lottery_email').val(),
-			"trial":_trial_selected,
-			"store":$('#_input_lottery_store').val()
+		url:'https://script.google.com/macros/s/AKfycbyZQlqqINqx89iets9atIF4YATr52gytQuGHzPFnCUkqyKN0np3/exec',
+		data:data,
+		success:function(response){			
+			console.log('update info: '+response);
+
+			if(callback) callback();			
+			gotoPage('_game','bb');			
 		},
-		success:function(response){
-			console.log(response);
+		error:function(jqXHR, textStatus, errorThrown){
+			alert('something wrong:(((((');
+			console.log(jqXHR);
 		}
 	});
 
-	gotoPage('_game','bb');
+	
 
 }
 
@@ -338,4 +365,43 @@ function onClickGotoTrial(set_){
 }
 
 
+function updateRank(callback){
 
+	var data={count:10};
+	$.ajax({
+		url:'https://script.google.com/macros/s/AKfycbzQIXck9QaCW1k5VmgW6WFOm5yQ35K2ULryaW8ilJ4K-uadGCI/exec',
+		data:data,
+		success:function(response){
+
+			$('#_rank_info').empty();
+
+			var data=JSON.parse(response);
+			var count=1;
+			for(var i in data){
+				
+				let user=data[i];
+				if(user[2]==="") break;
+
+				let row=$('<div></div>');
+				$('<sapn></span>').text(count+'.').appendTo(row);
+				$('<sapn></span>').text(user[0]).appendTo(row);
+				$('<sapn></span>').text(user[2]).appendTo(row);
+				
+				row.addClass('RankItem');
+				row.addClass('hidden');
+				setTimeout(function(){
+					row.removeClass('hidden');
+				},i*100);
+				row.appendTo($('#_rank_info'));
+
+				count++;
+			}
+			console.log('update rank!');
+			if(callback) callback();
+		},
+		error:function(jqXHR, textStatus, errorThrown){
+			alert('something wrong:(((((');
+			console.log(jqXHR);
+		}
+	});
+}

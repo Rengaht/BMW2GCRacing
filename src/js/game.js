@@ -48,8 +48,10 @@ function onload(){
 
 	 window.addEventListener('resize', resize);
 
-	  document.getElementById('_game').addEventListener('pointerdown',onGameClick,false);
+	 document.getElementById('_game').addEventListener('pointerdown',onGameClick,false);
 	 document.getElementById('_game').addEventListener('pointerup',onGameMouseUp,false);
+
+
 }
 function resize(){
 	clearTimeout(_resize_timeout);
@@ -386,7 +388,7 @@ function endGame(){
 
   	   _app.ticker.stop();
   	   sendScore(function(){
-	  	   	showItem($('#_score'));
+	  	   showItem($('#_score'));
 	  	   showItem($('#_button_rank'));
 	  	   		
 	  	   setTimeout(function(){
