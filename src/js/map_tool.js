@@ -109,19 +109,22 @@ function processData(data){
 	//     for(var n=start_seg;n<end_seg;++n){
 	for(var n=0;n<lines.length;++n){
 
-			let seg=segments[lines[n][0]];
+			let index=lines[n][0];
+			let seg=segments[index];
 
 			let textureMap;
-			if(n>sceneSegment[2]) textureMap=SPRITES3;
-			else if(n>sceneSegment[1]) textureMap=SPRITES2;
+			if(index>=sceneSegment[1]) textureMap=SPRITES3;
+			else if(index>=sceneSegment[0]) textureMap=SPRITES2;
 			else textureMap=SPRITES1;
 			
 			let tag=lines[n][1];
 			let texture;
+
+			try{
 			if(tag.length>0){
 				texture=textureMap[tag][0];
 
-				if(lines[n][1].length>0) seg.sprites.push({
+				seg.sprites.push({
 					source:texture,
 					offset:sidePosition[0]
 				});
@@ -141,14 +144,13 @@ function processData(data){
 			textureMap=SPRITE_ROAD;
 
 			for(var k=2;k<5;++k){
-				if(lines[n][k].length<1) continue;
-
+				
 				tag=lines[n][k];
 				if(tag.length<1) continue;
 
 				texture=textureMap[tag][0];
 
-				if(lines[n][k]==="COIN")
+				if(tag==="COIN")
 					seg.coins.push({
 						source:texture,
 						offsetX:onRoadPosition[k-2],
@@ -163,6 +165,9 @@ function processData(data){
 						score:5
 					});
 			}
+		}catch(e){
+			console.log(e);
+		}
 		
 	}
 

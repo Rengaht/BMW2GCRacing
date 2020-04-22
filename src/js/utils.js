@@ -330,23 +330,36 @@ var SPRITES1={
 
 
 var SPRITES2={
-  TURN:{left:['2-turn-left.png'],
-          right:  ['2-turn-right.png']},
-  BOARD:       ['2-board1.png','2-board2.png'],
+  TURNLEFT:['2-turn-left.png'],
+  TURNRIGHT:['2-turn-right.png'],
+  BOARD1:       ['2-board1.png','2-board2.png'],
+  BOARD1:       ['2-board2.png','2-board2.png'],
   BRIDGE:      ['2-bridge.png'],
-  HOUSE: {left:['2-house3-left.png','2-house4-left.png','2-house5-left.png','2-house6-left.png'], 
-          right:['2-house3-right.png','2-house4-right.png','2-house5-right.png','2-house6-right.png']}, 
-  LIGHT: {left:['2-light-left.png'], right:['2-light-right.png']}  
+  HOUSE3LEFT: ['2-house3-left.png'],
+  HOUSE4LEFT: ['2-house4-left.png'],
+  HOUSE5LEFT: ['2-house5-left.png'],
+  HOUSE6LEFT: ['2-house6-left.png'],
+  HOUSE3RIGHT:['2-house3-right.png'],
+  HOUSE3RIGHT:['2-house4-right.png'],
+  HOUSE3RIGHT:['2-house5-right.png'],
+  HOUSE3RIGHT:['2-house6-right.png'],
+  LIGHTLEFT:['2-light-left.png'],
+  LIGHTRIGHT:['2-light-right.png']
 };
 
 var SPRITES3={
-  TURN:{left:['3-turn-left.png'],
-          right:  ['3-turn-right.png']},
-  BOARD:       ['3-board1.png','3-board2.png'],
-  CHAIR:      ['3-chair1.png','3-chair2.png','3-chair3.png'],
-  HOUSE: {left:['3-house7.png'], 
-          right:[]}, 
-  UMBRELLA: ['3-umbrella1.png','3-umbrella2.png','3-umbrella3.png','3-umbrella4.png']
+  TURNLEFT:['3-turn-left.png'],
+  TURNRIGHT:['3-turn-right.png'],
+  BOARD1:       ['3-board1.png','3-board2.png'],
+  BOARD2:       ['3-board2.png','3-board2.png'],
+  CHAIR1:      ['3-chair1.png','3-chair2.png','3-chair3.png'],
+  CHAIR1:      ['3-chair2.png','3-chair2.png','3-chair3.png'],
+  CHAIR1:      ['3-chair3.png','3-chair2.png','3-chair3.png'],
+  HOUSELEFT:['3-house7.png'],
+  UMBRELLA1: ['3-umbrella1.png','3-umbrella2.png','3-umbrella3.png','3-umbrella4.png'],
+  UMBRELLA2: ['3-umbrella2.png','3-umbrella2.png','3-umbrella3.png','3-umbrella4.png'],
+  UMBRELLA3: ['3-umbrella3.png','3-umbrella2.png','3-umbrella3.png','3-umbrella4.png'],
+  UMBRELLA4: ['3-umbrella4.png','3-umbrella2.png','3-umbrella3.png','3-umbrella4.png']
 };
 
 var GATE={
