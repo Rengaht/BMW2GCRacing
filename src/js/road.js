@@ -512,8 +512,8 @@ function render() {
       alpha=1;//Math.min(segment.p1.project.y/0.08,1);
       
       if(coin.source===SPRITE_ROAD.COMBO[0]){
-        if(Math.floor(currentLapTime*1000)%600>=300) texture=_texture_road[SPRITE_ROAD.COMBO[0]];
-        else texture=_texture_road[SPRITE_ROAD.COMBO[1]];
+        if(Math.floor(currentLapTime*1000)%600>=300) texture=_texture_road[SPRITE_ROAD_TAG.COMBO[0]];
+        else texture=_texture_road[SPRITE_ROAD_TAG.COMBO[1]];
       }else
         texture     = _texture_road[coin.source];
 
@@ -685,7 +685,7 @@ function addDownhillToEnd(num,scene) {
   addRoad(num, num, num, -ROAD.CURVE.EASY, -lastY()/segmentLength,scene);
 }
 
-function resetRoad() {
+function resetRoad(callback) {
   segments = [];
 
   addStraight(sceneSegment[0],0);
@@ -696,17 +696,19 @@ function resetRoad() {
   // addSCurves();
   // addCurve(ROAD.LENGTH.SHORT, ROAD.CURVE.MEDIUM, ROAD.HILL.NONE);
 
-  resetSprites();
-  resetCoins();
-  resetObstacles();
+  // resetSprites();
+  // resetCoins();
+  // resetObstacles();
   
-  resetCars();
+  // resetCars();
+
+  readMap(callback);  
 
 
-  segments[findSegment(playerZ).index + 2].color = COLORS.START;
-  segments[findSegment(playerZ).index + 3].color = COLORS.START;
-  for(var n = 0 ; n < rumbleLength ; n++)
-    segments[segments.length-1-n].color = COLORS.FINISH;
+  // segments[findSegment(playerZ).index + 2].color = COLORS.START;
+  // segments[findSegment(playerZ).index + 3].color = COLORS.START;
+  // for(var n = 0 ; n < rumbleLength ; n++)
+  //   segments[segments.length-1-n].color = COLORS.FINISH;
 
   trackLength = segments.length * segmentLength;
 }
@@ -762,54 +764,54 @@ function getRandomSprite(index_,opt_,dir_){
     case 0:
       switch(opt_){
         case 0:  
-          txt=SPRITES1.TREE[Math.round(Math.random()*2)];
+          txt=SPRITES1_TAG.TREE[Math.round(Math.random()*2)];
           break;
         case 1:  
-          txt=SPRITES1.GRASS[Math.round(Math.random()*4)];
+          txt=SPRITES1_TAG.GRASS[Math.round(Math.random()*4)];
           break;
         case 2:
-          if(dir_<0) txt=SPRITES1.HOUSE.left[Math.round(Math.random()*2)];
-          else txt=SPRITES1.HOUSE.right[Math.round(Math.random()*2)];
+          if(dir_<0) txt=SPRITES1_TAG.HOUSE.left[Math.round(Math.random()*2)];
+          else txt=SPRITES1_TAG.HOUSE.right[Math.round(Math.random()*2)];
           break;
         case 3:
-          txt=SPRITES1.BOARD[Math.round(Math.random()*2)];
+          txt=SPRITES1_TAG.BOARD[Math.round(Math.random()*2)];
           break;
         case 4:
-          txt=SPRITES1.TOWER[Math.round(Math.random()*2)];
+          txt=SPRITES1_TAG.TOWER[Math.round(Math.random()*2)];
           break;
       }
       break;
     case 1:
       switch(opt_){
         case 0:  
-          txt=SPRITES2.BRIDGE[0];
+          txt=SPRITES2_TAG.BRIDGE[0];
           break;
         case 1:
-          if(dir_<0) txt=SPRITES2.HOUSE.left[Math.round(Math.random()*4)];
-          else txt=SPRITES2.HOUSE.right[Math.round(Math.random()*4)];
+          if(dir_<0) txt=SPRITES2_TAG.HOUSE.left[Math.round(Math.random()*4)];
+          else txt=SPRITES2_TAG.HOUSE.right[Math.round(Math.random()*4)];
           break;
         case 2:
-          txt=SPRITES2.BOARD[Math.round(Math.random()*2)];
+          txt=SPRITES2_TAG.BOARD[Math.round(Math.random()*2)];
           break;
         case 3:
-          if(dir_<0) txt=SPRITES2.LIGHT.left[0];
-          else  txt=SPRITES2.LIGHT.right[0];
+          if(dir_<0) txt=SPRITES2_TAG.LIGHT.left[0];
+          else  txt=SPRITES2_TAG.LIGHT.right[0];
           break;
       }
       break;
     case 2:
       switch(opt_){
         case 0:  
-          txt=SPRITES3.CHAIR[Math.round(Math.random()*3)];
+          txt=SPRITES3_TAG.CHAIR[Math.round(Math.random()*3)];
           break;
         case 1:
-          if(dir_<0) txt=SPRITES3.HOUSE.left[0];
+          if(dir_<0) txt=SPRITES3_TAG.HOUSE.left[0];
           break;
         case 2:
-          txt=SPRITES3.BOARD[Math.round(Math.random()*2)];
+          txt=SPRITES3_TAG.BOARD[Math.round(Math.random()*2)];
           break;
         case 3:
-          txt=SPRITES3.UMBRELLA[Math.round(Math.random()*4)];
+          txt=SPRITES3_TAG.UMBRELLA[Math.round(Math.random()*4)];
           break;
       }
       break;
@@ -895,7 +897,7 @@ function resetCoins(){
           let off=onRoadPosition[(dir+k)%3];
           let coin={offsetX:off,
                     offsetY:0,
-                    source:(combo.indexOf(arr[i])>-1)?'logo2-1.png':'logo.png',
+                    source:(combo.indexOf(arr[i])>-1)?'COMBO':'COIN',
                     score:(combo.indexOf(arr[i])>-1)?5:1};
 
           segments[arr[i]].coins.push(coin);
@@ -949,7 +951,7 @@ function resetObstacles(){
         let offset=Util.randomChoice(pos_);
         let obstacle={offsetX:offset,
                       offsetY:0,
-                      source:(Math.random()*2<1)?'cone-'+(scene_+1)+'.png':'block-'+(scene_+1)+'.png'};
+                      source:(Math.random()*2<1)?'CONE-'+(scene_+1):'BLOCK-'+(scene_+1)};
 
         segments[arr[i]].obstacles.push(obstacle);
         added++;

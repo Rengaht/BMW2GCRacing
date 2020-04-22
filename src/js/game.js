@@ -352,8 +352,6 @@ function setupGame(){
 			dk.push((yproj[i])*(((i+1)*segmentLength*segmentPerDraw-cameraDepth)/cameraHeight));
 		}
 	}
-	// if(segments.length==0)
-	resetRoad(); // only rebuild road when necessary
 
 	setupCarSprite(_driver_color);
 
@@ -361,10 +359,16 @@ function setupGame(){
 	setupScene(indexScene);
 	setShaderUniforms(indexScene,indexScene,0);
 
-	_app.ticker.start();
+	// if(segments.length==0)
+	resetRoad(function(){
+		
+		indexScene=0;
 
-	setTrafficLight(0);	
-	_sound_bgm.fade(0.5,1.0,1000);
+		_app.ticker.start();
+
+		setTrafficLight(0);	
+		_sound_bgm.fade(0.5,1.0,1000);
+	});
 }
 
 function startGame(){

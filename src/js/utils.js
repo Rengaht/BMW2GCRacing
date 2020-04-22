@@ -258,22 +258,74 @@ var COLORS = {
   START:  { road: 'white',   grass: 'white',   rumble: 'white'                     },
   FINISH: { road: 'black',   grass: 'black',   rumble: 'black'                     }
 };
+var SPRITE_ROAD_TAG={
+  COIN:   ['COIN'],  
+  COMBO:  ['COMBO'],
+  CONE:   ['CONE-1','CONE-2','CONE-3'],
+  BLOCK:   ['BLOCK-1','BLOCK-2','BLOCK-3'],
+  LIGHT:   ['LIGHT-1','LIGHT-2','LIGHT-3']
+}
+var SPRITES1_TAG={
+  TURN:{left:['TURN-LEFT'],
+          right:  ['TURN-RIGHT']},
+  TREE:        ['TREE-1','TREE-2'],
+  GRASS:       ['GRASS-1','GRASS-2','GRASS-3','GRASS-4','GRASS-5','GRASS-6'],
+  HOUSE:  {left:['HOUSE-1-LEFT','HOUSE-2-LEFT'], 
+            right: ['HOUSE-1-RIGHT','HOUSE-2-LEFT']}, 
+  BOARD:       ['BOARD-1','BOARD-2'],
+  TOWER:       ['TOWER-1','TOWER-2']
+};
+
+
+var SPRITES2_TAG={
+  TURN:{left:['TURN-LEFT'],
+          right:  ['TUR-RIGHT']},
+  BOARD:       ['BOARD-1','BOARD-2'],
+  BRIDGE:      ['BRIDGE'],
+  HOUSE: {left:['HOUSE-3-LEFT','HOUSE-4-LEFT','HOUSE-5-LEFT','HOUSE-6-LEFT'], 
+          right:['HOUSE-3-RIGHT','HOUSE-4-RIGHT','HOUSE-5-RIGHT','HOUSE-6-RIGHT']}, 
+  LIGHT: {left:['LIGHT-LEFT'], right:['LIGHT-RIGHT']}  
+};
+
+var SPRITES3_TAG={
+  TURN:{left:['TURN-LEFT'],
+          right:  ['TURN-RIGHT']},
+  BOARD:       ['BOARD-1','BOARD-2'],
+  CHAIR:      ['CHAIR-1','CHAIR-2','CHAIR-3'],
+  HOUSE: {left:['HOUSE-7'], 
+          right:[]}, 
+  UMBRELLA: ['UMBRELLA-1','UMBRELLA-1','UMBRELLA-1','UMBRELLA-1']
+};
 var SPRITE_ROAD={
   COIN:   ['logo.png'],  
   COMBO:  ['logo2-1.png','logo2-2.png'],
-  CONE:   ['cone-1.png','cone-2.png','cone-3.png'],
-  BLOCK:   ['block-1.png','block-2.png','block-3.png'],
+  CONE1:   ['cone-1.png','cone-2.png','cone-3.png'],
+  CONE2:   ['cone-2.png','cone-2.png','cone-3.png'],
+  CON3:   ['cone-3.png','cone-2.png','cone-3.png'],
+  BLOCK1:   ['block-1.png','block-2.png','block-3.png'],
+  BLOCK2:   ['block-2.png','block-2.png','block-3.png'],
+  BLOCK3:   ['block-3.png','block-2.png','block-3.png'],
   LIGHT:   ['light-1.png','light-2.png','light-3.png']
 }
 var SPRITES1={
   TURN:{left:['1-turn-left.png'],
           right:  ['1-turn-right.png']},
-  TREE:        ['1-tree-1.png','1-tree-2.png'],
-  GRASS:       ['1-grass1.png','1-grass2.png','1-grass3.png','1-grass4.png','1-grass5.png','1-grass6.png'],
-  HOUSE:  {left:['1-house1-left.png','1-house2-left.png'], 
-            right: ['1-house1-right.png','1-house2-right.png']}, 
-  BOARD:       ['1-board1.png','1-board2.png'],
-  TOWER:       ['1-tower1.png','1-tower2.png']
+  TREE1:        ['1-tree-1.png'],
+  TREE2:       ['1-tree-2.png'],
+  GRASS1:       ['1-grass1.png'],
+  GRASS2:['1-grass2.png'],
+  GRASS3:['1-grass3.png'],
+  GRASS4:['1-grass4.png'],
+  GRASS5:['1-grass5.png'],
+  GRASS6:['1-grass6.png'],
+  HOUSE1LEFT:  ['1-house1-left.png'],
+  HOUSE2LEFT:['1-house2-left.png'], 
+  HOUSE1RIGHT:['1-house1-right.png'],
+  HOUSE2RIGHT:['1-house2-right.png'], 
+  BOARD1:       ['1-board1.png'],
+  BOARD2:['1-board2.png'],
+  TOWER1:       ['1-tower1.png'],
+  TOWER2:['1-tower2.png']
 };
 
 
