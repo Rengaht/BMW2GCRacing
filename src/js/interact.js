@@ -43,7 +43,12 @@ function gotoPage(page_,sound_){
 			$('#_button_start').removeClass('Click');
 			showItem($('#_button_rank'));
 			hideItem($('#_button_back'));
-						
+					
+			if(!_sound_bgm.playing()){
+				_sound_bgm.start();
+  				_sound_bgm.fade(0.0,1.0,2000);
+			}
+
 			resetDriverColor();
 			setTimeout(function(){
 				$('#_input_driver').val("");			
@@ -190,6 +195,8 @@ function onButtonStartClick(){
 	$('#_button_start').addClass('Click');
 
 	gotoPage('_driver','bb');
+
+
 }
 function onDriverNameClick(){
 
@@ -253,6 +260,8 @@ function onButtonGoClick(){
 	if($('#_button_go').hasClass('Disable')) return;
 
 	$('#_button_go').addClass('Click');
+
+	_sound_bgm.fade(1.0,0.0,2000);
 	gotoPage('_game','bb');
 }
 
@@ -309,6 +318,9 @@ function sendScore(callback){
 }
 
 function showScore(){
+
+	 _app.ticker.stop();
+  	  
 	showItem($('#_score'));
 	showItem($('#_button_rank'));
 	

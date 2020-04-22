@@ -3,6 +3,7 @@ var _app;
 
 var _background;
 var _sky,_mountain,_road,_car,_scene_side,_scene_road;
+var _ribbon;
 var _container_traffic_light,_start_gate;
 var _index_traffic_light;
 
@@ -19,10 +20,11 @@ var RoadRatio=.6;
 var MoutainRatio=.124;
 var CarScale;
 var SpriteScale=1.0/513;
+var RibbonCount=80;
 
 var PolyPerSeg=6+(lanes-1);
 
-var _sound_bgm;
+var _sound_bgm,_sound_game;
 var _sound_fx={};
 var _resize_timeout;
 
@@ -170,6 +172,7 @@ function loadTexture(){
 			.add('scene2','asset/img/sprite/scene2.json')
 			.add('scene3','asset/img/sprite/scene3.json')
 			.add('gate','asset/img/sprite/gate.json')
+			.add('ribbon','asset/img/sprite/ribbon.json')
 			.load(loadFinish);
 
 }
@@ -269,7 +272,16 @@ function loadFinish(loader,resources_){
 
  	}
 
-
+ 	_ribbon=new Container();
+ 	for(var n=0;n<RibbonCount;++n){
+ 		var index=Math.floor(Math.random()*12)+1;
+ 		var ribbon=new PIXI.Sprite(resources.ribbon.textures['ribbon-'+pad(index,2)+'.png']);
+ 		ribbon.scaleX=Math.random();
+ 		ribbon.scaleY=Math.random(); 		
+ 		ribbon.angle=Math.random()*360;
+ 		ribbon.speed=Math.random()*.01+.01;
+ 		_ribbon.addChild(ribbon);
+ 	}
 
 
 	
@@ -291,7 +303,7 @@ function loadFinish(loader,resources_){
 
 	_background.addChild(_start_gate);
 	_background.addChild(_container_traffic_light);
-
+	_background.addChild(_ribbon);
 	
 
    _app.ticker.add(function(delta){
@@ -360,25 +372,34 @@ function setupGame(){
 	setShaderUniforms(indexScene,indexScene,0);
 
 	// if(segments.length==0)
-	resetRoad(function(){
+	resetRoad('map-2.csv',function(){
 		
 		indexScene=0;
-
+		_ribbon.visible=false;
+	
 		_app.ticker.start();
 
 		setTrafficLight(0);	
-		_sound_bgm.fade(0.5,1.0,1000);
+		
 	});
 }
 
 function startGame(){
 
-	hideItem($('#_hint'));		
+	hideItem($('#_hint'));	
+	_sound_fx['button_large'].play();
 
+	_sound_game.seek(0);	
+	_sound_game.stop();
 	
+	for(var n=0;n<RibbonCount;++n)
+		_ribbon.getChildAt(i).visible=false;
 
 	setTimeout(function(){
+	
+		_sound_bgm.stop();
 		_sound_fx['light_count'].play();
+	
 		//TODO: countdown here 
 		setTrafficLight(0);	
 		setTimeout(function(){
@@ -394,8 +415,9 @@ function startGame(){
 			isPlaying=true;	
 			console.log("------------- Start Game -------------");	
 			
-			_sound_bgm.play();	
-			_sound_bgm.seek(0);
+			_sound_game.play();
+			_sound_game.fade(0.5,1.0,1000);
+			_sound_game.seek(0);
 		},3000);
 
 		
@@ -426,23 +448,41 @@ function createQuadGeometry(index,x1, y1, x2, y2, x3, y3, x4, y4){
 }
 
 
-function endGame(){
+function endGame(fail){
 
   if(!isPlaying) return;
 
-  _sound_fx['goal'].play();
-  _sound_bgm.fade(1.0,0,1500);
+  if(fail){
+  	_sound_fx['fail'].play();
+  }else{
+	  _sound_fx['goal'].play();
+	  _sound_fx['goal'].volume(1.0);
+  }
+  // _sound_fx['goal'].fade(0.0,1.0,500);
+
+  _sound_game.stop();
+  isPlaying=false;
+  	   
+ 
 
   console.log("------------- End Game "+formatTime(currentLapTime)+"-------------");
-  isPlaying=false;
+ 
   setDriverScore(score);
 
   setTimeout(function(){
+  		
+  	   sendScore(function(){
+  	    
+  	    showScore();  	   
+  	   	if(_sound_fx['goal'].playing())
+  	   		_sound_fx['goal'].fade(1.0,0.0,500);
+  	    _sound_bgm.play();
+  		_sound_bgm.fade(0.0,1.0,2000);
 
-  	   _app.ticker.stop();
-  	   sendScore(showScore);  	   
+  		_app.ticker.stop();
 
-  },2000);
+  	  });
+  },500);
 }
 
 function setTrafficLight(set_){
@@ -456,9 +496,16 @@ function setTrafficLight(set_){
 
 function loadSound(){
 	_sound_bgm=new Howl({
-		src:['asset/sound/Running_Scared.mp3'],
+		src:['asset/sound/274_full_dirt-and-bones_0163_preview.mp3'],
 		loop:true
 	});
+	_sound_bgm.play();
+
+	_sound_game=new Howl({
+		src:['asset/sound/Sport_Electronic_Trailer.mp3']		
+	});
+
+
 
 	_sound_fx['button_large']=new Howl({src:['asset/sound/button_large.mp3']});
 	_sound_fx['button_small']=new Howl({src:['asset/sound/button_small.mp3']});
@@ -470,9 +517,40 @@ function loadSound(){
 	_sound_fx['combo']=new Howl({src:['asset/sound/combo_2.mp3']});
 	_sound_fx['bump']=new Howl({src:['asset/sound/bump_2.wav']});
 	
-	_sound_fx['horn']=new Howl({src:['asset/sound/engine.mp3']});
+	_sound_fx['horn']=new Howl({src:['asset/sound/horn.mp3']});
 	_sound_fx['engine']=new Howl({src:['asset/sound/engine.mp3']});
 
 	_sound_fx['goal']=new Howl({src:['asset/sound/goal.mp3']});
+
+	_sound_fx['other_car']=new Howl({src:['asset/sound/other_car.mp3']});
 	
+	_sound_fx['fail']=new Howl({src:['asset/sound/fail.mp3']});
+}
+
+function updateRibbon(gateX,gateY,gateScale,zIndex){
+	
+	gateX=width/2;
+	gateY=height;
+	gateScale=1;
+	let gateW=width;//2000*gateScale;
+    let gateH=height;//800*gateScale;
+
+    gateX=gateX-gateW/2;
+    gateY=gateY-gateH;
+
+	var ribbon;
+	for(var n=0;n<RibbonCount;++n){
+		ribbon=_ribbon.getChildAt(n);
+		// ribbon.x=Math.random()*resources.gate.textures['goal.png'].width;
+		ribbon.x=ribbon.scaleX*gateW+gateX
+		ribbon.y=ribbon.scaleY*gateH+gateY; 		
+		// ribbon.scale.x=gateScale;
+		// ribbon.scale.y=gateScale;
+		ribbon.angle=(ribbon.angle+.01)%360;
+
+		ribbon.scaleY+=ribbon.speed;
+		if(ribbon.scaleY>=1) ribbon.scaleY=-Math.random()*.3;
+
+		// 、ribbon.angle=Math.random()*360;
+	}
 }
