@@ -1,4 +1,5 @@
 var Container,autoDetectRenderer,loader,resources,Sprite,Texture,Rectangle;
+var Ticker;
 var _app;
 
 var _background;
@@ -12,6 +13,7 @@ var _texture_car;
 var _texture_road;
 var _last_car_pos;
 
+var _dest_mountain;
 
 var _shader_road,_shader_lane,_shader_rumble;
 
@@ -142,6 +144,8 @@ function setupPixi(){
 	Sprite = PIXI.Sprite;
 	Texture=PIXI.Texture;
 	Rectangle=PIXI.Rectangle;
+	Ticker=PIXI.Ticker.shared;
+	Ticker.autoStart=false;
 
 
 	width=_windowWidth=window.innerWidth;
@@ -193,9 +197,12 @@ function loadFinish(loader,resources_){
 	
 
 	_mountain=new Container();
+	_mountain.width=_windowWidth;
+	_mountain.height=_windowHeight*MoutainRatio;
 	for(var i=0;i<3;++i) _mountain.addChild(new PIXI.Sprite(resources.mountain.textures['mountain-02.png']));
-	_mountain.y=_windowHeight*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]-MoutainRatio);
-	setupMountain(0);
+	_mountain.y=_windowHeight*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]);
+	// setupMountain(0);
+	addMountain();
 	
 	// _ref=new PIXI.TilingSprite(resources.ref.texture,_windowWidth,_windowHeight);
 	// _ref.tileScale.x=_ref.tileScale.y=Math.min(_windowWidth/resources.ref.texture.width,_windowHeight/resources.ref.texture.height);
@@ -305,7 +312,7 @@ function loadFinish(loader,resources_){
 	
 
 	_background.addChild(_sky);
-	// _background.addChild(_mountain);
+	_background.addChild(_mountain);
 
 	_background.addChild(_road);
 	_background.addChild(_scene_side);
@@ -316,8 +323,7 @@ function loadFinish(loader,resources_){
 	_background.addChild(_container_traffic_light);
 	_background.addChild(_ribbon);
 	
-
-   _app.ticker.add(function(delta){
+   Ticker.add(function(delta){
 
    		if(segments.length<1) return;
    		
@@ -329,7 +335,7 @@ function loadFinish(loader,resources_){
    		// }
    		render();
    });
-	
+ 
 }
 function setupCarSprite(color_){
 	let id=null;
@@ -385,7 +391,7 @@ function setupGame(){
 	
 	
 	
-	_app.ticker.start();
+	Ticker.start();
 
 	resetRoad(MapURL,function(){
 		
@@ -504,7 +510,7 @@ function endGame(fail){
   	    _sound_bgm.play();
   		_sound_bgm.fade(0.0,1.0,2000);
 
-  		_app.ticker.stop();
+  		Ticker.stop();
 
   	  });
   },500+(life>0?(life+1)*300:0));
@@ -627,22 +633,98 @@ function updateRibbon(gateX,gateY,gateScale,zIndex){
 		// 、ribbon.angle=Math.random()*360;
 	}
 }
-function setupMountain(scene){
+function addMountain(){
 	let mountain_scale=_windowWidth/2048.0;
+
+	var pos=0;
+
+
+	var left_1=new PIXI.Sprite(resources.mountain.textures['mountain-01.png']);
+	// left_.texture=;
+	left_1.anchor.set(0.5,1);
+	left_1.scale.x=mountain_scale;
+	left_1.scale.y=mountain_scale;
+	left_1.x=left_1.texture.width*mountain_scale/2;
+	// left_.y=_mountain.y-left_.height*mountain_scale/2;
+	_mountain.addChild(left_1);
+	var right_1=new PIXI.Sprite(resources.mountain.textures['mountain-02.png']);
+	right_1.anchor.set(0.5,1);
+	right_1.scale.y=mountain_scale;
+	right_1.scale.x=mountain_scale;
+	right_1.x=left_1.texture.width*mountain_scale+right_1.texture.width*mountain_scale/2;
+	_mountain.addChild(right_1);
+
+
+	var left_2=new PIXI.Sprite(resources.mountain.textures['mountain-04.png']);
+	left_2.anchor.set(0.5,1);
+	left_2.scale.x=mountain_scale;
+	left_2.scale.y=mountain_scale;
+	left_2.x=right_1.x+right_1.texture.width/2*mountain_scale+left_2.texture.width*mountain_scale/2;
+	_mountain.addChild(left_2);
+
+	var center_2=new PIXI.Sprite(resources.mountain.textures['mountain-03.png']);
+	center_2.anchor.set(0.5,1);
+	center_2.scale.x=mountain_scale;
+	center_2.scale.y=mountain_scale;
+	center_2.x=left_2.x+left_2.texture.width/2*mountain_scale+center_2.texture.width*mountain_scale/2;
+	
+	_mountain.addChild(center_2);
+	
+	// var right_2=new PIXI.Sprite(resources.mountain.textures['mountain-04.png']);
+	// right_2.anchor.set(0.5,1);
+	// right_2.scale.x=mountain_scale;
+	// right_2.scale.y=mountain_scale;
+	// right_2.x=center_2.x+center_2.width/2+right_2.width*mountain_scale/2;
+	
+	// _mountain.addChild(right_2);
+
+	var left_3=new PIXI.Sprite(resources.mountain.textures['mountain-06.png']);
+	left_3.anchor.set(0.5,1);
+	left_3.scale.x=mountain_scale;
+	left_3.scale.y=mountain_scale;
+	left_3.x=center_2.x+center_2.texture.width/2*mountain_scale+center_2.texture.width*mountain_scale/2;
+	_mountain.addChild(left_3);
+
+	var center_3=new PIXI.Sprite(resources.mountain.textures['mountain-05.png']);
+	center_3.anchor.set(0.5,1);
+	center_3.anchor.set(0.5,1);
+	center_3.scale.x=mountain_scale;
+	center_3.scale.y=mountain_scale;
+	center_3.x=left_3.x+left_3.texture.width/2*mountain_scale+center_3.texture.width*mountain_scale/2;
+	
+	_mountain.addChild(center_3);
+	
+	var right_3=new PIXI.Sprite(resources.mountain.textures['mountain-06.png']);
+	right_3.anchor.set(0.5,1);
+	right_3.scale.x=mountain_scale;
+	right_3.scale.y=mountain_scale;
+	right_3.x=center_3.x+center_3.texture.width/2*mountain_scale+right_3.texture.width*mountain_scale/2;
+	
+	_mountain.addChild(right_3);
+
+	_dest_mountain=-(center_3.x-width/2);
+	
+
+}
+function setupMountain(scene){
+	
 	switch(scene){
 		case 0:
 			var left_=_mountain.getChildAt(0);
 			left_.texture=resources.mountain.textures['mountain-01.png'];
+			left_.anchor.set(0.5,1);
 			left_.scale.x=mountain_scale;
 			left_.scale.y=mountain_scale;
-			left_.x=0;
-			left_.y=_mountain.height-left_.height*mountain_scale;
-
+			left_.x=left_.width*mountain_scale/2;
+			// left_.y=_mountain.y-left_.height*mountain_scale/2;
+			
 			var right_=_mountain.getChildAt(1);
 			right_.texture=resources.mountain.textures['mountain-02.png'];
-			right_.scale.y=right_.scale.x=Math.min(mountain_scale,_mountain.width/right_.texture.width);			
-			right_.x=left_.width*right_.scale.x;
-			right_.y=_mountain.height-right_.height*right_.scale.y;
+			right_.anchor.set(0.5,1);
+			right_.scale.y=mountain_scale;
+			right_.scale.x=mountain_scale;
+			right_.x=(left_.width+right_.width)*mountain_scale/2;
+			// right_.y=_mountain.y-right_.height*mountain_scale/2;
 			
 			_mountain.getChildAt(2).visible=false;
 			break;

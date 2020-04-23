@@ -430,6 +430,8 @@ function render() {
 
   //TODO:
   Render.background(_sky, width, height, skyOffset,  resolution * skySpeed  * playerY, baseSegment.index/sceneSegment[totalScene-1]);
+  _mountain.x=(_dest_mountain)*(playerSegment.index/sceneSegment[2]);
+
   // Render.background(_mountain, width, height, hillOffset, resolution * hillSpeed * playerY,0);
   // Render.background(background, width, height, BACKGROUND.TREES, treeOffset, resolution * treeSpeed * playerY);
 
