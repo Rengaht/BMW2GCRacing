@@ -1,5 +1,6 @@
 var _cur_page='_home';
 var _pre_page='_home';
+var _next_page;
 var _driver_name;
 var _driver_color='blue';
 var _uuid;
@@ -9,10 +10,11 @@ const ClickBorder=0.5;
 
 function closePage(page_,next_page){
 	console.log('close '+page_);
+	
 	switch(page_){
 		case '_home':
 			if(next_page==='_driver') movePage($('#'+page_),'pageToTop');
-			else movePage($('#'+page_),'pageFromBase');
+			else movePage($('#'+page_),'pageToBase');
 			break;
 		case '_lottery':
 		case '_rank':
@@ -44,6 +46,7 @@ function setupPage(page_,sound_){
 		}
 	}
 
+
 	switch(page_){
 		case '_home':
 			
@@ -55,10 +58,7 @@ function setupPage(page_,sound_){
 
 			if(_cur_page!=='_rank'){
 				movePage($('#'+page_),'pageFromTop');
-				// setTimeout(function(){
-				// 	movePage($('#'+page_),'pageFromTop');
-				// },300);
-			}
+			}else movePage($('#'+page_),'pageFromBase');
 
 			break;
 		case '_driver':
@@ -151,12 +151,17 @@ function gotoPage(page_,sound_){
 	closePage(_cur_page,page_);
 	setupPage(page_,sound_);
 
+	// _pre_page=_cur_page;
+	_next_page=page_;
+
 	// hideItem($('#'+_cur_page));
 	// showItem($('#'+page_));
-
+}
+function onPageTransitionEnd(){
 
 	_pre_page=_cur_page;
-	_cur_page=page_;
+	_cur_page=_next_page;
+	console.log('page transition end! cur='+_cur_page+' pre= '+_pre_page);
 
 }
 
@@ -200,11 +205,21 @@ function movePage(page_,direction,callback){
 	
 	var dir=direction;
 	page_.addClass(direction);
+	// setTimeout(function(){
+	// 	page_.css("-webkit-animation-play-state", "running");
+ //    	page_.css("-animation-play-state", "running");
+ //    },100);
+ //    setTimeout(function(){ 
+ //     	page_.css("-animation-play-state", "paused");
+ //     	page_.css("-webkit-animation-play-state", "paused");
+ //    }, 700);
+
 	setTimeout(function(){
-		// page_.off(animEndEventName);
+		// page_.off('animationend');
 
 		if(dir.indexOf('From')==-1){
 			if(!page_.hasClass('close')) page_.addClass('close');
+			onPageTransitionEnd();
 		}
 		
 		page_.removeClass(dir);// endCurrPage = true;
@@ -212,7 +227,9 @@ function movePage(page_,direction,callback){
 
 		if(callback) callback();
 
-	},700);
+	},500);
+	
+
 }
 
 function onButtonStartClick(){

@@ -2,6 +2,8 @@ var totalCoins     = [150,250,300]; //
 var totalCombos    = [10,20,30]; //60
 var totalObstacles = [5,12,15];
 
+var ROAD_SCALE=5;
+
 var SPRITE_ROAD_TAG={
   COIN:   ['COIN'],  
   COMBO:  ['COMBO'],
@@ -429,9 +431,13 @@ function processData(data){
  //    	let end_seg=sceneSegment[scene_];
 
 	//     for(var n=start_seg;n<end_seg;++n){
+  ROAD_SCALE=sceneSegment[2]/lines.length;
+
 	for(var n=0;n<lines.length;++n){
 
-		let index=lines[n][0];
+		let index=Math.floor(lines[n][0]*ROAD_SCALE);
+    if(index>=sceneSegment[2]) continue;
+
 		var scene=(index<sceneSegment[0])?0:(index<sceneSegment[1]?1:2);
 		let seg=segments[index];
 

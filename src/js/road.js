@@ -22,7 +22,7 @@ var sprites        = null;                    // our spritesheet (loaded below)
 var resolution     = null;                    // scaling factor to provide resolution independence (computed)
 var roadWidth      = 2191;                    // actually half the roads width, easier math if the road spans from -roadWidth to +roadWidth
 
-var segmentLength  = 500;                     // length of a single segment
+var segmentLength  = 1000;                     // length of a single segment
 
 
 var rumbleLength   = 3;                       // number of segments per red/white rumble strip
@@ -32,7 +32,7 @@ var lanes          = 3;                       // number of lanes
 var fieldOfView    = 134;                     // angle (degrees) for field of view
 var cameraHeight   = 1000;                    // z height of camera
 var cameraDepth    = null;                    // z distance camera is from screen (computed)
-var drawDistance   = 80;                     // number of segments to draw
+var drawDistance   = 40;                     // number of segments to draw
 var mDrawSegment   = 8;
 var segmentPerDraw = Math.floor(drawDistance/mDrawSegment);
 
@@ -65,7 +65,7 @@ for(var i=0;i<totalScene;++i){
 }
 
 var sceneSpeedRatio=[0,1.25,1.5,2];
-var lengthScene=400; // segment count for scene 1
+var lengthScene=200; // segment count for scene 1
 var BaseSpeed  =lengthScene*segmentLength/(sceneInterval[0]*(sceneSpeedRatio[0]+sceneSpeedRatio[1])/2);
 var isPlaying=false;
 var maxSpeed=BaseSpeed*sceneSpeedRatio[sceneSpeedRatio.length-1];
@@ -93,8 +93,8 @@ var onRoadPosition = [-1,0,1];
 var CoinFlyVel=0.1;
 var CoinScale=0.82;
 var ObstacleScale=1.12;
-var startGateZ=38*segmentLength;              // position of start gate !!!!
-var endGateZ=38*segmentLength;
+var startGateZ=19*segmentLength;              // position of start gate !!!!
+var endGateZ=19*segmentLength;
 
 var currentLapTime = 0;                       // current lap time
 var lastLapTime    = null;                    // last lap time
@@ -122,7 +122,7 @@ function update(dt) {
 
     position = Math.min(position+dt * speed,trackLength);
 
-    if(speed<BaseSpeed*.5) speed=Math.min(speed+dt * accel*5,sceneSpeedRatio[indexScene+1]*BaseSpeed);
+    if(speed<BaseSpeed) speed=Math.min(speed+dt * accel*5,sceneSpeedRatio[indexScene+1]*BaseSpeed);
     else speed=Math.min(speed+dt * accel,sceneSpeedRatio[indexScene+1]*BaseSpeed);
     
     currentLapTime+=dt;
@@ -130,7 +130,8 @@ function update(dt) {
     updateCars(dt, playerSegment, playerW);
 
   }else{
-    speed=Math.max(speed-accel*120*dt,0);
+    position = Math.min(position+dt * speed,trackLength);
+    speed=Math.max(speed-accel*80*dt,0);
   }
 
 
@@ -224,7 +225,7 @@ function update(dt) {
         sprite = firstSegment.coins[n];
         spriteW = .5;
 
-        if(Util.overlap(playerX, .5, sprite.offsetX + spriteW/2 * (sprite.offset > 0 ? 1 : -1), spriteW)){
+        if(Util.overlap(playerX, .5, sprite.offsetX, spriteW)){
             // console.log('---------- got coin! '+playerSegment.index+'------------');
             score+=firstSegment.coins[n].score;
             sprite.offsetY+=CoinFlyVel;
@@ -235,13 +236,13 @@ function update(dt) {
     for(n = 0 ; n < firstSegment.obstacles.length ; n++) {
         sprite = firstSegment.obstacles[n];
         spriteW = .5;
-        if(Util.overlap(playerX, .5, sprite.offsetX + spriteW/2 * (sprite.offset > 0 ? 1 : -1), spriteW)){
+        if(Util.overlap(playerX, .5, sprite.offsetX, spriteW)){
             // console.log('---------- bump!'+firstSegment.index+' ------------');
             life=life-1;
             sprite.offsetY+=CoinFlyVel;
             _sound_fx['bump'].play();
 
-            if(life<=0) endGame(true);
+            // if(life<=0) endGame(true);
             break;
         }
     }
@@ -259,7 +260,7 @@ function update(dt) {
         car.offsetY+=CoinFlyVel;
         _sound_fx['bump'].play();
 
-        if(life<=0) endGame(true);
+        // if(life<=0) endGame(true);
 
         break;
       }
@@ -496,6 +497,7 @@ function render() {
 
     let index_draw=(baseSegment.index + n)%drawDistance;
     let index_scene=findSegmentScene(segment.index);
+    var hasCar=[false,false,false];
 
     for(i = 0 ; i < segment.sprites.length ; i++) {
 
@@ -524,7 +526,7 @@ function render() {
 
         texture=resources.gate.textures[sprite.source];
 
-      }else texture     = _texture_scene[index_scene][sprite.source];
+      }else texture=_texture_scene[index_scene][sprite.source];
 
       Render.sprite(_scene_side.getChildAt(index_draw*2+(sprite.offset<0?0:1)),                   
                     texture, 
@@ -532,10 +534,34 @@ function render() {
                     spriteScale,zIndex,alpha);
       // console.log('updage '+n+' -> '+sprite.source);
     }
+    
+    for(i = 0 ; i < segment.cars.length ; i++) {
+      car         = segment.cars[i];
+
+      sprite = (Math.abs(car.offsetX-playerX)<.5)?OTHER_CAR[car.color].center:
+               (car.offsetX<playerX)?OTHER_CAR[car.color].left:
+               OTHER_CAR[car.color].right;
+     
+      texture      = resources.other_car.textures[sprite];
+      
+      spriteScale = segment.p1.project.y*height*RoadRatio*RoadSpriteWScale*SpriteScale*1.2*(1-car.offsetY);
+      spriteX     = segment.p1.screen.x + ( car.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
+      spriteY     = segment.p1.screen.y-  Util.easeInOut(0,1,car.offsetY)*height;      
+      
+      road=(car.offsetX==0)?0:(car.offsetX<0?1:2);
+      hasCar[road]=true;
+      Render.sprite(_scene_road.getChildAt(index_draw*3+road),
+                    texture,
+                    spriteX, spriteY, 
+                    spriteScale,drawDistance-n,alpha);
+    }
 
     for(i=0;i<segment.coins.length;++i){
       
       coin=segment.coins[i];
+      road=(coin.offsetX==0)?0:(coin.offsetX<0?1:2);
+      if(hasCar[road]) continue;
+      
       spriteScale = CoinScale*segment.p1.project.y*height*RoadRatio*RoadSpriteXScale*SpriteScale*(1-coin.offsetY);
       spriteX     = segment.p1.screen.x + ( coin.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
       spriteY     = segment.p1.screen.y - Util.easeInOut(0,1,coin.offsetY)*height;      
@@ -547,8 +573,6 @@ function render() {
       }else
         texture     = _texture_road[coin.source];
 
-      road=(coin.offsetX==0)?0:(coin.offsetX<0?1:2);
-
       Render.sprite(_scene_road.getChildAt(index_draw*3+road),
                     texture,
                     spriteX, spriteY, 
@@ -558,6 +582,9 @@ function render() {
     for(i=0;i<segment.obstacles.length;++i){
       
       obstacle=segment.obstacles[i];
+      road=(obstacle.offsetX==0)?0:(obstacle.offsetX<0?1:2);
+      if(hasCar[road]) continue;
+      
       spriteScale = ObstacleScale*segment.p1.project.y*height*RoadRatio*RoadSpriteWScale*SpriteScale*1.2*(1-obstacle.offsetY);
       spriteX     = segment.p1.screen.x + ( obstacle.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
       spriteY     = segment.p1.screen.y-  Util.easeInOut(0,1,obstacle.offsetY)*height;      
@@ -573,26 +600,7 @@ function render() {
                     spriteScale,drawDistance-n,alpha);
 
     }
-    for(i = 0 ; i < segment.cars.length ; i++) {
-      car         = segment.cars[i];
-
-      sprite = (Math.abs(car.offsetX-playerX)<.5)?OTHER_CAR[car.color].center:
-               (car.offsetX<playerX)?OTHER_CAR[car.color].left:
-               OTHER_CAR[car.color].right;
-     
-      texture      = resources.other_car.textures[sprite];
-      
-      spriteScale = segment.p1.project.y*height*RoadRatio*RoadSpriteWScale*SpriteScale*1.2*(1-car.offsetY);
-      spriteX     = segment.p1.screen.x + ( car.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
-      spriteY     = segment.p1.screen.y-  Util.easeInOut(0,1,car.offsetY)*height;      
-      
-      road=(car.offsetX==0)?0:(car.offsetX<0?1:2);
-
-      Render.sprite(_scene_road.getChildAt(index_draw*3+road),
-                    texture,
-                    spriteX, spriteY, 
-                    spriteScale,drawDistance-n,alpha);
-    }
+    
 
 
     if (segment == playerSegment) {
@@ -603,7 +611,7 @@ function render() {
 
       if(segment.index>sceneSegment[2]-endGateZ/segmentLength){
 
-        if(segment.index>=sceneSegment[2]+drawDistance) carscale=0;
+        if(segment.index>=sceneSegment[2]+drawDistance-endGateZ/segmentLength) carscale=0;
         else carscale=segment.p1.project.y*height*RoadRatio*RoadSpriteWScale*SpriteScale*1.2;
           
 
@@ -626,7 +634,8 @@ function findSegment(z) {
 }
 function findSegmentScene(index){
   for(var i=0;i<totalScene;++i)
-    if(index<sceneSegment[i]) return i;
+    if(index<=sceneSegment[i]) return i;
+  return totalScene-1;
 }
 
 //=========================================================================
@@ -741,6 +750,10 @@ function resetRoad(file_,callback) {
 
   addSprite(offsetZ,GATE.START,0);
   addSprite(sceneSegment[totalScene-1],GATE.GOAL,0);
+  // addSprite(sceneSegment[totalScene-1]-endGateZ/segmentLength*2,GATE.GOAL,0);
+  // addSprite(sceneSegment[totalScene-1]-endGateZ/segmentLength*3,GATE.GOAL,0);
+  // addSprite(sceneSegment[totalScene-2],GATE.GOAL,0);
+
 
   readMap(file_,callback);  
   //resetCars();

@@ -32,7 +32,7 @@ var _resize_timeout;
 
 var audio_context;
 
-let MapURL=window.location.href+"/asset/map/map-2.csv";
+let MapURL=window.location.href+"/asset/map/map-3.csv";
 
 function onload(){
 
@@ -125,11 +125,10 @@ function doResize(){
   		_sky.height=wh_*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]);	
 		_sky.tileScale.x=_sky.tileScale.y=ww_/resources.sky.texture.width;
 	
-		_mountain.width=ww_;
-		_mountain.height=wh_*MoutainRatio;
-		_mountain.y=wh_*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]-MoutainRatio);
-		_mountain.height=wh_*MoutainRatio;	
-
+		// _mountain.width=ww_;
+		// _mountain.height=wh_*MoutainRatio;
+		_mountain.y=_windowHeight*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]);
+		
 
 
 		 _app.renderer.resize(ww_,wh_);
@@ -682,7 +681,7 @@ function addMountain(){
 	left_3.anchor.set(0.5,1);
 	left_3.scale.x=mountain_scale;
 	left_3.scale.y=mountain_scale;
-	left_3.x=center_2.x+center_2.texture.width/2*mountain_scale+center_2.texture.width*mountain_scale/2;
+	left_3.x=center_2.x+center_2.texture.width/2*mountain_scale+left_3.texture.width*mountain_scale/2;
 	_mountain.addChild(left_3);
 
 	var center_3=new PIXI.Sprite(resources.mountain.textures['mountain-05.png']);
@@ -705,77 +704,4 @@ function addMountain(){
 	_dest_mountain=-(center_3.x-width/2);
 	
 
-}
-function setupMountain(scene){
-	
-	switch(scene){
-		case 0:
-			var left_=_mountain.getChildAt(0);
-			left_.texture=resources.mountain.textures['mountain-01.png'];
-			left_.anchor.set(0.5,1);
-			left_.scale.x=mountain_scale;
-			left_.scale.y=mountain_scale;
-			left_.x=left_.width*mountain_scale/2;
-			// left_.y=_mountain.y-left_.height*mountain_scale/2;
-			
-			var right_=_mountain.getChildAt(1);
-			right_.texture=resources.mountain.textures['mountain-02.png'];
-			right_.anchor.set(0.5,1);
-			right_.scale.y=mountain_scale;
-			right_.scale.x=mountain_scale;
-			right_.x=(left_.width+right_.width)*mountain_scale/2;
-			// right_.y=_mountain.y-right_.height*mountain_scale/2;
-			
-			_mountain.getChildAt(2).visible=false;
-			break;
-		case 1:
-			var center_=_mountain.getChildAt(0);
-			center_.texture=resources.mountain.textures['mountain-03.png'];
-			center_.scale.x=mountain_scale;
-			center_.scale.y=mountain_scale;
-			center_.x=_mountain.width/2-center_.width*mountain_scale/2;
-			center_.y=_mountain.height-center_.height*mountain_scale;
-
-			var left_=_mountain.getChildAt(1);
-			left_.texture=resources.mountain.textures['mountain-04.png'];
-			left_.scale.x=mountain_scale;
-			left_.scale.y=mountain_scale;
-			left_.x=center_.x-left_.width*mountain_scale;
-			left_.y=_mountain.height-left_.height*mountain_scale;
-
-			var right_=_mountain.getChildAt(2);
-			right_.texture=resources.mountain.textures['mountain-04.png'];
-			right_.scale.x=mountain_scale;
-			right_.scale.y=mountain_scale;
-			right_.x=center_.x+center_.width*mountain_scale;
-			right_.y=_mountain.height-right_.height*mountain_scale;
-			
-			_mountain.getChildAt(2).visible=true;
-			break;
-		case 2:
-			var center_=_mountain.getChildAt(0);
-			center_.texture=resources.mountain.textures['mountain-05.png'];
-			center_.scale.x=mountain_scale;
-			center_.scale.y=mountain_scale;
-			center_.x=_mountain.width/2-center_.width*mountain_scale/2;
-			center_.y=_mountain.height-center_.height*mountain_scale;
-
-			var left_=_mountain.getChildAt(1);
-			left_.texture=resources.mountain.textures['mountain-06.png'];
-			left_.scale.x=mountain_scale;
-			left_.scale.y=mountain_scale;
-			left_.x=center_.x-left_.width*mountain_scale;
-			left_.y=_mountain.height-left_.height*mountain_scale;
-
-			var right_=_mountain.getChildAt(2);
-			right_.texture=resources.mountain.textures['mountain-06.png'];
-			right_.scale.x=mountain_scale;
-			right_.scale.y=mountain_scale;
-			right_.x=center_.x+center_.width*mountain_scale;
-			right_.y=_mountain.height-right_.height*mountain_scale;
-			
-			_mountain.getChildAt(2).visible=true;
-			break;
-
-	}
 }
