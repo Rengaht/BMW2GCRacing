@@ -7,53 +7,57 @@ var _uuid;
 var _trial_selected=true;
 const ClickBorder=0.5;
 
-
-function gotoPage(page_,sound_){
-	
-	if(_cur_page===page_) return;
-
-	switch(_cur_page){
+function closePage(page_,next_page){
+	switch(page_){
 		case '_home':
-			if(page_!=='_rank') movePage($('#'+_cur_page),'pageToTop');
+			if(next_page!=='_rank') movePage($('#'+page_),'pageToTop');
 			break;
 		case '_lottery':
 		case '_rank':
-			movePage($('#'+_cur_page),'pageToRight');
+			movePage($('#'+page_),'pageToRight');
 			break;
 		case '_driver':
-			if(page_!=='_home') movePage($('#'+_cur_page),'pageToTop');
+			if(next_page==='_color') movePage($('#'+page_),'pageToTop');
 			break;
 		case '_color':
-			if(page_==='_game') movePage($('#'+_cur_page),'pageToTop');
-			else movePage($('#'+_cur_page),'pageToBottom');
+			if(next_page==='_game') movePage($('#'+page_),'pageToTop');
+			else movePage($('#'+page_),'pageToBottom');
 			break;
 		case 'game':
-			if(page_==='home'){
+			if(next_page==='home'){
 				hideItem($('#_score'));
 				movePage($('#_score_board'),'pageToTop');	
 			} 
 	  		break;
 	}
+}
+function setupPage(page_,sound_){
+	if(page_!=='game'){		
+		if(!_sound_bgm.playing()){
+			_sound_bgm.play();
+			_sound_bgm.fade(0.0,1.0,2000);
+		}
+	}
 
 	switch(page_){
 		case '_home':
-			if(_cur_page!=='_rank')
-				movePage($('#'+page_),'pageFromTop');
+			
 
 			$('#_button_start').removeClass('Click');
 			showItem($('#_button_rank'));
 			hideItem($('#_button_back'));
 					
-			if(!_sound_bgm.playing()){
-				_sound_bgm.start();
-  				_sound_bgm.fade(0.0,1.0,2000);
-			}
-
 			resetDriverColor();
-			setTimeout(function(){
+			setTimeout(function(){				
 				$('#_input_driver').val("");			
 				_driver_name="";
 			},700);
+			if(_cur_page!=='_rank')
+				setTimeout(function(){
+					movePage($('#'+page_),'pageFromTop')
+				},200);
+
+
 			break;
 		case '_driver':
 			if(_cur_page==='_home')
@@ -90,7 +94,12 @@ function gotoPage(page_,sound_){
 				hideItem($('#_button_rank'));
 				hideItem($('#_score'));	
 				movePage($('#_score_board'),'pageToTop');
-	  			showItem($('#_hint'));
+	  			
+				showItem($('#_rule'));	
+				// movePage($('#_rule_board'),'pageToTop');
+				// setTimeout(function(){			
+	  	// 			movePage($('#_rule_board'),'pageFromTop');
+	  	// 		},700);
 	
 				setupGame();			
 			}else{
@@ -128,6 +137,14 @@ function gotoPage(page_,sound_){
 			_sound_fx['button_small'].play();
 			break;
 	}
+}
+
+function gotoPage(page_,sound_){
+	
+	if(_cur_page===page_) return;
+
+	closePage(_cur_page,page_);
+	setupPage(page_,sound_);
 
 	// hideItem($('#'+_cur_page));
 	// showItem($('#'+page_));
@@ -178,7 +195,7 @@ function movePage(page_,direction){
 
 	page_.addClass(direction);
 	setTimeout(function(){
-		page_.off(animEndEventName);
+		// page_.off(animEndEventName);
 
 		if(direction.indexOf('From')==-1){
 			if(!page_.hasClass('close')) page_.addClass('close');
@@ -191,6 +208,8 @@ function movePage(page_,direction){
 }
 
 function onButtonStartClick(){
+
+
 	if($('#_button_start').hasClass('Disable')) return;
 	$('#_button_start').addClass('Click');
 
@@ -261,8 +280,23 @@ function onButtonGoClick(){
 
 	$('#_button_go').addClass('Click');
 
-	_sound_bgm.fade(1.0,0.0,2000);
 	gotoPage('_game','bb');
+}
+
+function onButtonRuleOkClick(){
+	
+	if($('_button_ok_rule').hasClass('Disable')) return;
+
+
+	_sound_fx['button_large'].play();
+	_sound_bgm.fade(1.0,0.0,2000);
+	
+	// movePage($('#_rule_board'),'moveToTop');
+	hideItem($('#_rule'));
+
+	setTimeout(function(){
+		showItem($('#_hint'));
+	},800);
 }
 
 function setDriverScore(set_){
@@ -319,7 +353,7 @@ function sendScore(callback){
 
 function showScore(){
 
-	 _app.ticker.stop();
+	
   	  
 	showItem($('#_score'));
 	showItem($('#_button_rank'));

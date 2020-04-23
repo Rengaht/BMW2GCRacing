@@ -393,11 +393,11 @@ function printMap(){
 // printMap();
 // readMap();
 
-function readMap(file_,callback){
+function readMap(file_url_,callback){
 
 	 $.ajax({
         type: "GET",
-        url: "https://mmlab.com.tw/project/the2/asset/map/"+file_,
+        url: file_url_,
         dataType: "text",
         success: function(data){
         	processData(data);
@@ -475,7 +475,7 @@ function processData(data){
 					var z=index*segmentLength;
 				    var color=Math.floor(Math.random()*3);
 				    var sprite = onRoadPosition[k-2]<0?OTHER_CAR[color].left:(onRoadPosition[k-2]>0?OTHER_CAR[color].right:OTHER_CAR[color].center);
-				    var speed  = (sceneSpeedRatio[scene]*1.2 + Math.random()) * BaseSpeed;
+				    var speed  = (sceneSpeedRatio[scene] + Math.random()*2) * BaseSpeed;
 				    
 				    car = { offsetX: onRoadPosition[k-2], 
 				              offsetY:0,

@@ -12,6 +12,12 @@ html{
 	-webkit-text-size-adjust:none;
 
 }
+@media (max-width: 1024px){
+	html{
+		font-size: 14px;
+		-webkit-text-size-adjust:none;
+	}
+}
 @media (min-width: 2048px){
 	html{
 		font-size: 32px;

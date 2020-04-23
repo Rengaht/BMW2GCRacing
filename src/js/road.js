@@ -34,8 +34,9 @@ var cameraHeight   = 1000;                    // z height of camera
 var cameraDepth    = null;                    // z distance camera is from screen (computed)
 var drawDistance   = 80;                     // number of segments to draw
 var mDrawSegment   = 8;
-var segmentPerDraw = drawDistance/mDrawSegment;
+var segmentPerDraw = Math.floor(drawDistance/mDrawSegment);
 
+var spritePerDraw=drawDistance;
 
 var playerX        = 0;                       // player x offset from center of road (-1 to 1 to stay independent of roadWidth)
 var playerZ        = 15*segmentLength;                    // player relative z distance from camera (computed)
@@ -90,6 +91,8 @@ var sidePosition=[-2,2,0];
 var onRoadPosition = [-1,0,1];
 
 var CoinFlyVel=0.1;
+var CoinScale=0.82;
+var ObstacleScale=1.12;
 var startGateZ=38*segmentLength;              // position of start gate !!!!
 var endGateZ=38*segmentLength;
 
@@ -193,8 +196,8 @@ function update(dt) {
 
   // var playerW       = SPRITES.PLAYER_STRAIGHT.w * SPRITES.SCALE;
   var playerW       = _texture_car['car1-center.png'].width * CarScale;
-  var speedPercent  = speed/maxSpeed;
-  var dx            = dt * 2 * speedPercent; // at top speed, should be able to cross from left to right (-1 to 1) in 1 second
+  var speedPercent  = Math.min(2,speed/BaseSpeed*4);
+  var move_dx            = dt * 2 * speedPercent; // at top speed, should be able to cross from left to right (-1 to 1) in 1 second
   var startPosition = position;
 
  
@@ -202,9 +205,9 @@ function update(dt) {
   
 
   if (keyLeft)
-    playerX = playerX - dx;
+    playerX = playerX - move_dx;
   else if (keyRight)
-    playerX = playerX + dx;
+    playerX = playerX + move_dx;
 
   // playerX = playerX - (dx * speedPercent * playerSegment.curve * centrifugal);
   playerX = Util.limit(playerX, -1.2, 1.2);     // dont ever let it go too far out of bounds
@@ -427,7 +430,7 @@ function render() {
 
   //TODO:
   Render.background(_sky, width, height, skyOffset,  resolution * skySpeed  * playerY, baseSegment.index/sceneSegment[totalScene-1]);
-  Render.background(_mountain, width, height, hillOffset, resolution * hillSpeed * playerY,0);
+  // Render.background(_mountain, width, height, hillOffset, resolution * hillSpeed * playerY,0);
   // Render.background(background, width, height, BACKGROUND.TREES, treeOffset, resolution * treeSpeed * playerY);
 
   
@@ -531,7 +534,7 @@ function render() {
     for(i=0;i<segment.coins.length;++i){
       
       coin=segment.coins[i];
-      spriteScale = segment.p1.project.y*height*RoadRatio*RoadSpriteXScale*SpriteScale*(1-coin.offsetY);
+      spriteScale = CoinScale*segment.p1.project.y*height*RoadRatio*RoadSpriteXScale*SpriteScale*(1-coin.offsetY);
       spriteX     = segment.p1.screen.x + ( coin.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
       spriteY     = segment.p1.screen.y - Util.easeInOut(0,1,coin.offsetY)*height;      
       alpha=1;//Math.min(segment.p1.project.y/0.08,1);
@@ -553,7 +556,7 @@ function render() {
     for(i=0;i<segment.obstacles.length;++i){
       
       obstacle=segment.obstacles[i];
-      spriteScale = segment.p1.project.y*height*RoadRatio*RoadSpriteWScale*SpriteScale*1.2*(1-obstacle.offsetY);
+      spriteScale = ObstacleScale*segment.p1.project.y*height*RoadRatio*RoadSpriteWScale*SpriteScale*1.2*(1-obstacle.offsetY);
       spriteX     = segment.p1.screen.x + ( obstacle.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
       spriteY     = segment.p1.screen.y-  Util.easeInOut(0,1,obstacle.offsetY)*height;      
       
@@ -758,7 +761,7 @@ function setupScene(index){
   accel=(sceneSpeedRatio[index+1]*BaseSpeed-speed)/sceneInterval[index];
   console.log("v= "+speed+"  a= "+accel);
 
-  
+  // setupMountain(index);
 }
 function lerpColor(c1,c2,inter){
   return new Float32Array([Util.interpolate(c1[0],c2[0],inter),

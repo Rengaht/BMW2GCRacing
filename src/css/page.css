@@ -351,20 +351,54 @@ input,select{
 #_hint>img{
 	width:60%;
 }
+/* rules */
+#_rule_text{
+	max-height: 60%;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
+.RuleItem{
+	text-align: left;
+
+}
+.RuleItem img{
+	vertical-align: middle;
+	max-height: 2rem;
+	max-width: 2rem;
+}
+.RuleItem img:first-child{
+	margin-right:10px;
+
+}
+.RuleItem img,p{
+	display: inline-block;
+}
+#_button_ok_rule{
+	top:-100%;
+}
+#_button_ok_rule.Click{
+	top:0;
+}
+#_rule_button_wrapper{
+	position: relative;
+	margin-top: 30px;
+}
 
 /* congradulation !!! */
-#_score{
+#_score,#_rule{
 	position: fixed;
 	background-color:rgba(255,131,69,0.5);
 }
-#_score_board{
+#_score_board,#_rule_board{
 	width:94%;
 	height:90%;
 
 	/*background-image: url(../../asset/img/ui/frame_complete.png);
 	background-size: cover;
-	background-repeat: no-repeat;*/
-	
+	background-repeat: no-repeat;*/	
 }
 .BoardWrapper{
 	position:relative;
@@ -643,7 +677,7 @@ input,select{
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	margin-bottom: 20px;
+	/*margin-bottom: 20px;*/
 }
 .RankItem>span{
 	display: flex;

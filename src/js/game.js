@@ -20,7 +20,7 @@ var RoadRatio=.6;
 var MoutainRatio=.124;
 var CarScale;
 var SpriteScale=1.0/513;
-var RibbonCount=80;
+var RibbonCount=50;
 
 var PolyPerSeg=6+(lanes-1);
 
@@ -28,11 +28,16 @@ var _sound_bgm,_sound_game;
 var _sound_fx={};
 var _resize_timeout;
 
+var audio_context;
+
+let MapURL=window.location.href+"/asset/map/map-2.csv";
+
 function onload(){
 
 	// setup pixi
 	setupPixi();	
 	loadTexture();
+
 	loadSound();
 	// setup hud
 	hud={
@@ -121,7 +126,7 @@ function doResize(){
 		_mountain.width=ww_;
 		_mountain.height=wh_*MoutainRatio;
 		_mountain.y=wh_*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]-MoutainRatio);
-		_mountain.tileScale.x=_mountain.tileScale.y=wh_*MoutainRatio/resources.mountain.texture.height;	
+		_mountain.height=wh_*MoutainRatio;	
 
 
 
@@ -161,7 +166,7 @@ function setupPixi(){
 function loadTexture(){
 	
 	loader.add('sky','asset/img/texture-02.png')
-			.add('mountain','asset/img/mountain-1.png')
+			.add('mountain','asset/img/sprite/mountain.json')
 			.add('road','asset/img/texture/txt-24.png')
 			.add('side_road','asset/img/texture/txt-27.png')
 			.add('ref','asset/img/ref.png')
@@ -186,9 +191,11 @@ function loadFinish(loader,resources_){
 	_sky=new PIXI.TilingSprite(resources.sky.texture,_windowWidth,_windowHeight*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]));	
 	_sky.tileScale.x=_sky.tileScale.y=_windowWidth/resources.sky.texture.width;
 	
-	_mountain=new PIXI.TilingSprite(resources.mountain.texture,_windowWidth,_windowHeight*MoutainRatio);
+
+	_mountain=new Container();
+	for(var i=0;i<3;++i) _mountain.addChild(new PIXI.Sprite(resources.mountain.textures['mountain-02.png']));
 	_mountain.y=_windowHeight*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]-MoutainRatio);
-	_mountain.tileScale.x=_mountain.tileScale.y=_windowHeight*MoutainRatio/resources.mountain.texture.height;	
+	setupMountain(0);
 	
 	// _ref=new PIXI.TilingSprite(resources.ref.texture,_windowWidth,_windowHeight);
 	// _ref.tileScale.x=_ref.tileScale.y=Math.min(_windowWidth/resources.ref.texture.width,_windowHeight/resources.ref.texture.height);
@@ -240,13 +247,17 @@ function loadFinish(loader,resources_){
 	_scene_road.sortableChildren=true;
 	_scene_side.sortableChildren=true;
 
+	// road
  	for(var n=0;n<drawDistance;n++){
  		for(var i=0;i<PolyPerSeg;++i){
  			_road.addChild(new PIXI.Mesh(createQuadGeometry((n%segmentPerDraw)/segmentPerDraw,0,0,
  															0,0,0,0,0,0),
  										_shader_road));
 	 	}
-	 	// scene object
+	}
+	// road element
+	for(var n=0;n<drawDistance;n++){
+ 	 	// scene object
 	 	let sprite_left=new PIXI.Sprite();
 	 	let sprite_right=new PIXI.Sprite();
 	 	
@@ -287,14 +298,14 @@ function loadFinish(loader,resources_){
 	
 	// laod car texture
 	_car=new PIXI.Sprite(_texture_car['car1-center.png']);
-	CarScale=width/3*.8/_texture_car['car1-center.png'].width;
+	CarScale=width/3*0.8/_texture_car['car1-center.png'].width;
 
 	_driver_color='blue';
 	setupCarSprite(_driver_color);
 	
 
 	_background.addChild(_sky);
-	_background.addChild(_mountain);
+	// _background.addChild(_mountain);
 
 	_background.addChild(_road);
 	_background.addChild(_scene_side);
@@ -354,6 +365,7 @@ function setupGame(){
 	resolution             = height/480;
 	roadWidth			   = height*RoadRatio/cameraDepth;
 
+
 	
 	// roadWidth				 = width*0.65/(cameraDepth/segmentLength*(width/2));
 	// segmentLength			 = (zfar)/drawDistance;
@@ -370,18 +382,19 @@ function setupGame(){
 	indexScene=0;
 	setupScene(indexScene);
 	setShaderUniforms(indexScene,indexScene,0);
+	
+	
+	
+	_app.ticker.start();
 
-	// if(segments.length==0)
-	resetRoad('map-2.csv',function(){
+	resetRoad(MapURL,function(){
 		
 		indexScene=0;
 		_ribbon.visible=false;
 	
-		_app.ticker.start();
-
 		setTrafficLight(0);	
-		
-	});
+	
+	});	
 }
 
 function startGame(){
@@ -457,6 +470,18 @@ function endGame(fail){
   }else{
 	  _sound_fx['goal'].play();
 	  _sound_fx['goal'].volume(1.0);
+
+	  if(life>0){
+	  	for(var i=0;i<life;++i){
+	  		setTimeout(function(){
+	  			score+=10;
+	  			life-=1;
+	  			updateHud();
+	  			_sound_fx['combo'].play();
+
+	  		},300*(i+1));
+	  	}
+	  }
   }
   // _sound_fx['goal'].fade(0.0,1.0,500);
 
@@ -482,7 +507,7 @@ function endGame(fail){
   		_app.ticker.stop();
 
   	  });
-  },500);
+  },500+(life>0?(life+1)*300:0));
 }
 
 function setTrafficLight(set_){
@@ -494,37 +519,85 @@ function setTrafficLight(set_){
 	}
 }
 
-function loadSound(){
+function loadSound(){	
+
+	Howler.autoUnlock = false;
 	_sound_bgm=new Howl({
-		src:['asset/sound/274_full_dirt-and-bones_0163_preview.mp3'],
-		loop:true
+		src:['asset/sound/webm/274_full_dirt-and-bones_0163_preview.webm',
+			'asset/sound/mp3/274_full_dirt-and-bones_0163_preview.mp3',
+			'asset/sound/wav/274_full_dirt-and-bones_0163_preview.wav'],
+		onplayerror: function() {
+		    _sound_bgm.once('unlock', function() {
+		      _sound_bgm.play();
+		    });
+		}
 	});
-	_sound_bgm.play();
+	// _sound_bgm.play();
 
 	_sound_game=new Howl({
-		src:['asset/sound/Sport_Electronic_Trailer.mp3']		
+		src:['asset/sound/webm/Sport_Electronic_Trailer.webm',
+			'asset/sound/mp3/Sport_Electronic_Trailer.mp3',			
+			'asset/sound/wav/Sport_Electronic_Trailer.wav']
 	});
 
+	_sound_fx['button_large']=new Howl({
+		src:['asset/sound/webm/button_large.webm',
+			'asset/sound/mp3/button_large.mp3',
+			'asset/sound/wav/button_large.wav']});
 
+	_sound_fx['button_small']=new Howl({
+		src:['asset/sound/webm/button_small.webm',
+			'asset/sound/mp3/button_small.mp3',
+			'asset/sound/wav/button_small.wav']});
 
-	_sound_fx['button_large']=new Howl({src:['asset/sound/button_large.mp3']});
-	_sound_fx['button_small']=new Howl({src:['asset/sound/button_small.mp3']});
-	_sound_fx['button_disable']=new Howl({src:['asset/sound/button_disable.mp3']});
+	_sound_fx['button_disable']=new Howl({src:[
+		'asset/sound/webm/button_disable.webm',
+		'asset/sound/mp3/button_disable.mp3',
+		'asset/sound/wav/button_disable.wav']});
 	
-	_sound_fx['light_count']=new Howl({src:['asset/sound/light_count.wav']});
+	_sound_fx['light_count']=new Howl({src:[
+		'asset/sound/webm/light_count.webm',
+		'asset/sound/mp3/light_count.mp3',
+		'asset/sound/wav/light_count.wav']});
 
-	_sound_fx['coin']=new Howl({src:['asset/sound/coin_1.mp3']});
-	_sound_fx['combo']=new Howl({src:['asset/sound/combo_2.mp3']});
-	_sound_fx['bump']=new Howl({src:['asset/sound/bump_2.wav']});
+	_sound_fx['coin']=new Howl({src:[
+		'asset/sound/webm/coin_1.webm',
+		'asset/sound/mp3/coin_1.mp3',
+		'asset/sound/wav/coin_1.wav']});
+
+	_sound_fx['combo']=new Howl({src:[
+		'asset/sound/webm/combo_2.webm',
+		'asset/sound/mp3/combo_2.mp3',
+		'asset/sound/wav/combo_2.wav']});
+
+	_sound_fx['bump']=new Howl({src:[
+		'asset/sound/webm/bump_2.webm',
+		'asset/sound/mp3/bump_2.mp3',
+		'asset/sound/wav/bump_2.wav']});
 	
-	_sound_fx['horn']=new Howl({src:['asset/sound/horn.mp3']});
-	_sound_fx['engine']=new Howl({src:['asset/sound/engine.mp3']});
+	_sound_fx['horn']=new Howl({src:[
+		'asset/sound/webm/horn.webm',
+		'asset/sound/mp3/horn.mp3',
+		'asset/sound/wav/horn.wav']});
+	_sound_fx['engine']=new Howl({src:[
+		'asset/sound/webm/engine.webm',
+		'asset/sound/mp3/engine.mp3',
+		'asset/sound/wav/engine.wav']});
 
-	_sound_fx['goal']=new Howl({src:['asset/sound/goal.mp3']});
+	_sound_fx['goal']=new Howl({src:[
+		'asset/sound/webm/goal.webm',
+		'asset/sound/mp3/goal.mp3',
+		'asset/sound/wav/goal.wav']});
 
-	_sound_fx['other_car']=new Howl({src:['asset/sound/other_car.mp3']});
+	_sound_fx['other_car']=new Howl({src:[
+		'asset/sound/webm/other_car.webm',
+		'asset/sound/mp3/other_car.mp3',
+		'asset/sound/wav/other_car.wav']});
 	
-	_sound_fx['fail']=new Howl({src:['asset/sound/fail.mp3']});
+	_sound_fx['fail']=new Howl({src:[
+		'asset/sound/webm/fail.webm',
+		'asset/sound/mp3/fail.mp3',
+		'asset/sound/wav/fail.wav']});
 }
 
 function updateRibbon(gateX,gateY,gateScale,zIndex){
@@ -552,5 +625,75 @@ function updateRibbon(gateX,gateY,gateScale,zIndex){
 		if(ribbon.scaleY>=1) ribbon.scaleY=-Math.random()*.3;
 
 		// 、ribbon.angle=Math.random()*360;
+	}
+}
+function setupMountain(scene){
+	let mountain_scale=_windowWidth/2048.0;
+	switch(scene){
+		case 0:
+			var left_=_mountain.getChildAt(0);
+			left_.texture=resources.mountain.textures['mountain-01.png'];
+			left_.scale.x=mountain_scale;
+			left_.scale.y=mountain_scale;
+			left_.x=0;
+			left_.y=_mountain.height-left_.height*mountain_scale;
+
+			var right_=_mountain.getChildAt(1);
+			right_.texture=resources.mountain.textures['mountain-02.png'];
+			right_.scale.y=right_.scale.x=Math.min(mountain_scale,_mountain.width/right_.texture.width);			
+			right_.x=left_.width*right_.scale.x;
+			right_.y=_mountain.height-right_.height*right_.scale.y;
+			
+			_mountain.getChildAt(2).visible=false;
+			break;
+		case 1:
+			var center_=_mountain.getChildAt(0);
+			center_.texture=resources.mountain.textures['mountain-03.png'];
+			center_.scale.x=mountain_scale;
+			center_.scale.y=mountain_scale;
+			center_.x=_mountain.width/2-center_.width*mountain_scale/2;
+			center_.y=_mountain.height-center_.height*mountain_scale;
+
+			var left_=_mountain.getChildAt(1);
+			left_.texture=resources.mountain.textures['mountain-04.png'];
+			left_.scale.x=mountain_scale;
+			left_.scale.y=mountain_scale;
+			left_.x=center_.x-left_.width*mountain_scale;
+			left_.y=_mountain.height-left_.height*mountain_scale;
+
+			var right_=_mountain.getChildAt(2);
+			right_.texture=resources.mountain.textures['mountain-04.png'];
+			right_.scale.x=mountain_scale;
+			right_.scale.y=mountain_scale;
+			right_.x=center_.x+center_.width*mountain_scale;
+			right_.y=_mountain.height-right_.height*mountain_scale;
+			
+			_mountain.getChildAt(2).visible=true;
+			break;
+		case 2:
+			var center_=_mountain.getChildAt(0);
+			center_.texture=resources.mountain.textures['mountain-05.png'];
+			center_.scale.x=mountain_scale;
+			center_.scale.y=mountain_scale;
+			center_.x=_mountain.width/2-center_.width*mountain_scale/2;
+			center_.y=_mountain.height-center_.height*mountain_scale;
+
+			var left_=_mountain.getChildAt(1);
+			left_.texture=resources.mountain.textures['mountain-06.png'];
+			left_.scale.x=mountain_scale;
+			left_.scale.y=mountain_scale;
+			left_.x=center_.x-left_.width*mountain_scale;
+			left_.y=_mountain.height-left_.height*mountain_scale;
+
+			var right_=_mountain.getChildAt(2);
+			right_.texture=resources.mountain.textures['mountain-06.png'];
+			right_.scale.x=mountain_scale;
+			right_.scale.y=mountain_scale;
+			right_.x=center_.x+center_.width*mountain_scale;
+			right_.y=_mountain.height-right_.height*mountain_scale;
+			
+			_mountain.getChildAt(2).visible=true;
+			break;
+
 	}
 }

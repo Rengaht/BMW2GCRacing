@@ -123,6 +123,60 @@
 				<span id="_hud_score">888</span>
 			</div>			
 		</div>
+		<div id="_rule" class="PageContainer hidden close">
+			<div id="_rule_board" class="Center">
+			<div class="BoardWrapper">
+				<div id="_rule_title" class="Center WaveTitle FontT1 Orange">
+					<img src="asset/img/ui/line_rules.png"/>
+					<span>RULES</span>
+					<img src="asset/img/ui/line_rules.png"/>
+				</div>
+				<div id="_rule_text" class="FontT3 LightBlue">
+					<div class="Center">
+					<div class="RuleItem">
+						<img src="asset/img/ui/point.png"/>
+						<p>遊戲時間60秒，擁有3個星星生命
+							<img src="asset/img/ui/star.png"/>
+							<img src="asset/img/ui/star.png"/>
+							<img src="asset/img/ui/star.png"/>
+						</p>
+					</div>
+					<div class="RuleItem">
+						<img src="asset/img/ui/point.png"/>
+						<p>吃到
+						<img src="asset/img/ui/rules_logo.png"/>
+						加一分，
+						<img src="asset/img/ui/rules_m.png"/>
+						加五分
+						</p>
+					</div>
+					<div class="RuleItem">
+						<img src="asset/img/ui/point.png"/>
+						<p>碰到障礙或其他車輛，扣１個星星</p>
+					</div>
+					<div class="RuleItem">
+						<img src="asset/img/ui/point.png"/>
+						<p>失去３個星星，遊戲提早結束</p>
+					</div>
+					<div class="RuleItem">
+						<img src="asset/img/ui/point.png"/>
+						<p>抵達終點時，剩下的星星每個可加10分</p>
+					</div>
+					</div>
+				</div>
+				
+				<div id="_rule_button_wrapper" class="BottomWrapper">
+					<img id="_button_ok_rule" class="Button" src="asset/img/ui/button_ok.png" onclick="onButtonRuleOkClick()"/>
+				</div>
+				<span class="BoardBorder"></span>
+				<span class="BoardBorder"></span>
+				<span class="BoardBorder"></span>
+				<img class="BoardBottomLeft" src="asset/img/ui/board_corner-1.png"/>
+				<img class="BoardBottomRight" src="asset/img/ui/board_corner-2.png"/>
+			</div>
+			</div>
+		</div>
+
 		<div id="_hint" onClick="startGame()" class="Button hidden close">
 			<img src="asset/img/ui/hint.png" class="Center"/>
 		</div>
