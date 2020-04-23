@@ -143,9 +143,9 @@ input,select{
 	height:100%;
 }
 .LogoGlow{
-	animation: fadein 2.5s infinite;
+	animation: glowglow 2.5s infinite;
 }
-@keyframes fadein {
+@keyframes glowglow {
   0%   { opacity:1; }
   40%  { opacity:0; }  
   41% { opacity:1; } 

@@ -8,9 +8,11 @@ var _trial_selected=true;
 const ClickBorder=0.5;
 
 function closePage(page_,next_page){
+	console.log('close '+page_);
 	switch(page_){
 		case '_home':
-			if(next_page!=='_rank') movePage($('#'+page_),'pageToTop');
+			if(next_page==='_driver') movePage($('#'+page_),'pageToTop');
+			else movePage($('#'+page_),'pageFromBase');
 			break;
 		case '_lottery':
 		case '_rank':
@@ -32,6 +34,9 @@ function closePage(page_,next_page){
 	}
 }
 function setupPage(page_,sound_){
+
+	console.log('setup '+page_);
+
 	if(page_!=='game'){		
 		if(!_sound_bgm.playing()){
 			_sound_bgm.play();
@@ -42,27 +47,26 @@ function setupPage(page_,sound_){
 	switch(page_){
 		case '_home':
 			
-
 			$('#_button_start').removeClass('Click');
 			showItem($('#_button_rank'));
 			hideItem($('#_button_back'));
 					
-			resetDriverColor();
-			setTimeout(function(){				
-				$('#_input_driver').val("");			
-				_driver_name="";
-			},700);
-			if(_cur_page!=='_rank')
-				setTimeout(function(){
-					movePage($('#'+page_),'pageFromTop')
-				},200);
+			resetDriverColor();			
 
+			if(_cur_page!=='_rank'){
+				movePage($('#'+page_),'pageFromTop');
+				// setTimeout(function(){
+				// 	movePage($('#'+page_),'pageFromTop');
+				// },300);
+			}
 
 			break;
 		case '_driver':
-			if(_cur_page==='_home')
+			if(_cur_page==='_home'){
+				$('#_input_driver').val("");			
+				_driver_name="";
 				movePage($('#'+page_),'pageFromBase');
-			else
+			}else
 				movePage($('#'+page_),'pageFromTop');
 			
 			$('#_button_ok').removeClass('Click');
@@ -74,6 +78,7 @@ function setupPage(page_,sound_){
 			$('#_input_driver').blur();
 			break;
 		case '_color':
+			//resetDriverColor();
 			movePage($('#'+page_),'pageFromBottom');
 
 			$('#_button_go').removeClass('Click');
@@ -81,10 +86,7 @@ function setupPage(page_,sound_){
 
 			showItem($('#_button_back'));
 			hideItem($('#_button_rank'));
-			
-			setTimeout(function(){
-				setDriverColor('blue');
-			},700);
+		
 			break;
 		case '_game':				
 			movePage($('#'+page_),'pageFromBase');
@@ -111,11 +113,14 @@ function setupPage(page_,sound_){
 			break;
 		case '_rank':			
 			hideItem($('#_button_rank'));
-			movePage($('#'+page_),'pageFromRight');	
-
 			$('#_button_back').removeClass('Click');			
-			showItem($('#_button_back'));			
-			updateRank();
+				
+			movePage($('#'+page_),'pageFromRight',function(){
+				showItem($('#_button_back'));			
+				updateRank();
+			});	
+
+			
 			break;
 		case '_lottery':
 			clearInfo();
@@ -183,8 +188,9 @@ function showItem(item_){
 	},10);
 }
 
-function movePage(page_,direction){
+function movePage(page_,direction,callback){
 	
+	console.log('move '+page_+' '+direction);
 	animEndEventName='animationend';
 	// if(!page_.hasClass(direction)) page_.removeClass(direction);
 
@@ -192,17 +198,19 @@ function movePage(page_,direction){
 	if(page_.hasClass('close')) page_.removeClass('close');
 	page_.find('.Button').addClass('Disable');
 	
-
+	var dir=direction;
 	page_.addClass(direction);
 	setTimeout(function(){
 		// page_.off(animEndEventName);
 
-		if(direction.indexOf('From')==-1){
+		if(dir.indexOf('From')==-1){
 			if(!page_.hasClass('close')) page_.addClass('close');
 		}
 		
-		page_.removeClass(direction);// endCurrPage = true;
+		page_.removeClass(dir);// endCurrPage = true;
 		page_.find('.Button').removeClass('Disable');
+
+		if(callback) callback();
 
 	},700);
 }
@@ -211,8 +219,8 @@ function onButtonStartClick(){
 
 
 	if($('#_button_start').hasClass('Disable')) return;
-	$('#_button_start').addClass('Click');
 
+	$('#_button_start').addClass('Click');
 	gotoPage('_driver','bb');
 
 
