@@ -455,7 +455,8 @@ function sendScore(callback){
 function showScore(){
 
 	
-  	  
+  	$('#_rank_to_show').addClass('hidden');
+
 	showItem($('#_score'));
 	showItem($('#_button_rank'));
 	
@@ -501,27 +502,36 @@ function sendInfo(callback){
     _sound_fx['button_large'].play();
 
 	let data={
-		"uuid":_uuid,
+		// "uuid":_uuid,
+		"player":_driver_name,
+		"color":_driver_color,
+		"score":score,
 		"name":$('#_input_lottery_name').val(),
 		"gender":$('#_input_lottery_gender').val(),
 		"age":$('#_input_lottery_age').val(),
 		"phone":$('#_input_lottery_phone').val(),
 		"email":$('#_input_lottery_email').val(),
 		"trial":_trial_selected,
-		"store":$('#_input_lottery_store').val()
+		"store":$('#_input_lottery_store').val(),
+		"vender":_isVender?"TRUE":""
 	};
 	
 	$.ajax({
 		url:'https://script.google.com/macros/s/AKfycbyZQlqqINqx89iets9atIF4YATr52gytQuGHzPFnCUkqyKN0np3/exec',
+		// url:'https://script.google.com/macros/s/AKfycbxPGSHSW3HBjJ4WPmAXtTgUX2SKa6t0lH7M4zwQTcOYKaXGzzE9/exec',
 		data:data,
 		success:function(response){			
 			console.log('update info: '+response);
 			var data=JSON.parse(response);
-			 $('#_button_send').removeClass('Disable');
-
+			 
 			if(data.result==='success'){
 				toggleLotteryError(true,'成功!');
 				ga('send','complete');
+
+				// update rank
+				_rank=data.rank;
+				$('#_rank_complete').text(_rank);
+				$('#_rank_to_show').removeClass('hidden');
 
 				setTimeout(function(){
 					$('#_button_lottery').addClass('Disable');
@@ -530,6 +540,7 @@ function sendInfo(callback){
 				},300);
 
 			}else{
+				$('#_button_send').removeClass('Disable');
 				toggleLotteryError(true,'something wrong^^');				
 			}
 		},

@@ -431,7 +431,8 @@ function processData(data){
  //    	let end_seg=sceneSegment[scene_];
 
 	//     for(var n=start_seg;n<end_seg;++n){
-  ROAD_SCALE=sceneSegment[2]/lines.length;
+   ROAD_SCALE=sceneSegment[2]/lines.length;
+   cars=[];
 
 	for(var n=0;n<lines.length;++n){
 
@@ -495,7 +496,7 @@ function processData(data){
 				              index:cars.length,
 				          	  segment:index};
 				    // seg.cars.push(car);
-				    // cars.push(car);
+				    cars.push(car);
 					continue;
 				}
 				

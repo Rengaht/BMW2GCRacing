@@ -242,7 +242,7 @@ function update(dt) {
             sprite.offsetY+=CoinFlyVel;
             _sound_fx['bump'].play();
 
-            if(life<=0) endGame(true);
+            // if(life<=0) endGame(true);
             break;
         }
     }
@@ -262,7 +262,7 @@ function update(dt) {
         car.offsetY+=CoinFlyVel;
         _sound_fx['bump'].play();
 
-        if(life<=0) endGame(true);
+        // if(life<=0) endGame(true);
 
         break;
       }
@@ -316,6 +316,8 @@ function updateCars(dt, playerSegment, playerW) {
     car.percent = Util.percentRemaining(car.z, segmentLength); // useful for interpolation during rendering phase
     newSegment  = findSegment(car.z);
     
+    console.log('car '+n+'  '+car.segment+' -> '+newSegment.index+'  '+car.z);
+
     car.segment=newSegment.index;
 
     // if (oldSegment != newSegment) {
@@ -452,9 +454,9 @@ function render() {
   for(n=0;n<_scene_side.children.length;++n){
     _scene_side.getChildAt(n).visible=false;
   }
-  for(n=0;n<_other_car.children.length;++n){
-    _other_car.getChildAt(n).visible=false;
-  }
+  // for(n=0;n<_other_car.children.length;++n){
+  //   _other_car.getChildAt(n).visible=false;
+  // }
   _start_gate.visible=false;
 
 
@@ -637,7 +639,10 @@ function render() {
   // draw car
   for(i=0; i<cars.length; i++) {
       car=cars[i];
-      if(car.segment<baseSegment.index || car.segment>=baseSegment.index+drawDistance) continue;
+      if(car.segment<baseSegment.index || car.segment>=baseSegment.index+drawDistance){
+          // _other_car.getChildAt(car.index).visible=false;
+          continue;
+      } 
 
       segment=segments[car.segment];
 
@@ -659,6 +664,8 @@ function render() {
                     spriteX, spriteY, 
                     spriteScale,drawDistance-n,alpha);
   }
+  _other_car.sortDirty=true;
+
   // console.log("--------------------------------");
 }
 

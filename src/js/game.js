@@ -33,8 +33,8 @@ var _resize_timeout;
 var audio_context;
 
 let url=window.location.href;
-let MapURL="https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/asset/map/map-3.csv";
-// let MapURL="http://127.0.0.1/BMW2GCRacing/asset/map/map-3.csv";
+// let MapURL="https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/asset/map/map-3.csv";
+let MapURL="http://127.0.0.1/BMW2GCRacing/asset/map/map-3.csv";
 // if(url.indexOf('?')>-1) MapURL=url.substring(0,url.indexOf('?')-1)+"/asset/map/map-3.csv";
 // else MapURL=url+"asset/map/map-3.csv";
 
@@ -317,6 +317,7 @@ function loadFinish(loader,resources_){
 	for(var n=0;n<10;++n){
 		_other_car.addChild(new PIXI.Sprite(resources.other_car.textures['car1-center.png']));
 	}
+	_other_car.sortableChildren=true;
 
 	_background.addChild(_sky);
 	_background.addChild(_mountain);
@@ -511,17 +512,15 @@ function endGame(fail){
 
   setTimeout(function(){
   		
-  	   sendScore(function(){
   	    
-  	    showScore();  	   
-  	   	if(_sound_fx['goal'].playing())
-  	   		_sound_fx['goal'].fade(1.0,0.0,500);
-  	    _sound_bgm.play();
-  		_sound_bgm.fade(0.0,1.0,2000);
+    showScore();  	   
+   	if(_sound_fx['goal'].playing())
+   		_sound_fx['goal'].fade(1.0,0.0,500);
+    _sound_bgm.play();
+	_sound_bgm.fade(0.0,1.0,2000);
 
-  		Ticker.stop();
+	Ticker.stop();
 
-  	  });
   },500+(life>0?(life+1)*300:0));
 }
 
