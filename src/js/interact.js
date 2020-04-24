@@ -8,34 +8,54 @@ var _uuid;
 var _trial_selected=true;
 const ClickBorder=0.5;
 
+
 function closePage(page_,next_page){
 	console.log('close '+page_);
 	
+	$('#'+page_).find('.Button').addClass('Disable');
+	
 	switch(page_){
 		case '_home':
-			if(next_page==='_driver') movePage($('#'+page_),'pageToTop');
-			else movePage($('#'+page_),'pageToBase');
+			hideItem($('#_button_rank'));			
+			
+			// if(next_page==='_driver') movePage($('#'+page_),'pageToTop');
+			// else movePage($('#'+page_),'pageToBase');
+			if(next_page==='_driver') $('#'+page_).addClass('pageToTop');
+			// else $('#'+page_).removeClass('pageToBase');
+			
 			break;
 		case '_lottery':
 		case '_rank':
-			movePage($('#'+page_),'pageToRight');
+			hideItem($('#_button_back'));
+			if(!$('#'+page_).hasClass('pageToRight')) $('#'+page_).addClass('pageToRight');
 			break;
 		case '_driver':
-			if(next_page==='_color') movePage($('#'+page_),'pageToTop');
+			
+			if(next_page==='_color') $('#'+page_).addClass('pageToTop');
+			else{
+				hideItem($('#_button_back'));
+				$('#_driver').removeClass('pageToTop');
+			}
 			break;
 		case '_color':
-			if(next_page==='_game') movePage($('#'+page_),'pageToTop');
-			else movePage($('#'+page_),'pageToBottom');
+			
+			
+			if(next_page==='_game'){
+				$('#'+page_).addClass('pageToTop');	
+				hideItem($('#_button_back'));
+			} 
+			else $('#'+page_).addClass('pageToBottom');
 			break;
 		case 'game':
+			hideItem($('#_button_rank'));
 			if(next_page==='home'){
 				hideItem($('#_score'));
-				movePage($('#_score_board'),'pageToTop');	
+				$('#_score_board').addClass('pageToTop');	
 			} 
 	  		break;
 	}
 }
-function setupPage(page_,sound_){
+function setupPage(page_){
 
 	console.log('setup '+page_);
 
@@ -46,22 +66,24 @@ function setupPage(page_,sound_){
 		}
 	}
 
+	$('#'+page_).removeClass('close');
 
 	switch(page_){
 		case '_home':
 			
 			$('#_button_start').removeClass('Click');
-			showItem($('#_button_rank'));
-			hideItem($('#_button_back'));
-					
 			resetDriverColor();			
-
-			if(_cur_page!=='_rank'){
-				movePage($('#'+page_),'pageFromTop');
-			}else movePage($('#'+page_),'pageFromBase');
-
+			$('#'+page_).removeClass('pageToTop');
+			// if(_cur_page!=='_rank'){
+			// 	// $('#'+page_).removeClass('pageToTop');
+			// 	$('#'+page_).addClass('pageToBase');
+			// }
 			break;
 		case '_driver':
+			$('#_button_ok').removeClass('Click');
+			$('#_button_back').removeClass('Click');
+			$('#_input_driver').blur();
+			
 			if(_cur_page==='_home'){
 				$('#_input_driver').val("");			
 				_driver_name="";
@@ -69,28 +91,16 @@ function setupPage(page_,sound_){
 			}else
 				movePage($('#'+page_),'pageFromTop');
 			
-			$('#_button_ok').removeClass('Click');
-			$('#_button_back').removeClass('Click');
-
-			hideItem($('#_button_rank'));			
-			showItem($('#_button_back'));
-			
-			$('#_input_driver').blur();
 			break;
 		case '_color':
 			//resetDriverColor();
-			movePage($('#'+page_),'pageFromBottom');
-
 			$('#_button_go').removeClass('Click');
 			$('#_button_back').removeClass('Click');
+			
+			movePage($('#'+page_),'pageFromBottom');
 
-			showItem($('#_button_back'));
-			hideItem($('#_button_rank'));
-		
 			break;
 		case '_game':				
-			movePage($('#'+page_),'pageFromBase');
-			hideItem($('#_button_back'));
 			
 			if(_cur_page==='_color'){
 				hideItem($('#_button_rank'));
@@ -98,7 +108,7 @@ function setupPage(page_,sound_){
 				movePage($('#_score_board'),'pageToTop');
 	  			
 				showItem($('#_rule'));	
-				// movePage($('#_rule_board'),'pageToTop');
+				movePage($('#_rule_board'),'pageToTop');
 				// setTimeout(function(){			
 	  	// 			movePage($('#_rule_board'),'pageFromTop');
 	  	// 		},700);
@@ -107,33 +117,34 @@ function setupPage(page_,sound_){
 			}else{
 				showItem($('#_button_rank'));
 				showItem($('#_score'));
-				movePage($('#_score_board'),'pageFromBase');
-	  
 			}
+
+			movePage($('#'+page_),'pageFromBase');
+			
 			break;
 		case '_rank':			
-			hideItem($('#_button_rank'));
 			$('#_button_back').removeClass('Click');			
 				
-			movePage($('#'+page_),'pageFromRight',function(){
-				showItem($('#_button_back'));			
-				updateRank();
-			});	
-
-			
+			// $('#'+page_).removeClass('pageToRight');	
+			$('#'+page_).removeClass('pageToRight');
 			break;
 		case '_lottery':
 			clearInfo();
 			onClickGotoTrial(true);
-			movePage($('#'+page_),'pageFromRight');
-			hideItem($('#_button_rank'));
-
 			$('#_button_send').removeClass('Click');    
 			$('#_button_back').removeClass('Click');
-			showItem($('#_button_back'));
+			
+			movePage($('#'+page_),'pageFromRight');
+			
 			break;
 	}
 
+	
+}
+
+function gotoPage(page_,sound_){
+	
+	if(_cur_page===page_) return;
 	switch(sound_){
 		case 'bb':
 			_sound_fx['button_large'].play();
@@ -142,17 +153,19 @@ function setupPage(page_,sound_){
 			_sound_fx['button_small'].play();
 			break;
 	}
-}
 
-function gotoPage(page_,sound_){
-	
-	if(_cur_page===page_) return;
 
 	closePage(_cur_page,page_);
-	setupPage(page_,sound_);
+	setupPage(page_);
 
 	// _pre_page=_cur_page;
 	_next_page=page_;
+
+
+	setTimeout(function(){
+		onPageTransitionEnd();
+	},500);
+
 
 	// hideItem($('#'+_cur_page));
 	// showItem($('#'+page_));
@@ -162,6 +175,38 @@ function onPageTransitionEnd(){
 	_pre_page=_cur_page;
 	_cur_page=_next_page;
 	console.log('page transition end! cur='+_cur_page+' pre= '+_pre_page);
+
+	$('#'+_pre_page).addClass('close');
+
+	switch(_cur_page){
+			case '_home':
+			
+				showItem($('#_button_rank'));
+				break;
+			case '_driver':
+				showItem($('#_button_back'));
+				break;
+			case '_color':	
+				break;		
+			case '_game':
+				if(_pre_page==='_color'){
+					setupGame();			
+					showItem($('#_rule'));	
+					movePage($('#_rule_board'),'pageFromTop');
+				}else{
+					movePage($('#_score_board'),'pageFromBase');
+				}
+				break;
+			case '_lottery':
+				showItem($('#_button_back'));
+				break;
+			case '_rank':
+				$('#'+_cur_page).removeClass('pageToRight');
+				showItem($('#_button_back'));			
+				updateRank();
+				break;
+	}
+	$('#'+_cur_page).find('.Button').removeClass('Disable');
 
 }
 
@@ -173,11 +218,11 @@ function hideItem(item_){
 	item_.find('.Button').addClass('Disable');
 	
 	item_.addClass('hidden');
-	item_.children().addClass('hidden');
+	//item_.children().addClass('hidden');
 	
 	setTimeout(function(){
 		item_.addClass('close');
-		item_.children().addClass('close');
+		//item_.children().addClass('close');
 	},600);
 }
 function showItem(item_){
@@ -185,11 +230,11 @@ function showItem(item_){
 	if(!item_.hasClass('hidden') && !item_.hasClass('close')) return;
 	
 	item_.removeClass('close');
-	item_.children().removeClass('close');
+	//item_.children().removeClass('close');
 	
 	setTimeout(function(){		
 		item_.removeClass('hidden');		
-		item_.children().removeClass('hidden');
+		//item_.children().removeClass('hidden');
 	},10);
 }
 
@@ -200,11 +245,12 @@ function movePage(page_,direction,callback){
 	// if(!page_.hasClass(direction)) page_.removeClass(direction);
 
 	// if(direction.indexOf('From')>-1){
-	if(page_.hasClass('close')) page_.removeClass('close');
-	page_.find('.Button').addClass('Disable');
+	// if(page_.hasClass('close')) page_.removeClass('close');
 	
 	var dir=direction;
-	page_.addClass(direction);
+	setTimeout(function(){
+		page_.addClass(direction);
+	},100);
 	// setTimeout(function(){
 	// 	page_.css("-webkit-animation-play-state", "running");
  //    	page_.css("-animation-play-state", "running");
@@ -217,17 +263,18 @@ function movePage(page_,direction,callback){
 	setTimeout(function(){
 		// page_.off('animationend');
 
-		if(dir.indexOf('From')==-1){
-			if(!page_.hasClass('close')) page_.addClass('close');
-			onPageTransitionEnd();
-		}
+		// if(dir.indexOf('From')==-1){
+		// 	if(!page_.hasClass('close')) page_.addClass('close');
+		// }else{
+
+		// }
 		
 		page_.removeClass(dir);// endCurrPage = true;
-		page_.find('.Button').removeClass('Disable');
+		// page_.find('.Button').removeClass('Disable');
 
-		if(callback) callback();
+		// if(callback) callback();
 
-	},500);
+	},600);
 	
 
 }
