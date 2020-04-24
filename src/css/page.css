@@ -92,6 +92,7 @@ input,select{
     background-size: cover;	
     background-position: center center;
 	transition: .5s ease;
+	overflow: hidden;
     /*transform:translateX(0%) translateY(0%);*/
     /*transition: top 0s ease-in-out;*/
 }
@@ -129,7 +130,10 @@ input,select{
 	background-position: top;
 }
 
-
+#_campaign{
+	background-color: #001368;
+	z-index:7;
+}
 /* page home */
 .GameLogo{
 	position: relative;
@@ -640,11 +644,26 @@ input,select{
 	text-transform: none;
 }
 .LotteryAuth{
-	position: absolute;
-    bottom: 20vh;
+	/*position: absolute;*/
+    /*bottom: 20vh;*/
     left: 5%;
     right: 5%;
     padding: 20px;
+    text-align: left;
+    max-width: 90%;
+    position: relative;
+}
+#_auth_text{
+	display: inline-block;
+	margin-left:3rem;
+}
+
+#_button_agree{
+	position: absolute;
+}
+
+#_button_campaign{
+	margin-right:100px;
 }
 /* rank page */
 
@@ -715,4 +734,38 @@ input,select{
 #_hint_landscape{
 	z-index: 500;
 	display: none;
+}
+
+#_campaign_wrapper{
+	position: absolute;
+    top: 180px;
+    left: 20%;
+    right: 20%;
+    bottom: 50px;
+    overflow-y: auto;
+
+    line-height: 1.5rem;
+}
+.CampaignItem{
+	text-align: left;
+	margin-bottom: 30px;
+}
+.CampaignItem div{
+	margin-bottom: 10px;	
+}
+.CampaignItem>div:first-child{
+	/*color:#008AFF;*/
+	font-size: 1.2rem;
+	letter-spacing:1px;	
+}
+.CampaignItem img{
+	margin-right: .5rem;
+	width: 1rem;
+	height: 1rem;
+}
+.CampaignItem ul{
+	padding-inline-start: 1rem;
+}
+.CampaignItem li{
+    line-height: 1.5rem;
 }

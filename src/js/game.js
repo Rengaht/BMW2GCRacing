@@ -3,7 +3,7 @@ var Ticker;
 var _app;
 
 var _background;
-var _sky,_mountain,_road,_car,_scene_side,_scene_road;
+var _sky,_mountain,_road,_car,_scene_side,_scene_road,_other_car;
 var _ribbon;
 var _container_traffic_light,_start_gate;
 var _index_traffic_light;
@@ -32,7 +32,11 @@ var _resize_timeout;
 
 var audio_context;
 
-let MapURL=window.location.href+"/asset/map/map-3.csv";
+let url=window.location.href;
+let MapURL="https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/asset/map/map-3.csv";
+// let MapURL="http://127.0.0.1/BMW2GCRacing/asset/map/map-3.csv";
+// if(url.indexOf('?')>-1) MapURL=url.substring(0,url.indexOf('?')-1)+"/asset/map/map-3.csv";
+// else MapURL=url+"asset/map/map-3.csv";
 
 function onload(){
 
@@ -309,6 +313,10 @@ function loadFinish(loader,resources_){
 	_driver_color='blue';
 	setupCarSprite(_driver_color);
 	
+	_other_car=new Container();
+	for(var n=0;n<10;++n){
+		_other_car.addChild(new PIXI.Sprite(resources.other_car.textures['car1-center.png']));
+	}
 
 	_background.addChild(_sky);
 	_background.addChild(_mountain);
@@ -316,6 +324,7 @@ function loadFinish(loader,resources_){
 	_background.addChild(_road);
 	_background.addChild(_scene_side);
 	_background.addChild(_scene_road);
+	_background.addChild(_other_car);
 	_background.addChild(_car);
 
 	_background.addChild(_start_gate);
@@ -388,8 +397,6 @@ function setupGame(){
 	setupScene(indexScene);
 	setShaderUniforms(indexScene,indexScene,0);
 	
-	
-	
 	Ticker.start();
 
 	resetRoad(MapURL,function(){
@@ -398,6 +405,9 @@ function setupGame(){
 		_ribbon.visible=false;
 	
 		setTrafficLight(0);	
+
+		update(0);
+		render();
 	
 	});	
 }
@@ -441,7 +451,7 @@ function startGame(){
 		
 	},500);
 
-
+	ga('send','Start_game');
 }
 
 function createQuadGeometry(index,x1, y1, x2, y2, x3, y3, x4, y4){

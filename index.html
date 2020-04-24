@@ -31,7 +31,7 @@
 		<img id="_button_back" class="Button hidden close" src="asset/img/ui/button_back.png" onclick="onButtonBackClick()"/>
 	</div>
 			
-	<div id="_home" class="PageContainer">
+	<div id="_home" class="PageContainer pageToTop pageToBase">
 		<div class="GameLogo Center">
 			<img src="asset/img/ui/game_logo_glow.png" class="LogoGlow"/>
 			<img id="_game_logo" src="asset/img/ui/game_logo.png"/>
@@ -41,7 +41,7 @@
 			<img id="_button_start" class="Button Center" onclick="onButtonStartClick()" src="asset/img/ui/button_start.png"/>		
 		</div>
 	</div>
-	<div id="_driver" class="PageContainer close">
+	<div id="_driver" class="PageContainer pageToBase">
 		<div id="_flag_top" class="Flag Center">
 			<div id="_hint_driver_name" class="FontT2 MiddleBlue DisableSelect">Enter Driver's Name</div>
 			<div>
@@ -58,7 +58,7 @@
 			</div>		
 		</div>
 	</div>
-	<div id="_color" class="PageContainer close">
+	<div id="_color" class="PageContainer pageToBottom">
 		<div id="_flag_bottom" class="Flag Center">
 			<div id="_hint_car_color" class="FontT2 LightBlue DisableSelect">CHOOSE THE COLOR</div>			
 		</div>
@@ -93,7 +93,7 @@
 		</div>
 	</div>
 	
-	<div id="_game" class="PageContainer close">
+	<div id="_game" class="PageContainer">
 		<div id="_game_frame"></div>
 		<div id="_speed_meter">
 			<img src="asset/img/ui/meter.png"/>
@@ -226,13 +226,14 @@
 		</div>
 	</div>
 	
-	<div id="_lottery" class="PageContainer close">
+	<div id="_lottery" class="PageContainer PageToRight">
 		<div id="_lottery_title" class="Center WaveTitle FontT2 LightBlue">
 			<img src="asset/img/ui/line_title.png"/>
 			<span>輸入資料參加抽獎</span>
 			<img src="asset/img/ui/line_title.png"/>
 		</div>
 		<div class="VerticalWrapper">
+		<div class="Center">
 		<div id="_lottery_info" class="Center FontInfo MiddleBlue">
 			<div class="LotteryColumn">
 				<div class="LotteryItem">
@@ -351,25 +352,85 @@
 						</div>
 					</div>
 				</div>
+			</div>			
+		</div>	
+				<div class="LotteryAuth FontFormSmall LightBlue">
+				<span id="_button_agree" class="RadioMark" onclick="onClickAgree()"></span>
+				<span id="_auth_text">我同意BMW總代理汎德股份有限公司得將本人之個人資料經電腦處理後，BMW總代理汎德股份有限公司及其所屬汎德股份有限公司其他關係企業暨其特約經銷商等使用，以及為提升客戶服務品質、車輛資訊之提供及推廣客戶關懷活動而使用。</span>
 			</div>
-			
-			</div>	
-
+		</div>	
 		</div>
-		<div class="LotteryAuth FontFormSmall LightBlue">
-			我同意BMW總代理汎德股份有限公司得將本人之個人資料經電腦處理後， BMW總代理汎德股份有限公司及其所屬汎德股份有限公司其他關係企業暨其特約經銷商等使用，以及為提升客戶服務品質、車輛資訊之提供及推廣客戶關懷活動而使用。
-		</div>
+		
 		
 		<div class="InputError">
 			<span id="_lottery_input_error" class="Orange FontInfo Center"></span>
 		</div>
 
-		<div class="BottomWrapper">
-			<img id="_button_send" class="Button Center" onclick="sendInfo()" src="asset/img/ui/button_send.png"/>
+		<div id="_lottery_button_wrapper" class="Center BottomWrapper">
+			<img id="_button_campaign" class="Button" onclick="onClickCampaignInfo()" src="asset/img/ui/button_info.png"/>
+			<img id="_button_send" class="Button" onclick="sendInfo()" src="asset/img/ui/button_send.png"/>
 			</div>		
 		</div>
 	</div>
-	<div id="_rank" class="PageContainer pageToRight close">
+	<div id="_campaign" class="PageContainer pageToRight">
+		<div id="_lottery_title" class="Center WaveTitle FontT2 LightBlue">
+			<img src="asset/img/ui/line_title.png"/>
+			<span>活動詳情</span>
+			<img src="asset/img/ui/line_title.png"/>
+		</div>
+		<div id="_campaign_wrapper" class="FontFormSmall LightBlue">
+		<div>
+			<div class="CampaignItem">
+				<div><img src="asset/img/ui/point.png"/>活動時間</div>
+				<div>即日起至2020/5/31止</div>
+			</div>
+			<div class="CampaignItem">
+				<div><img src="asset/img/ui/point.png"/>活動辦法</div>
+				<div>於「THE 2 RACING CHALLENGE」線上遊戲活動期間，挑戰遊戲積分排行。體驗後並填單即有機會獲得「THE BIG BMW RACE桌遊組」（共50名），成功衛冕冠軍及第2~4名挑戰者，更加贈「頂級BMW Lifestyle生活精品」</div>
+			</div>
+			<div class="CampaignItem">
+				<div><img src="asset/img/ui/point.png"/>活動獎項</div>
+				<ul>
+					<li>填單即有機會抽：「THE BIG BMW RACE桌遊組」（共50名，各1份）</li>
+					<li>冠軍：BMW 城市滑板車（共1名）</li>
+					<li>第2~4名：頂級BMW Lifestyle生活精品（共3名，各1份）</li>
+				</ul>
+			</div>
+			<div class="CampaignItem">
+				<div><img src="asset/img/ui/point.png"/>抽獎方式</div>
+				<ul>
+					<li>「THE BIG BMW RACE桌遊組」：BMW活動小組將以隨機抽獎方式抽出50名得獎者。</li>
+					<li>冠軍至第4名：以5/31 23:59最終名次為準。</li>
+				</ul>
+			</div>
+			<div class="CampaignItem">
+				<div><img src="asset/img/ui/point.png"/>得獎公告</div>
+				<div>2020/6/15公布於BMW官網，並將由BMW活動小組以E-Mail與得獎者聯繫。</div>
+			</div>
+			<div class="CampaignItem">
+				<div><img src="asset/img/ui/point.png"/>兌獎辦法</div>
+				<div>得獎名單公告後，主辦單位將透過E-Mail與得獎者聯繫，得獎者請於2020/6/22 23:59以前回覆訊息，以供主辦單位準備後續贈品寄送作業。若逾期未提供或不同意提供得獎者資訊，將視同放棄，主辦單位不再另行通知。</div>
+			</div>
+			<div class="CampaignItem">
+				<div><img src="asset/img/ui/point.png"/>活動注意事項</div>
+				<ul>
+					<li>相同E-Mail僅能獲得一次抽獎機會。</li>
+					<li>相同E-mail如於排行榜中重複，以最高排名為排名標準計算。</li>
+					<li>排行榜中如多人同分，以時間先後順序排名。</li>
+					<li>參加此活動者,表示同意將個人資料，無償提供給BMW台灣總代理汎德使用。如有資料不實或不正確之情事，將被取消得獎資格,並自負相關法律責任。</li>
+					<li>本活動僅限居住於台灣、金門、澎湖、馬祖地區之中華民國國民參加。</li>
+					<li>本活動中獎者名單將由系統自動隨機抽出，並與得獎者取得聯繫安排後續領獎事宜。</li>
+					<li>得獎者不得要求指定、更改獎項或兌換現金，且不得轉讓獎品。</li>
+					<li>得獎者同意主辦單位對所有因使用或領取獎項之後果無須負責。</li>
+					<li>本活動因故無法進行時,BMW活動小組有權決定取消、終止、修改或暫停本活動。</li>
+					<li>其他未盡事宜，悉依BMW活動小組相關規定。</li>
+				</ul>
+			</div>
+		</div>
+		</div>		
+	</div>
+
+	<div id="_rank" class="PageContainer pageToRight">
 		<img src="asset/img/ui/game_logo_rank.png" id="_rank_logo"/>
 		<div id="_rank_info" class="Center FontInfo LightBlue DisableSelect">
 			<!-- <div class="RankItem">
@@ -383,7 +444,16 @@
 		</div>
 	</div>
 	<script src="src/js/game.js"></script>
-	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-53535602-8"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-53535602-8');
+	</script>
+
 
 </body>
 

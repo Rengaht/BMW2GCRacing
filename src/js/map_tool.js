@@ -451,23 +451,27 @@ function processData(data){
 
 		try{
 			if(tag.length>0){
-				texture=textureMap[tag][0];
+				if(textureMap[tag]!==undefined){									
+					texture=textureMap[tag][0];
 
-				seg.sprites.push({
-					source:texture,
-					offset:(tag==="BRIDGE")?0:sidePosition[0]
-				});
+					seg.sprites.push({
+						source:texture,
+						offset:(tag==="BRIDGE")?0:sidePosition[0]
+					});
+				}
 			}
 
 			tag=lines[n][5];
 			if(tag.length>0){
-				texture=textureMap[tag][0];
-				// console.log(tag+"-"+texture);
+				if(textureMap[tag]!==undefined){
+					texture=textureMap[tag][0];
+					// console.log(tag+"-"+texture);
 
-				seg.sprites.push({
-					source:texture,
-					offset:(tag==="BRIDGE")?0:sidePosition[1]
-				});
+					seg.sprites.push({
+						source:texture,
+						offset:(tag==="BRIDGE")?0:sidePosition[1]
+					});
+				}
 			}
 
 			textureMap=SPRITE_ROAD;
@@ -481,18 +485,22 @@ function processData(data){
 					var z=index*segmentLength;
 				    var color=Math.floor(Math.random()*3);
 				    var sprite = onRoadPosition[k-2]<0?OTHER_CAR[color].left:(onRoadPosition[k-2]>0?OTHER_CAR[color].right:OTHER_CAR[color].center);
-				    var speed  = (sceneSpeedRatio[scene] + Math.random()*2) * BaseSpeed;
+				    var speed  = (sceneSpeedRatio[scene]*.5 + Math.random()) * BaseSpeed;
 				    
 				    car = { offsetX: onRoadPosition[k-2], 
 				              offsetY:0,
 				              z: z, 
 				              source: sprite, 
-				              speed: speed, color:color };
-				    seg.cars.push(car);
-				    cars.push(car);
+				              speed: speed, color:color,
+				              index:cars.length,
+				          	  segment:index};
+				    // seg.cars.push(car);
+				    // cars.push(car);
 					continue;
 				}
 				
+				if(textureMap[tag]===undefined) continue;
+
 				texture=textureMap[tag][0];
 
 				if(tag==="COIN" || tag==="COMBO")

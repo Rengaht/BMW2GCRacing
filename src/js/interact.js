@@ -4,54 +4,67 @@ var _next_page;
 var _driver_name;
 var _driver_color='blue';
 var _uuid;
+var _agree=false;
 
 var _trial_selected=true;
 const ClickBorder=0.5;
+var _isVender;
 
 
 function closePage(page_,next_page){
 	console.log('close '+page_);
 	
 	$('#'+page_).find('.Button').addClass('Disable');
-	
 	switch(page_){
 		case '_home':
 			hideItem($('#_button_rank'));			
 			
-			// if(next_page==='_driver') movePage($('#'+page_),'pageToTop');
-			// else movePage($('#'+page_),'pageToBase');
-			if(next_page==='_driver') $('#'+page_).addClass('pageToTop');
-			// else $('#'+page_).removeClass('pageToBase');
+			if(next_page==='_driver') $('#'+page_).removeClass('pageToBase');
 			
 			break;
 		case '_lottery':
+			if(next_page==='_game'){
+				hideItem($('#_button_back'));
+				$('#'+page_).removeClass('pageToBase');	
+			}
+			break;
 		case '_rank':
 			hideItem($('#_button_back'));
-			if(!$('#'+page_).hasClass('pageToRight')) $('#'+page_).addClass('pageToRight');
+			$('#'+page_).removeClass('pageToBase');	
 			break;
 		case '_driver':
 			
-			if(next_page==='_color') $('#'+page_).addClass('pageToTop');
-			else{
+			if(next_page==='_color'){
+
+				$('#'+page_).removeClass('pageToBase');
+				$('#'+page_).addClass('pageToTop');
+			}
+			if(next_page==='_home'){
 				hideItem($('#_button_back'));
-				$('#_driver').removeClass('pageToTop');
+				$('#'+page_).removeClass('pageToTop');				
 			}
 			break;
 		case '_color':
 			
-			
 			if(next_page==='_game'){
-				$('#'+page_).addClass('pageToTop');	
+				$('#'+page_).removeClass('pageToBase');
+				$('#'+page_).removeClass('pageToBottom');
+				$('#'+page_).addClass('pageToTop');
 				hideItem($('#_button_back'));
 			} 
-			else $('#'+page_).addClass('pageToBottom');
+			if(next_page==='_driver'){
+				$('#'+page_).removeClass('pageToBase');				
+			} 
+			
 			break;
-		case 'game':
+		case '_game':
 			hideItem($('#_button_rank'));
 			if(next_page==='home'){
 				hideItem($('#_score'));
-				$('#_score_board').addClass('pageToTop');	
 			} 
+	  		break;
+	  	case '_campaign':
+	  		$('#'+page_).removeClass('pageToBase');		
 	  		break;
 	}
 }
@@ -66,18 +79,16 @@ function setupPage(page_){
 		}
 	}
 
-	$('#'+page_).removeClass('close');
+	// $('#'+page_).removeClass('close');
+	// $('#'+page_).addClass('pageToBase');
 
 	switch(page_){
 		case '_home':
 			
-			$('#_button_start').removeClass('Click');
-			resetDriverColor();			
-			$('#'+page_).removeClass('pageToTop');
-			// if(_cur_page!=='_rank'){
-			// 	// $('#'+page_).removeClass('pageToTop');
-			// 	$('#'+page_).addClass('pageToBase');
-			// }
+			$('#_button_start').removeClass('Click');			
+			$('#'+page_).addClass('pageToBase');
+
+			ga('send','back');
 			break;
 		case '_driver':
 			$('#_button_ok').removeClass('Click');
@@ -87,18 +98,18 @@ function setupPage(page_){
 			if(_cur_page==='_home'){
 				$('#_input_driver').val("");			
 				_driver_name="";
-				movePage($('#'+page_),'pageFromBase');
-			}else
-				movePage($('#'+page_),'pageFromTop');
-			
+			}
+			if(_cur_page==='_color'){
+				$('#'+page_).removeClass('pageToTop');
+			}
 			break;
 		case '_color':
 			//resetDriverColor();
 			$('#_button_go').removeClass('Click');
 			$('#_button_back').removeClass('Click');
 			
-			movePage($('#'+page_),'pageFromBottom');
-
+			// movePage($('#'+page_),'pageFromBottom');
+			$('#'+page_).addClass('pageToBase');
 			break;
 		case '_game':				
 			
@@ -123,19 +134,26 @@ function setupPage(page_){
 			
 			break;
 		case '_rank':			
+			hideItem($('#_button_rank'));
 			$('#_button_back').removeClass('Click');			
-				
+			$('#'+page_).addClass('pageToBase');
 			// $('#'+page_).removeClass('pageToRight');	
-			$('#'+page_).removeClass('pageToRight');
+			// $('#'+page_).removeClass('pageToRight');
 			break;
 		case '_lottery':
 			clearInfo();
 			onClickGotoTrial(true);
 			$('#_button_send').removeClass('Click');    
 			$('#_button_back').removeClass('Click');
+			hideItem($('#_button_rank'));
 			
-			movePage($('#'+page_),'pageFromRight');
+			$('#'+page_).addClass('pageToBase');
 			
+			ga('send','Participate');
+
+			break;
+		case '_campaign':
+			$('#'+page_).addClass('pageToBase');		
 			break;
 	}
 
@@ -176,12 +194,20 @@ function onPageTransitionEnd(){
 	_cur_page=_next_page;
 	console.log('page transition end! cur='+_cur_page+' pre= '+_pre_page);
 
-	$('#'+_pre_page).addClass('close');
-
+	// $('#'+_pre_page).addClass('close');
+	$('#_button_back').removeClass('Click');
+				
 	switch(_cur_page){
-			case '_home':
-			
+			case '_home':			
 				showItem($('#_button_rank'));
+
+				// reset pages;
+				$('#_driver').removeClass('pageToTop');
+				$('#_driver').addClass('pageToBase');
+				$('#_color').removeClass('pageToTop');
+				$('#_color').addClass('pageToBottom');
+
+				resetDriverColor();						
 				break;
 			case '_driver':
 				showItem($('#_button_back'));
@@ -201,9 +227,12 @@ function onPageTransitionEnd(){
 				showItem($('#_button_back'));
 				break;
 			case '_rank':
-				$('#'+_cur_page).removeClass('pageToRight');
-				showItem($('#_button_back'));			
+				// $('#'+_cur_page).removeClass('pageToRight');
+				showItem($('#_button_back'));	
 				updateRank();
+				break;
+			case '_campaign':
+				showItem($('#_button_back'));		
 				break;
 	}
 	$('#'+_cur_page).find('.Button').removeClass('Disable');
@@ -449,6 +478,12 @@ function clearInfo(){
 	$('#_button_goto_trial_yes').addClass('checked');
 	$('#_button_goto_trial_no').removeClass('checked');
 	$('#_input_lottery_score').val("台北汎德 - 天母");
+
+	_agree=false;
+	$('#_button_agree').removeClass('checked');
+
+	$('#_lottery_input_error').text('');
+	toggleLotteryError(false);
 }
 function sendInfo(callback){
 
@@ -486,7 +521,8 @@ function sendInfo(callback){
 
 			if(data.result==='success'){
 				toggleLotteryError(true,'成功!');
-				
+				ga('send','complete');
+
 				setTimeout(function(){
 					$('#_button_lottery').addClass('Disable');
 					if(callback) callback();			
@@ -527,6 +563,9 @@ function onButtonBackClick(){
 		case '_lottery':
 			gotoPage('_game','sb');
 			break;
+		case '_campaign':
+			gotoPage('_lottery','sb');
+			break;
 	}
 }
 
@@ -557,7 +596,15 @@ function onClickGotoTrial(set_){
 	}
 	_trial_selected=set_;
 }
-
+function onClickAgree(){
+	if($('#_button_agree').hasClass('checked')){
+		$('#_button_agree').removeClass('checked');
+		_agree=false;
+	}else{
+		$('#_button_agree').addClass('checked');
+		_agree=true;
+	}
+}
 
 function updateRank(callback){
 
@@ -633,6 +680,7 @@ function checkLotteryInput(){
 	var input_email=$('#_input_lottery_email').val().toLowerCase();
     if(!emailRegx.test(input_email)) error_text=error_text+"*email格式錯誤\n";
 
+    if(!_agree) error_text+="*請同意個人資料使用";
 
 	toggleLotteryError(error_text.length>0,error_text);
 	return error_text.length==0;
@@ -646,4 +694,21 @@ function toggleLotteryError(show_,text_){
 		$('#_lottery_input_error').addClass('hidden');
 		$('#_button_ok').removeClass('Disabled');
 	}
+}
+
+function getUrlParameter() {
+    var url = new URL(window.location.href);
+    _isVender = get("vender");
+    console.log('vender= '+_isVender);
+}
+
+function get(name) {
+    if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))
+        return decodeURIComponent(name[1]);
+}
+
+getUrlParameter();
+
+function onClickCampaignInfo(){	
+	gotoPage('_campaign');
 }
