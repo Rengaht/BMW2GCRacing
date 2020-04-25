@@ -544,6 +544,7 @@ function endGame(fail){
  
   if(fail){
   	_sound_fx['fail'].play();
+  	doneScore();
   }else{
 	  _sound_fx['goal'].play();
 	  _sound_fx['goal'].volume(1.0);
