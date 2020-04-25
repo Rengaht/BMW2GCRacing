@@ -242,7 +242,7 @@ function update(dt) {
               sprite.offsetY+=CoinFlyVel;
               _sound_fx['bump'].play();
 
-              // if(life<=0) endGame(true);
+              if(life<=0) endGame(true);
               break;
           }
       }
@@ -262,7 +262,7 @@ function update(dt) {
           car.offsetY+=CoinFlyVel;
           _sound_fx['bump'].play();
 
-          // if(life<=0) endGame(true);
+          if(life<=0) endGame(true);
 
           break;
         }
