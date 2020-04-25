@@ -481,13 +481,14 @@ function sendInfo(callback){
 	if($('#_button_send').hasClass('Disable')) return;
 	if(_inTransition) return;
 	
-	_inTransition=true;
-
+	
 	// check empty
 	if(!checkLotteryInput()){
 		_sound_fx['button_disable'].play();
 		return;
 	}
+
+	_inTransition=true;
 
 	toggleLotteryError(true,'傳送中...');
     $('#_button_send').addClass('Click');
