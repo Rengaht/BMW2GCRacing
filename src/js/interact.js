@@ -95,8 +95,13 @@ function setupPage(page_){
 			$('#_button_start').removeClass('Click');			
 			$('#'+page_).addClass('pageToBase');
 
-			ga('send','back');
+			// ga('send','back');
 			gtag('event','back');
+			gtag('event', 'Nav Click', {
+						'event_category': 'Click',
+						'event_label': 'back'
+				});
+
 			break;
 		case '_driver':
 			$('#_button_ok').removeClass('Click');
@@ -158,9 +163,12 @@ function setupPage(page_){
 			
 			$('#'+page_).addClass('pageToBase');
 			
-			ga('send','Participate');
+			// ga('send','Participate');
 			gtag('event','Participate');
-				
+			gtag('event', 'Nav Click', {
+					'event_category': 'Click',
+					'event_label': 'Participate'
+			});
 
 			break;
 		case '_campaign':
@@ -531,9 +539,12 @@ function sendInfo(callback){
 				
 			if(data.result==='success'){
 				toggleLotteryError(true,'成功!');
-				ga('send','complete');
+				// ga('send','complete');
 				gtag('event','complete');
-
+				gtag('event', 'Nav Click', {
+					'event_category': 'Click',
+					'event_label': 'complete'
+				});
 				// update rank
 				_rank=data.rank;
 				$('#_rank_complete').text(_rank);
