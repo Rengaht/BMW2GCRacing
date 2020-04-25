@@ -38,6 +38,9 @@ let MapURL="https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/asset/m
 // let MapURL="http://127.0.0.1/2gc/asset/map/map-3.csv";
 let OtherCarCount=10;
 
+var _game_loaded=false;
+var _sound_loaded=false;
+
 // if(url.indexOf('?')>-1) MapURL=url.substring(0,url.indexOf('?')-1)+"/asset/map/map-3.csv";
 // else MapURL=url+"asset/map/map-3.csv";
 
@@ -184,6 +187,9 @@ function doResize(){
   	}
 
 
+}
+function checkLoading(){
+	if(_sound_loaded && _game_loaded) _inTransition=false;
 }
 
 function setupPixi(){
@@ -391,9 +397,9 @@ function loadFinish(loader,resources_){
    		// }
    		render();
    });
+   _game_loaded=true;
+   checkLoading();
 
-   _inTransition=false;
- 
 }
 function setupCarSprite(color_){
 	let id=null;
@@ -586,19 +592,23 @@ function loadSound(){
 
 	Howler.autoUnlock = false;
 	_sound_bgm=new Howl({
-		src:['asset/sound/webm/274_full_dirt-and-bones_0163_preview.webm',
-			'asset/sound/mp3/274_full_dirt-and-bones_0163_preview.mp3'],
+		src:['asset/sound/webm/bgm_buy.webm',
+			'asset/sound/mp3/bgm_buy.mp3'],
 		onplayerror: function() {
 		    _sound_bgm.once('unlock', function() {
 		      _sound_bgm.play();
 		    });
+		},
+		onload:function(){
+			_sound_loaded=true;
+			checkLoading();
 		}
 	});
 	// _sound_bgm.play();
 
 	_sound_game=new Howl({
-		src:['asset/sound/webm/Sport_Electronic_Trailer.webm',
-			'asset/sound/mp3/Sport_Electronic_Trailer.mp3']
+		src:['asset/sound/webm/game.webm',
+			'asset/sound/mp3/game.mp3']
 	});
 
 	_sound_fx['button_large']=new Howl({
