@@ -306,15 +306,15 @@ function updateCars(dt, playerSegment, playerW) {
     
     
     car         = cars[n];
-    // oldSegment  = findSegment(car.z);
+    oldSegment  = segments[car.segment];
     
-    if (car.segment<playerSegment.index || (car.segment-playerSegment.index)>(drawDistance-playerZ/segmentLength)) continue;
+    if (car.segment<playerSegment.index || (car.segment-playerSegment.index)>(drawDistance)) continue;
       
 
     car.offsetX  = car.offsetX + updateCarOffset(car, car.segment, playerSegment, playerW);
     car.offsetX=Util.limit(car.offsetX,onRoadPosition[0],onRoadPosition[2]);
 
-    car.z       = Util.increase(car.z, dt * car.speed, trackLength);
+    car.z       = Util.increase(car.z, dt * speed*.6, trackLength);
     car.percent = Util.percentRemaining(car.z, segmentLength); // useful for interpolation during rendering phase
     newSegment  = findSegment(car.z);
     
@@ -322,76 +322,66 @@ function updateCars(dt, playerSegment, playerW) {
 
     car.segment=newSegment.index;
 
-    // if (oldSegment != newSegment) {
-    //   index = oldSegment.cars.indexOf(car);
-    //   oldSegment.cars.splice(index, 1);
-    //   newSegment.cars.push(car);
-    // }
+    if (oldSegment != newSegment) {
+      index = oldSegment.cars.indexOf(car);
+      oldSegment.cars.splice(index, 1);
+      newSegment.cars.push(car);
+    }
 
   }
 }
 
 function updateCarOffset(car, carSegment, playerSegment, playerW) {
 
-  var i, j, dir, segment, otherCar, otherCarW, lookahead = 20;
+  var i, j,n, dir, segment, otherCar, otherCarW, lookahead = 10;
 
+  var steer=Math.min(2,car.speed/BaseSpeed*4);
   // optimization, dont bother steering around other cars when 'out of sight' of the player
   // if (Math.abs(carSegment - playerSegment.index) > drawDistance)
   //   return 0;
+  var road=[false,false,false];
 
-  // for(i = 1 ; i < lookahead ; i++) {
-  //   segment = segments[(carSegment.index+i)%segments.length];
+  for(n = 1 ; n < lookahead ; n++) {
+    segment = segments[(carSegment+n)%segments.length];
 
-    // if ((segment === playerSegment) && (car.speed > speed) && (Util.overlap(playerX, .5, car.offsetX, .5, 1.2))) {
-    //   if (playerX > 0.5)
-    //     dir = -1;
-    //   else if (playerX < -0.5)
-    //     dir = 1;
-    //   else
-    //     dir = (car.offset > playerX) ? 1 : -1;
-    //   // return dir * 1/i * (car.speed-speed)/maxSpeed; // the closer the cars (smaller i) and the greated the speed ratio, the larger the offset
-    // }
-
-    // stop when obstacles
-    var nextseg=findSegment(car.z+playerZ);
     var obstacle;
-    for(i=0;i<nextseg.obstacles.length;++i){
-      
-      obstacle=nextseg.obstacles[i];
 
-      if(Util.overlap(car.offsetX,.5,obstacle.offsetX,.5)){
+    for(i=0;i<segment.obstacles.length;++i){
+      
+      obstacle=segment.obstacles[i];
+
+      // if(Util.overlap(car.offsetX,.5,obstacle.offsetX,.5)){
         
-        if(obstacle.offsetX<0) dir=1;
-        else if(obstacle.offsetX>0) dir=-1;
-        else 
-          dir=Math.random(2)<1?.5:-.5;
-        // car.speed=0;
-        return dir*Math.min(1,(car.speed)/BaseSpeed);
-      
-      }
-      
+        if(obstacle.offsetX<0) road[0]=true;
+        else if(obstacle.offsetX>0) road[2]=true;
+        else road[1]=true;
+        
+        // return dir* Math.min(2,car.speed/BaseSpeed*4);     
     }
+  }
 
+  for(j=0 ; j<cars.length; j++){
+    otherCar  = cars[j];
+    
+    if(otherCar.index==car.index) continue;
 
-    for(j = 0 ; j < cars.length ; j++) {
-      otherCar  = cars[j];
-      
-      if(otherCar.index==car.index) continue;
-
-      if (Util.overlap(car.segment,.5,otherCar.segment,.5) 
-          && Util.overlap(car.offsetX, .5, otherCar.offsetX, .5)) {
-        if (otherCar.offsetX > 0)
-          dir = -1;
-        else if (otherCar.offsetX < -0)
-          dir = 1;
-        else
-          dir = Math.random(2)<1 ? .5 : -.5;
-        return dir * Math.min(car.speed/BaseSpeed,1);
-      }
+    if(otherCar.segment>car.segment && otherCar.segment<car.segment+lookahead){
+      if(otherCar.offsetX < 0) road[0]=true;
+      else if(otherCar.offsetX >0) road[2]=true;
+      else road[1]=true;
     }
+  }
+
+  var car_lane=Util.limit(Math.floor(car.offsetX+1),0,2);
+  if(car_lane==0 && road[0]) return steer;
+  else if(car_lane==2 && road[2]) return -steer;
+  else if(car_lane==1 && road[1]){
+    if(!road[0]) return -steer;
+    if(!road[2]) return steer;
+    else speed=0;
+  }
 
   // return 0;
-  // }
 
   // if no cars ahead, but I have somehow ended up off road, then steer back on
   // if (car.offsetX < 0){
@@ -482,9 +472,9 @@ function render() {
   for(n=0;n<_scene_side.children.length;++n){
     _scene_side.getChildAt(n).visible=false;
   }
-  // for(n=0;n<_other_car.children.length;++n){
-  //   _other_car.getChildAt(n).visible=false;
-  // }
+  for(n=0;n<_other_car.children.length;++n){
+    _other_car.getChildAt(n).visible=false;
+  }
   _start_gate.visible=false;
 
 
@@ -493,19 +483,7 @@ function render() {
     if((baseSegment.index + n)>segments.length-1) continue;
 
     segment        = segments[(baseSegment.index + n)];
-    // segment.looped = segment.index < baseSegment.index;
-    // segment.fog    = Util.exponentialFog(n/drawDistance, fogDensity);
-    // segment.clip   = maxy;
 
-    // Util.project(n,segment.p1, 
-    //             (playerX  * roadWidth) - x, playerY + cameraHeight, position - (segment.looped ? trackLength : 0), 
-    //             cameraDepth, width, height, roadWidth);
-    // Util.project((n+1),segment.p2, 
-    //             (playerX  * roadWidth) - x - dx, playerY + cameraHeight, position - (segment.looped ? trackLength : 0), 
-    //             cameraDepth, width, height, roadWidth);
-
-    // x  = x + dx;
-    // dx = dx + segment.curve;
 
      if ((segment.p1.camera.z <= cameraDepth)         || // behind us
     	 (segment.p2.screen.y >= segment.p1.screen.y) || // back face cull
@@ -571,28 +549,6 @@ function render() {
                     spriteScale,zIndex,alpha);
       // console.log('updage '+n+' -> '+sprite.source);
     }
-    
-    // for(i = 0 ; i < segment.cars.length ; i++) {
-    //   car         = segment.cars[i];
-
-    //   sprite = (Math.abs(car.offsetX-playerX)<.5)?OTHER_CAR[car.color].center:
-    //            (car.offsetX<playerX)?OTHER_CAR[car.color].left:
-    //            OTHER_CAR[car.color].right;
-     
-    //   texture      = resources.other_car.textures[sprite];
-      
-    //   spriteScale = segment.p1.project.y*height*RoadRatio*RoadSpriteWScale*SpriteScale*1.2*(1-car.offsetY);
-    //   spriteX     = segment.p1.screen.x + ( car.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
-    //   spriteY     = segment.p1.screen.y-  Util.easeInOut(0,1,car.offsetY)*height;      
-      
-    //   road=(car.offsetX==0)?0:(car.offsetX<0?1:2);
-    //   // hasCar[road]=true;
-    //   // Render.sprite(_scene_road.getChildAt(index_draw*3+road),
-    //   Render.sprite(_other_car.getChildAt(car.index%_other_car.children.length),
-    //                 texture,
-    //                 spriteX, spriteY, 
-    //                 spriteScale,drawDistance-n,alpha);
-    // }
 
     for(i=0;i<segment.coins.length;++i){
       
@@ -638,6 +594,37 @@ function render() {
                     spriteScale,drawDistance-n,alpha);
 
     }
+    for(i=0;i<segment.cars.length;++i){
+
+      car=segment.cars[i];
+
+      sprite = (Math.abs(car.offsetX-playerX)<.5)?OTHER_CAR[car.color].center:
+               (car.offsetX<playerX)?OTHER_CAR[car.color].left:
+               OTHER_CAR[car.color].right;
+     
+      texture=resources.other_car.textures[sprite];
+      
+      var py1=Util.interpolate(segment.p1.project.y,segment.p2.project.y||0,car.percent);
+      if(py1<yproj[mDrawSegment]) 
+        continue;
+
+      var x1=Util.interpolate(segment.p1.screen.x,segment.p2.screen.x||0,car.percent);
+      var y1=Util.interpolate(segment.p1.screen.y,segment.p2.screen.y||0,car.percent);
+      var w1=Util.interpolate(segment.p1.screen.w,segment.p2.screen.w||0,car.percent);
+
+      spriteScale = py1*height*RoadRatio*RoadSpriteWScale*SpriteScale*1.2*(1-car.offsetY);
+      
+      spriteX     = x1 + ( car.offsetX *Math.abs(w1)/lanes*2);
+      spriteY     = y1-  Util.easeInOut(0,1,car.offsetY)*height;      
+      
+      // road=(car.offsetX==0)?0:(car.offsetX<0?1:2);
+      // hasCar[road]=true;
+      // Render.sprite(_scene_road.getChildAt(index_draw*3+road),
+      Render.sprite(_other_car.getChildAt(car.index%_other_car.children.length),
+                    texture,
+                    spriteX, spriteY, 
+                    spriteScale,cars.length-i,alpha);
+    }
     
 
 
@@ -664,47 +651,7 @@ function render() {
     }
   }
   
-  // draw car
-  for(i=0; i<cars.length; i++) {
-      car=cars[i];
-      if(car.segment<playerSegment.index || car.segment-playerSegment.index>drawDistance-playerZ/segmentLength){
-          _other_car.getChildAt(car.index).visible=false;
-          continue;
-      } 
-
-      segment=segments[car.segment];
-
-      sprite = (Math.abs(car.offsetX-playerX)<.5)?OTHER_CAR[car.color].center:
-               (car.offsetX<playerX)?OTHER_CAR[car.color].left:
-               OTHER_CAR[car.color].right;
-     
-      texture=resources.other_car.textures[sprite];
-      
-      var py1=Util.interpolate(segment.p1.project.y,segment.p2.project.y||0,car.percent);
-      if(py1<yproj[mDrawSegment]) 
-        continue;
-
-      var x1=Util.interpolate(segment.p1.screen.x,segment.p2.screen.x||0,car.percent);
-      var y1=Util.interpolate(segment.p1.screen.y,segment.p2.screen.y||0,car.percent);
-      var w1=Util.interpolate(segment.p1.screen.w,segment.p2.screen.w||0,car.percent);
-
-      spriteScale = py1*height*RoadRatio*RoadSpriteWScale*SpriteScale*1.2*(1-car.offsetY);
-      
-      spriteX     = x1 + ( car.offsetX *Math.abs(w1)/lanes*2);
-      spriteY     = y1-  Util.easeInOut(0,1,car.offsetY)*height;      
-      
-      road=(car.offsetX==0)?0:(car.offsetX<0?1:2);
-      // hasCar[road]=true;
-      // Render.sprite(_scene_road.getChildAt(index_draw*3+road),
-      Render.sprite(_other_car.getChildAt(car.index%_other_car.children.length),
-                    texture,
-                    spriteX, spriteY, 
-                    spriteScale,cars.length-i,alpha);
-      if(i==0) console.log(spriteX+" , "+spriteY+"  "+spriteScale);
-  }
-  _other_car.sortDirty=true;
-
-  // console.log("--------------------------------");
+  
 }
 
 function findSegment(z) {

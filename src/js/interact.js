@@ -76,9 +76,13 @@ function setupPage(page_){
 	console.log('setup '+page_);
 
 	if(page_!=='game'){		
-		if(!_sound_bgm.playing()){
-			_sound_bgm.play();
-			_sound_bgm.fade(0.0,1.0,2000);
+		try{
+			if(!_sound_bgm.playing()){
+				_sound_bgm.play();
+				_sound_bgm.fade(0.0,1.0,2000);
+			}
+		}catch(e){
+			console.log(e);
 		}
 	}
 

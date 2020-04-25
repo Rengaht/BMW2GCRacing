@@ -33,9 +33,9 @@ var _resize_timeout;
 var audio_context;
 
 let url=window.location.href;
-let MapURL="https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/asset/map/map-3.csv";
+// let MapURL="https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/asset/map/map-3.csv";
 // let MapURL="https://mmlab.com.tw/project/the2/asset/map/map-3.csv";
-// let MapURL="http://127.0.0.1/2gc/asset/map/map-3.csv";
+let MapURL="http://127.0.0.1/2gc/asset/map/map-3.csv";
 let OtherCarCount=10;
 
 // if(url.indexOf('?')>-1) MapURL=url.substring(0,url.indexOf('?')-1)+"/asset/map/map-3.csv";
@@ -372,7 +372,7 @@ function loadFinish(loader,resources_){
 	_background.addChild(_road);
 	_background.addChild(_scene_side);
 	_background.addChild(_scene_road);
-	// _background.addChild(_other_car);
+	_background.addChild(_other_car);
 	_background.addChild(_car);
 
 	_background.addChild(_start_gate);

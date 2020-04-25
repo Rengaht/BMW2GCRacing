@@ -495,7 +495,7 @@ function processData(data){
 					var z=index*segmentLength;
 				    var color=Math.floor(Math.random()*3);
 				    var sprite = onRoadPosition[k-2]<0?OTHER_CAR[color].left:(onRoadPosition[k-2]>0?OTHER_CAR[color].right:OTHER_CAR[color].center);
-				    var speed  = Util.interpolate(sceneSpeedRatio[scene],sceneSpeedRatio[scene+1],percent+.05) * BaseSpeed;
+				    var speed  = Util.interpolate(sceneSpeedRatio[scene],sceneSpeedRatio[scene+1],percent+.01) * BaseSpeed;
 				    
 				    car = { offsetX: onRoadPosition[k-2], 
 				              offsetY:0,
@@ -505,9 +505,9 @@ function processData(data){
 				              index:cars.length,
 				          	  segment:index,
                       playsound:false};
-				    // seg.cars.push(car);
+				    seg.cars.push(car);
             // console.log(speed);
-				    // cars.push(car);
+				    cars.push(car);
 					continue;
 				}
 				
