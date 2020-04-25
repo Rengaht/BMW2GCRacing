@@ -131,7 +131,6 @@ function setupPage(page_){
 				// setTimeout(function(){			
 	  	// 			movePage($('#_rule_board'),'pageFromTop');
 	  	// 		},700);
-				$('#_button_lottery').removeClass('Disable');
 				setupGame();			
 			}else{
 				showItem($('#_button_rank'));
@@ -240,6 +239,7 @@ function onPageTransitionEnd(){
 					setupGame();			
 					showItem($('#_rule'));	
 					movePage($('#_rule_board'),'pageFromTop');
+					$('#_button_lottery').removeClass('Disable');
 				}else{
 					movePage($('#_score_board'),'pageFromBase');
 				}
