@@ -246,6 +246,8 @@ function onPageTransitionEnd(){
 				break;
 			case '_lottery':
 				showItem($('#_button_back'));
+				$('#_button_send').removeClass('Disable');
+				$('#_button_send').removeClass('Click');
 				break;
 			case '_rank':
 				// $('#'+_cur_page).removeClass('pageToRight');
