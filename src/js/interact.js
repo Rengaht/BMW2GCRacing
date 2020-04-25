@@ -9,12 +9,14 @@ var _agree=false;
 var _trial_selected=true;
 const ClickBorder=0.5;
 var _isVender;
+var _inTransition=false;
 
+var RankCount=50;
 
 function closePage(page_,next_page){
 	console.log('close '+page_);
 	
-	$('#'+page_).find('.Button').addClass('Disable');
+	// $('#'+page_).find('.Button').addClass('Disable');
 	switch(page_){
 		case '_home':
 			hideItem($('#_button_rank'));			
@@ -123,7 +125,7 @@ function setupPage(page_){
 				// setTimeout(function(){			
 	  	// 			movePage($('#_rule_board'),'pageFromTop');
 	  	// 		},700);
-	
+				$('#_button_lottery').removeClass('Disable');
 				setupGame();			
 			}else{
 				showItem($('#_button_rank'));
@@ -141,7 +143,9 @@ function setupPage(page_){
 			// $('#'+page_).removeClass('pageToRight');
 			break;
 		case '_lottery':
-			clearInfo();
+			
+			if(_cur_page==='_game') clearInfo();
+
 			onClickGotoTrial(true);
 			$('#_button_send').removeClass('Click');    
 			$('#_button_back').removeClass('Click');
@@ -163,15 +167,22 @@ function setupPage(page_){
 function gotoPage(page_,sound_){
 	
 	if(_cur_page===page_) return;
-	switch(sound_){
-		case 'bb':
-			_sound_fx['button_large'].play();
-			break;
-		case 'sb':
-			_sound_fx['button_small'].play();
-			break;
-	}
+	if(_inTransition) return;
 
+	_inTransition=true;
+
+	try{
+		switch(sound_){
+			case 'bb':
+				_sound_fx['button_large'].play();
+				break;
+			case 'sb':
+				_sound_fx['button_small'].play();
+				break;
+		}
+	}catch(e){
+		console.log(e);
+	}
 
 	closePage(_cur_page,page_);
 	setupPage(page_);
@@ -189,6 +200,8 @@ function gotoPage(page_,sound_){
 	// showItem($('#'+page_));
 }
 function onPageTransitionEnd(){
+
+	_inTransition=false;
 
 	_pre_page=_cur_page;
 	_cur_page=_next_page;
@@ -235,7 +248,7 @@ function onPageTransitionEnd(){
 				showItem($('#_button_back'));		
 				break;
 	}
-	$('#'+_cur_page).find('.Button').removeClass('Disable');
+	// $('#'+_cur_page).find('.Button').removeClass('Disable');
 
 }
 
@@ -244,7 +257,7 @@ function hideItem(item_){
 	
 	if(item_.hasClass('hidden') && item_.hasClass('close')) return;	
 	
-	item_.find('.Button').addClass('Disable');
+	// item_.find('.Button').addClass('Disable');
 	
 	item_.addClass('hidden');
 	//item_.children().addClass('hidden');
@@ -266,52 +279,27 @@ function showItem(item_){
 		//item_.children().removeClass('hidden');
 	},10);
 }
-
 function movePage(page_,direction,callback){
 	
 	console.log('move '+page_+' '+direction);
-	animEndEventName='animationend';
-	// if(!page_.hasClass(direction)) page_.removeClass(direction);
-
-	// if(direction.indexOf('From')>-1){
-	// if(page_.hasClass('close')) page_.removeClass('close');
 	
 	var dir=direction;
 	setTimeout(function(){
 		page_.addClass(direction);
 	},100);
-	// setTimeout(function(){
-	// 	page_.css("-webkit-animation-play-state", "running");
- //    	page_.css("-animation-play-state", "running");
- //    },100);
- //    setTimeout(function(){ 
- //     	page_.css("-animation-play-state", "paused");
- //     	page_.css("-webkit-animation-play-state", "paused");
- //    }, 700);
-
+	
 	setTimeout(function(){
-		// page_.off('animationend');
-
-		// if(dir.indexOf('From')==-1){
-		// 	if(!page_.hasClass('close')) page_.addClass('close');
-		// }else{
-
-		// }
 		
 		page_.removeClass(dir);// endCurrPage = true;
-		// page_.find('.Button').removeClass('Disable');
-
-		// if(callback) callback();
-
+	
 	},600);
 	
 
 }
-
 function onButtonStartClick(){
 
 
-	if($('#_button_start').hasClass('Disable')) return;
+	if(_inTransition) return;
 
 	$('#_button_start').addClass('Click');
 	gotoPage('_driver','bb');
@@ -320,7 +308,7 @@ function onButtonStartClick(){
 }
 function onDriverNameClick(){
 
-	if($('#_button_ok').hasClass('Disable')) return;
+	if(_inTransition) return;
 
 	if(!checkNameInput()){
 		_sound_fx['button_disable'].play();
@@ -340,7 +328,7 @@ function setDriverName(set_){
 }
 function setDriverColor(set_){
 
-	if($('#_button_'+set_).hasClass('Disable')) return;
+	if(_inTransition) return;
 
 	if(set_===_driver_color) return;
 
@@ -377,7 +365,8 @@ function resetDriverColor(){
 	_driver_color=set_;
 }
 function onButtonGoClick(){
-	if($('#_button_go').hasClass('Disable')) return;
+	
+	if(_inTransition) return;
 
 	$('#_button_go').addClass('Click');
 
@@ -386,8 +375,7 @@ function onButtonGoClick(){
 
 function onButtonRuleOkClick(){
 	
-	if($('_button_ok_rule').hasClass('Disable')) return;
-
+	if(_inTransition) return;
 
 	_sound_fx['button_large'].play();
 	_sound_bgm.fade(1.0,0.0,2000);
@@ -409,13 +397,15 @@ function setDriverScore(set_){
 }
 function onButtonLotteryClick(){
 	if($('#_button_lottery').hasClass('Disable')) return;
-	$('#_button_lottery').addClass('Click');
+	if(_inTransition) return;
 
+	$('#_button_lottery').addClass('Click');
 	gotoPage('_lottery','bb');
 }
 function onButtonHomeClick(){
 	
-	if($('#_button_home').hasClass('Disable')) return;
+	if(_inTransition) return;
+
 	$('#_button_home').addClass('Click');
 
 	gotoPage('_home','bb');
@@ -423,34 +413,34 @@ function onButtonHomeClick(){
 
 
 
-function sendScore(callback){
+// function sendScore(callback){
 
-	let data={
-		"player":_driver_name,
-		"color":_driver_color,
-		"score":score
-	};
-	$.ajax({
-		url:'https://script.google.com/macros/s/AKfycbzQvLdIIL5UHhEOH8Yu3yMoYpFG30WfeKI8V8whH2p2_7oCD1H1/exec',
-		data:data,
-		success:function(response){
+// 	let data={
+// 		"player":_driver_name,
+// 		"color":_driver_color,
+// 		"score":score
+// 	};
+// 	$.ajax({
+// 		url:'https://script.google.com/macros/s/AKfycbzQvLdIIL5UHhEOH8Yu3yMoYpFG30WfeKI8V8whH2p2_7oCD1H1/exec',
+// 		data:data,
+// 		success:function(response){
 
-			var data=JSON.parse(response);
-			_uuid=data.uid;
-			_rank=data.rank;
+// 			var data=JSON.parse(response);
+// 			_uuid=data.uid;
+// 			_rank=data.rank;
 
-			$('#_rank_complete').text(_rank);
+// 			$('#_rank_complete').text(_rank);
 			
-			console.log('update score'+response);
-			callback();
-		},
-		error:function(jqXHR, textStatus, errorThrown){
-			alert('something wrong^^');
-			console.log(jqXHR);
-		}
-	});
+// 			console.log('update score'+response);
+// 			callback();
+// 		},
+// 		error:function(jqXHR, textStatus, errorThrown){
+// 			alert('something wrong^^');
+// 			console.log(jqXHR);
+// 		}
+// 	});
 
-}
+// }
 
 function showScore(){
 
@@ -489,6 +479,9 @@ function clearInfo(){
 function sendInfo(callback){
 
 	if($('#_button_send').hasClass('Disable')) return;
+	if(_inTransition) return;
+	
+	_inTransition=true;
 
 	// check empty
 	if(!checkLotteryInput()){
@@ -498,7 +491,7 @@ function sendInfo(callback){
 
 	toggleLotteryError(true,'傳送中...');
     $('#_button_send').addClass('Click');
-    $('#_button_send').addClass('Disable');
+    
     _sound_fx['button_large'].play();
 
 	let data={
@@ -517,13 +510,14 @@ function sendInfo(callback){
 	};
 	
 	$.ajax({
-		url:'https://script.google.com/macros/s/AKfycbyZQlqqINqx89iets9atIF4YATr52gytQuGHzPFnCUkqyKN0np3/exec',
-		// url:'https://script.google.com/macros/s/AKfycbxPGSHSW3HBjJ4WPmAXtTgUX2SKa6t0lH7M4zwQTcOYKaXGzzE9/exec',
+		// url:'https://script.google.com/macros/s/AKfycbyZQlqqINqx89iets9atIF4YATr52gytQuGHzPFnCUkqyKN0np3/exec',
+		url:'https://script.google.com/macros/s/AKfycbxPGSHSW3HBjJ4WPmAXtTgUX2SKa6t0lH7M4zwQTcOYKaXGzzE9/exec',
 		data:data,
 		success:function(response){			
 			console.log('update info: '+response);
 			var data=JSON.parse(response);
-			 
+			_inTransition=false;
+				
 			if(data.result==='success'){
 				toggleLotteryError(true,'成功!');
 				ga('send','complete');
@@ -532,14 +526,16 @@ function sendInfo(callback){
 				_rank=data.rank;
 				$('#_rank_complete').text(_rank);
 				$('#_rank_to_show').removeClass('hidden');
-
+				$('#_button_send').addClass('Disable');
+				
 				setTimeout(function(){
 					$('#_button_lottery').addClass('Disable');
 					if(callback) callback();			
-					gotoPage('_game','');			
+					gotoPage('_game','bb');			
 				},300);
 
 			}else{
+				$('#_button_send').removeClass('Click');
 				$('#_button_send').removeClass('Disable');
 				toggleLotteryError(true,'something wrong^^');				
 			}
@@ -556,7 +552,7 @@ function sendInfo(callback){
 
 function onButtonBackClick(){
 
-	if($('#_button_back').hasClass('Disable')) return;
+	if(_inTransition) return;
 
 	$('#_button_back').addClass('Click');
 	// gotoPage(_pre_page,'sb');
@@ -619,7 +615,7 @@ function onClickAgree(){
 
 function updateRank(callback){
 
-	var data={count:10};
+	var data={count:RankCount};
 	$.ajax({
 		url:'https://script.google.com/macros/s/AKfycbzQIXck9QaCW1k5VmgW6WFOm5yQ35K2ULryaW8ilJ4K-uadGCI/exec',
 		data:data,
@@ -640,10 +636,12 @@ function updateRank(callback){
 				$('<sapn></span>').text(user[2]).appendTo(row);
 				
 				row.addClass('RankItem');
+				
 				row.addClass('hidden');
 				setTimeout(function(){
 					row.removeClass('hidden');
 				},i*100);
+
 				row.appendTo($('#_rank_info'));
 
 				count++;

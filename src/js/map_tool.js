@@ -442,10 +442,19 @@ function processData(data){
 		var scene=(index<sceneSegment[0])?0:(index<sceneSegment[1]?1:2);
 		let seg=segments[index];
 
+    var percent;
 		let textureMap;
-		if(index>=sceneSegment[1]) textureMap=SPRITES3;
-		else if(index>=sceneSegment[0]) textureMap=SPRITES2;
-		else textureMap=SPRITES1;
+		if(index>=sceneSegment[1]){
+        textureMap=SPRITES3;
+        percent=index/(sceneSegment[2]-sceneSegment[1]);
+    } else if(index>=sceneSegment[0]){
+        textureMap=SPRITES2;
+        percent=index/(sceneSegment[1]-sceneSegment[0]);
+    } 
+		else{
+      textureMap=SPRITES1;
+      percent=index/(sceneSegment[0]);
+    } 
 		
 		let tag=lines[n][1];
 		let texture;
@@ -486,8 +495,7 @@ function processData(data){
 					var z=index*segmentLength;
 				    var color=Math.floor(Math.random()*3);
 				    var sprite = onRoadPosition[k-2]<0?OTHER_CAR[color].left:(onRoadPosition[k-2]>0?OTHER_CAR[color].right:OTHER_CAR[color].center);
-				    var speed  = Util.interpolate(sceneSpeedRatio[scene],sceneSpeedRatio[scene+1],
-                        (index-sceneSegment[scene])/(index-sceneSegment[scene-1]||0)) * BaseSpeed;
+				    var speed  = Util.interpolate(sceneSpeedRatio[scene],sceneSpeedRatio[scene+1],percent+.05) * BaseSpeed;
 				    
 				    car = { offsetX: onRoadPosition[k-2], 
 				              offsetY:0,
@@ -495,9 +503,11 @@ function processData(data){
 				              source: sprite, 
 				              speed: speed, color:color,
 				              index:cars.length,
-				          	  segment:index};
+				          	  segment:index,
+                      playsound:false};
 				    // seg.cars.push(car);
-				    cars.push(car);
+            // console.log(speed);
+				    // cars.push(car);
 					continue;
 				}
 				

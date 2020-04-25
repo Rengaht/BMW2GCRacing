@@ -33,15 +33,17 @@ var _resize_timeout;
 var audio_context;
 
 let url=window.location.href;
-// let MapURL="https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/asset/map/map-3.csv";
-let MapURL="http://127.0.0.1/2gc/asset/map/map-3.csv";
-let OtherCarCount=9;
+let MapURL="https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/asset/map/map-3.csv";
+// let MapURL="https://mmlab.com.tw/project/the2/asset/map/map-3.csv";
+// let MapURL="http://127.0.0.1/2gc/asset/map/map-3.csv";
+let OtherCarCount=10;
 
 // if(url.indexOf('?')>-1) MapURL=url.substring(0,url.indexOf('?')-1)+"/asset/map/map-3.csv";
 // else MapURL=url+"asset/map/map-3.csv";
 
 function onload(){
 
+	_inTransition=true;
 	// setup pixi
 	setupPixi();	
 	loadTexture();
@@ -65,10 +67,10 @@ function onload(){
 
 
 	if(window.PointerEvent){
-		 document.getElementById('_game').addEventListener('pointerdown',onGameClick);
-		 document.getElementById('_game').addEventListener('pointerup',onGameMouseUp);
+		 document.getElementById('_game_touch_frame').addEventListener('pointerdown',onGameClick);
+		 document.getElementById('_game_touch_frame').addEventListener('pointerup',onGameMouseUp);
 	}
-	document.getElementById('_game_frame').addEventListener('touchstart',function(event){
+	document.getElementById('_game_touch_frame').addEventListener('touchstart',function(event){
 		event.preventDefault(); 
 		if(!isPlaying) return;
 
@@ -77,7 +79,7 @@ function onload(){
 	    if(x<ClickBorder) keyLeft=true;
 	  	else if(x>1.0-ClickBorder) keyRight=true;
 	});
-	document.getElementById('_game_frame').addEventListener('touchend',function(event){
+	document.getElementById('_game_touch_frame').addEventListener('touchend',function(event){
 		 event.preventDefault(); 
 
 		 keyLeft=false;
@@ -86,59 +88,102 @@ function onload(){
 	});
 	
 	
-	document.getElementById('_game').addEventListener('mousedown',onGameClick);
-	document.getElementById('_game').addEventListener('mouseup',onGameMouseUp);	
+	document.getElementById('_game_touch_frame').addEventListener('mousedown',onGameClick);
+	document.getElementById('_game_touch_frame').addEventListener('mouseup',onGameMouseUp);	
 	
-	$('#_input_driver').bind("change paste keyup",function(){
+	$('#_input_driver').bind("change paste keyup",function(event){
+		if(event.which===13){
+      		$(this).blur();
+    	}
 		toggleNameError(false);		
 		$('#_input_driver').val($('#_input_driver').val().replace(/ /g,''));
 	});
 
-	$('#_input_lottery_name').bind("change paste keyup",function(){
-		toggleLotteryError(false);		
+	$('#_input_lottery_name').bind("change paste keyup",function(event){
+		if(event.which===13){
+      		$(this).blur();
+    	}toggleLotteryError(false);		
 		$('#_input_lottery_name').val($('#_input_lottery_name').val().replace(/ /g,''));
 	});
-	$('#_input_lottery_phone').bind("change paste keyup",function(){
-		toggleLotteryError(false);		
+	$('#_input_lottery_phone').bind("change paste keyup",function(event){
+		if(event.which===13){
+      		$(this).blur();
+    	}
+    	toggleLotteryError(false);		
 		$(this).val($(this).val().replace(/[^\d]+/g,''));
 		$(this).val($(this).val().replace(/(\d{4})\-?(\d{3})\-?(\d{3})/,'$1-$2-$3'))
 	});
-	$('#_input_lottery_email').bind("change paste keyup",function(){
-		toggleLotteryError(false);		
+	$('#_input_lottery_email').bind("change paste keyup",function(event){
+		if(event.which===13){
+      		$(this).blur();
+    	}
+    	toggleLotteryError(false);		
 		$('#_input_lottery_email').val($('#_input_lottery_email').val().replace(/ /g,''));
 	});
+
+	doResize();
 }
 function resize(){
 	clearTimeout(_resize_timeout);
+
+	if(Ticker.started) Ticker.stop(); 		
 	_resize_timeout=setTimeout(doResize,100);
 }
 function doResize(){
 	var ww_ = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; 
   	var wh_ = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+	if(ww_<wh_){
+  		// landscape!!!
+  		showItem($('#_hint_landscape'));
+  		return;	
+  	}
 
-  	// var ww_ = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-  	// var wh_ = (window.innerHeight > 0) ? window.innerHeight : screen.height;
-  	
+
+  	// rank board
+  	var frameh_=Math.max(ww_/2048,wh_/1366)*1366;
+  	$('#_rank_info').css('top',0.22*frameh_);
+	$('#_rank_info').css('left',ww_/2-0.30*frameh_);
+  	$('#_rank_info').css('width',0.60*frameh_);
+  	$('#_rank_info').css('height',0.49*frameh_);
+
+
+  	hideItem($('#_hint_landscape'));
+  		
 
   	console.log('window size:'+ww_+' x '+wh_);
 
   	_windowWidth=width=ww_;
   	_windowHeight=height=wh_;
 
+  	if(!Ticker.started && isPlaying) Ticker.start();
+
   	if(_app){
   		
-  		_sky.width=ww_;
-  		_sky.height=wh_*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]);	
-		_sky.tileScale.x=_sky.tileScale.y=ww_/resources.sky.texture.width;
-	
+  		if(_sky){
+	  		_sky.width=ww_;
+	  		_sky.height=wh_*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]);	
+			_sky.tileScale.x=_sky.tileScale.y=ww_/resources.sky.texture.width;
+		}
 		// _mountain.width=ww_;
 		// _mountain.height=wh_*MoutainRatio;
-		_mountain.y=_windowHeight*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]);
+		if(_mountain)
+			_mountain.y=_windowHeight*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]);
 		
+		if(_texture_car)
+			CarScale=width/3*0.8/_texture_car['car1-center.png'].width;
 
 
 		 _app.renderer.resize(ww_,wh_);
+
+		 try{
+		 	update(0);
+		 	render();
+		 }catch(e){
+		 	console.log(e);
+		 }
   	}
+
+
 }
 
 function setupPixi(){
@@ -327,7 +372,7 @@ function loadFinish(loader,resources_){
 	_background.addChild(_road);
 	_background.addChild(_scene_side);
 	_background.addChild(_scene_road);
-	_background.addChild(_other_car);
+	// _background.addChild(_other_car);
 	_background.addChild(_car);
 
 	_background.addChild(_start_gate);
@@ -346,6 +391,8 @@ function loadFinish(loader,resources_){
    		// }
    		render();
    });
+
+   _inTransition=false;
  
 }
 function setupCarSprite(color_){
@@ -540,8 +587,7 @@ function loadSound(){
 	Howler.autoUnlock = false;
 	_sound_bgm=new Howl({
 		src:['asset/sound/webm/274_full_dirt-and-bones_0163_preview.webm',
-			'asset/sound/mp3/274_full_dirt-and-bones_0163_preview.mp3',
-			'asset/sound/wav/274_full_dirt-and-bones_0163_preview.wav'],
+			'asset/sound/mp3/274_full_dirt-and-bones_0163_preview.mp3'],
 		onplayerror: function() {
 		    _sound_bgm.once('unlock', function() {
 		      _sound_bgm.play();
@@ -552,29 +598,24 @@ function loadSound(){
 
 	_sound_game=new Howl({
 		src:['asset/sound/webm/Sport_Electronic_Trailer.webm',
-			'asset/sound/mp3/Sport_Electronic_Trailer.mp3',			
-			'asset/sound/wav/Sport_Electronic_Trailer.wav']
+			'asset/sound/mp3/Sport_Electronic_Trailer.mp3']
 	});
 
 	_sound_fx['button_large']=new Howl({
 		src:['asset/sound/webm/button_large.webm',
-			'asset/sound/mp3/button_large.mp3',
-			'asset/sound/wav/button_large.wav']});
+			'asset/sound/mp3/button_large.mp3']});
 
 	_sound_fx['button_small']=new Howl({
 		src:['asset/sound/webm/button_small.webm',
-			'asset/sound/mp3/button_small.mp3',
-			'asset/sound/wav/button_small.wav']});
+			'asset/sound/mp3/button_small.mp3']});
 
 	_sound_fx['button_disable']=new Howl({src:[
 		'asset/sound/webm/button_disable.webm',
-		'asset/sound/mp3/button_disable.mp3',
-		'asset/sound/wav/button_disable.wav']});
+		'asset/sound/mp3/button_disable.mp3']});
 	
 	_sound_fx['light_count']=new Howl({src:[
 		'asset/sound/webm/light_count.webm',
-		'asset/sound/mp3/light_count.mp3',
-		'asset/sound/wav/light_count.wav']});
+		'asset/sound/mp3/light_count.mp3']});
 
 	_sound_fx['coin']=new Howl({src:[
 		'asset/sound/webm/coin_1.webm',
@@ -583,37 +624,30 @@ function loadSound(){
 
 	_sound_fx['combo']=new Howl({src:[
 		'asset/sound/webm/combo_2.webm',
-		'asset/sound/mp3/combo_2.mp3',
-		'asset/sound/wav/combo_2.wav']});
+		'asset/sound/mp3/combo_2.mp3']});
 
 	_sound_fx['bump']=new Howl({src:[
-		'asset/sound/webm/bump_2.webm',
-		'asset/sound/mp3/bump_2.mp3',
-		'asset/sound/wav/bump_2.wav']});
+		'asset/sound/webm/bump.webm',
+		'asset/sound/mp3/bump.mp3']});
 	
 	_sound_fx['horn']=new Howl({src:[
 		'asset/sound/webm/horn.webm',
-		'asset/sound/mp3/horn.mp3',
-		'asset/sound/wav/horn.wav']});
+		'asset/sound/mp3/horn.mp3']});
 	_sound_fx['engine']=new Howl({src:[
 		'asset/sound/webm/engine.webm',
-		'asset/sound/mp3/engine.mp3',
-		'asset/sound/wav/engine.wav']});
+		'asset/sound/mp3/engine.mp3']});
 
 	_sound_fx['goal']=new Howl({src:[
 		'asset/sound/webm/goal.webm',
-		'asset/sound/mp3/goal.mp3',
-		'asset/sound/wav/goal.wav']});
+		'asset/sound/mp3/goal.mp3']});
 
 	_sound_fx['other_car']=new Howl({src:[
 		'asset/sound/webm/other_car.webm',
-		'asset/sound/mp3/other_car.mp3',
-		'asset/sound/wav/other_car.wav']});
+		'asset/sound/mp3/other_car.mp3']});
 	
 	_sound_fx['fail']=new Howl({src:[
 		'asset/sound/webm/fail.webm',
-		'asset/sound/mp3/fail.mp3',
-		'asset/sound/wav/fail.wav']});
+		'asset/sound/mp3/fail.mp3']});
 }
 
 function updateRibbon(gateX,gateY,gateScale,zIndex){

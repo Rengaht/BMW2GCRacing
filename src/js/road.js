@@ -127,12 +127,12 @@ function update(dt) {
     
     currentLapTime+=dt;
 
-    updateCars(dt, playerSegment, playerW);
-
+  
   }else{
     position = Math.min(position+dt * speed,trackLength);
     speed=Math.max(speed-accel*80*dt,0);
   }
+    updateCars(dt, playerSegment, playerW);
 
 
   if(playerSegment.index>sceneSegment[indexScene]){
@@ -213,67 +213,67 @@ function update(dt) {
   // playerX = playerX - (dx * speedPercent * playerSegment.curve * centrifugal);
   playerX = Util.limit(playerX, -1.2, 1.2);     // dont ever let it go too far out of bounds
   
+  if(isPlaying){
+    // check coins and obstacles
+    if(lastPlayerSegment!=playerSegment.index){
 
-  // check coins and obstacles
-  if(lastPlayerSegment!=playerSegment.index){
+      let firstSegment=segments[playerSegment.index];
+      let ss=firstSegment.p1.project.y*height*RoadRatio*SideSpriteXScale*SpriteScale;
 
-    let firstSegment=segments[playerSegment.index];
-    let ss=firstSegment.p1.project.y*height*RoadRatio*SideSpriteXScale*SpriteScale;
+      for(n = 0 ; n < firstSegment.coins.length ; n++) {
+          
+          sprite = firstSegment.coins[n];
+          spriteW = .5;
 
-    for(n = 0 ; n < firstSegment.coins.length ; n++) {
-        
-        sprite = firstSegment.coins[n];
-        spriteW = .5;
-
-        if(Util.overlap(playerX, .5, sprite.offsetX, spriteW)){
-            // console.log('---------- got coin! '+playerSegment.index+'------------');
-            score+=firstSegment.coins[n].score;
-            sprite.offsetY+=CoinFlyVel;
-            if(firstSegment.coins[n].score>1) _sound_fx['combo'].play();
-            else _sound_fx['coin'].play();
-        }
-    }
-    for(n = 0 ; n < firstSegment.obstacles.length ; n++) {
-        sprite = firstSegment.obstacles[n];
-        spriteW = .5;
-        if(Util.overlap(playerX, .5, sprite.offsetX, spriteW)){
-            // console.log('---------- bump!'+firstSegment.index+' ------------');
-            life=life-1;
-            sprite.offsetY+=CoinFlyVel;
-            _sound_fx['bump'].play();
-
-            // if(life<=0) endGame(true);
-            break;
-        }
-    }
-  }
-
-
-  // TODO: check car overlap
-  for(n = 0 ; n < cars.length ; n++) {
-
-    car  = cars[n];
-    if (Math.abs(car.segment - playerSegment.index) > drawDistance) continue;
-
-    carW = .5;
-    // if(speed>car.speed && car.offsetY<=0){
-      if(car.offsetY<=0&&car.segment==playerSegment.index && Util.overlap(playerX, .5, car.offsetX, 0.5)){
-        life=life-1;
-        car.offsetY+=CoinFlyVel;
-        _sound_fx['bump'].play();
-
-        // if(life<=0) endGame(true);
-
-        break;
+          if(Util.overlap(playerX, .5, sprite.offsetX, spriteW)){
+              // console.log('---------- got coin! '+playerSegment.index+'------------');
+              score+=firstSegment.coins[n].score;
+              sprite.offsetY+=CoinFlyVel;
+              if(firstSegment.coins[n].score>1) _sound_fx['combo'].play();
+              else _sound_fx['coin'].play();
+          }
       }
-    // }
-    if(Math.random()*2<1){
-     if(!_sound_fx['other_car'].playing()) _sound_fx['other_car'].play();
-    }else{
-      if(!_sound_fx['horn'].playing()) _sound_fx['horn'].play();
+      for(n = 0 ; n < firstSegment.obstacles.length ; n++) {
+          sprite = firstSegment.obstacles[n];
+          spriteW = .5;
+          if(Util.overlap(playerX, .5, sprite.offsetX, spriteW)){
+              // console.log('---------- bump!'+firstSegment.index+' ------------');
+              life=life-1;
+              sprite.offsetY+=CoinFlyVel;
+              _sound_fx['bump'].play();
+
+              // if(life<=0) endGame(true);
+              break;
+          }
+      }
+    }
+
+
+    // TODO: check car overlap
+    for(n = 0 ; n < cars.length ; n++) {
+
+      car  = cars[n];
+      if (Math.abs(car.segment - playerSegment.index) > drawDistance) continue;
+
+      carW = .5;
+      // if(speed>car.speed && car.offsetY<=0){
+        if(car.offsetY<=0&&car.segment==playerSegment.index && Util.overlap(playerX, .5, car.offsetX, 0.5)){
+          life=life-1;
+          car.offsetY+=CoinFlyVel;
+          _sound_fx['bump'].play();
+
+          // if(life<=0) endGame(true);
+
+          break;
+        }
+      // }
+      if(!car.playSound){
+        if(Math.random()*2<1) _sound_fx['other_car'].play();
+        else _sound_fx['horn'].play();
+        car.playSound=true;
+      }
     }
   }
-  
 
   // speed   = Util.limit(speed, 0, maxSpeed); // or exceed maxSpeed
 
@@ -308,8 +308,8 @@ function updateCars(dt, playerSegment, playerW) {
     car         = cars[n];
     // oldSegment  = findSegment(car.z);
     
-    if (Math.abs(car.segment-playerSegment.index)>drawDistance) continue;
-
+    if (car.segment<playerSegment.index || (car.segment-playerSegment.index)>(drawDistance-playerZ/segmentLength)) continue;
+      
 
     car.offsetX  = car.offsetX + updateCarOffset(car, car.segment, playerSegment, playerW);
     car.offsetX=Util.limit(car.offsetX,onRoadPosition[0],onRoadPosition[2]);
@@ -336,8 +336,8 @@ function updateCarOffset(car, carSegment, playerSegment, playerW) {
   var i, j, dir, segment, otherCar, otherCarW, lookahead = 20;
 
   // optimization, dont bother steering around other cars when 'out of sight' of the player
-  if ((carSegment - playerSegment.index) > drawDistance)
-    return 0;
+  // if (Math.abs(carSegment - playerSegment.index) > drawDistance)
+  //   return 0;
 
   // for(i = 1 ; i < lookahead ; i++) {
   //   segment = segments[(carSegment.index+i)%segments.length];
@@ -353,18 +353,19 @@ function updateCarOffset(car, carSegment, playerSegment, playerW) {
     // }
 
     // stop when obstacles
+    var nextseg=findSegment(car.z+playerZ);
     var obstacle;
-    for(i=0;i<segments[carSegment].obstacles.length;++i){
+    for(i=0;i<nextseg.obstacles.length;++i){
       
-      obstacle=segments[carSegment].obstacles[i];
+      obstacle=nextseg.obstacles[i];
 
       if(Util.overlap(car.offsetX,.5,obstacle.offsetX,.5)){
         
-        // if(obstacle.offsetX<-0.5) dir=.5;
-        // else if(obstacle.offsetX>0.5) dir=-.5;
-        // else 
-          dir=(car.offsetX>obstacle.offsetX)?1:-1;
-      
+        if(obstacle.offsetX<0) dir=1;
+        else if(obstacle.offsetX>0) dir=-1;
+        else 
+          dir=Math.random(2)<1?.5:-.5;
+        // car.speed=0;
         return dir*Math.min(1,(car.speed)/BaseSpeed);
       
       }
@@ -379,26 +380,26 @@ function updateCarOffset(car, carSegment, playerSegment, playerW) {
 
       if (Util.overlap(car.segment,.5,otherCar.segment,.5) 
           && Util.overlap(car.offsetX, .5, otherCar.offsetX, .5)) {
-        // if (otherCar.offsetX > 0.5)
-        //   dir = -.5;
-        // else if (otherCar.offsetX < -0.5)
-        //   dir = .5;
-        // else
-          dir = (car.offsetX > otherCar.offsetX) ? 1 : -1;
+        if (otherCar.offsetX > 0)
+          dir = -1;
+        else if (otherCar.offsetX < -0)
+          dir = 1;
+        else
+          dir = Math.random(2)<1 ? .5 : -.5;
         return dir * Math.min(car.speed/BaseSpeed,1);
       }
     }
 
-  return 0;
+  // return 0;
   // }
 
   // if no cars ahead, but I have somehow ended up off road, then steer back on
-  // if (car.offsetX < -0.9)
-  //   return 0.1;
-  // else if (car.offsetX > 0.9)
-  //   return -0.1;
-  // else
-  //   return 0;
+  // if (car.offsetX < 0){
+  //   if(Math.random(10)<1) return 0.1;
+  // }else if (car.offsetX > 0){
+  //   if(Math.random(10)<1) return -0.1;
+  // }
+    return 0;
 }
 
 //-------------------------------------------------------------------------
@@ -666,7 +667,7 @@ function render() {
   // draw car
   for(i=0; i<cars.length; i++) {
       car=cars[i];
-      if(car.segment<baseSegment.index || car.segment>=baseSegment.index+drawDistance){
+      if(car.segment<playerSegment.index || car.segment-playerSegment.index>drawDistance-playerZ/segmentLength){
           _other_car.getChildAt(car.index).visible=false;
           continue;
       } 

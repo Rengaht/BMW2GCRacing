@@ -46,7 +46,7 @@
 			<div id="_hint_driver_name" class="FontT2 MiddleBlue DisableSelect">Enter Driver's Name</div>
 			<div>
 				<span id="_driver_title" class="FontText DisableSelect">DRIVER</span>	
-				<input type="text" id="_input_driver" maxlength="6" class="FontT1 LightBlue" placeholder="YOUR NAME..." />
+				<input type="text" id="_input_driver" maxlength="6" class="FontT1 LightBlue" placeholder="YOUR NAME..." autocomplete="off" />
 				
 			</div>			
 		</div>
@@ -123,6 +123,8 @@
 				<span id="_hud_score">888</span>
 			</div>			
 		</div>
+		<div id="_game_touch_frame"></div>
+		
 		<div id="_rule" class="PageContainer hidden close">
 			<div id="_rule_board" class="Center">
 			<div class="BoardWrapper">
@@ -240,7 +242,7 @@
 					<span>姓名</span>
 					<div class="FormInput">
 						<div class="FormInputWrapper">
-							<input type="text" id="_input_lottery_name" class="FontInfo LightBlue"/>
+							<input type="text" id="_input_lottery_name" class="FontInfo LightBlue" autocomplete="off"/>
 							<img class="FormTopLeft" src="asset/img/ui/form_corner-1.png"/>
 							<img class="FormTopRight" src="asset/img/ui/form_corner-2.png"/>
 							<img class="FormBottomLeft" src="asset/img/ui/form_corner-2.png"/>
@@ -284,7 +286,7 @@
 					<span>手機</span>
 					<div class="FormInput">
 						<div class="FormInputWrapper">
-							<input type="tel" id="_input_lottery_phone" class="FontInfo LightBlue"/>
+							<input type="tel" id="_input_lottery_phone" class="FontInfo LightBlue" autocomplete="off"/>
 							<img class="FormTopLeft" src="asset/img/ui/form_corner-1.png"/>
 							<img class="FormTopRight" src="asset/img/ui/form_corner-2.png"/>
 							<img class="FormBottomLeft" src="asset/img/ui/form_corner-2.png"/>
@@ -296,7 +298,7 @@
 					<span>信箱</span>
 					<div class="FormInput">
 						<div class="FormInputWrapper">
-							<input type="email" id="_input_lottery_email" class="FontInfo LightBlue"/>
+							<input type="email" id="_input_lottery_email" class="FontInfo LightBlue" autocomplete="off"/>
 							<img class="FormTopLeft" src="asset/img/ui/form_corner-1.png"/>
 							<img class="FormTopRight" src="asset/img/ui/form_corner-2.png"/>
 							<img class="FormBottomLeft" src="asset/img/ui/form_corner-2.png"/>
@@ -378,7 +380,7 @@
 			<span>活動詳情</span>
 			<img src="asset/img/ui/line_title.png"/>
 		</div>
-		<div id="_campaign_wrapper" class="FontFormSmall LightBlue">
+		<div id="_campaign_wrapper" class="FontCampaign LightBlue">
 		<div>
 			<div class="CampaignItem">
 				<div><img src="asset/img/ui/point.png"/>活動時間</div>
@@ -438,7 +440,7 @@
 			</div> -->
 		</div>
 	</div>
-	<div id="_hint_landscape" class="PageContainer">
+	<div id="_hint_landscape" class="PageContainer hidden close">
 		<div class="VerticalWrapper" style="width:100%">
 			<img class="Center" src="asset/img/ui/hint_landscape.png"/>
 		</div>
