@@ -303,7 +303,7 @@ function movePage(page_,direction,callback){
 }
 function onButtonStartClick(){
 
-
+	if($('#_button_start').hasClass('Disable')) return;
 	if(_inTransition) return;
 
 	$('#_button_start').addClass('Click');

@@ -47,6 +47,7 @@ var _sound_loaded=false;
 function onload(){
 
 	_inTransition=true;
+	$('#_button_start').addClass("Disable");
 	// setup pixi
 	setupPixi();	
 	loadTexture();
@@ -189,7 +190,10 @@ function doResize(){
 
 }
 function checkLoading(){
-	if(_sound_loaded && _game_loaded) _inTransition=false;
+	if(_sound_loaded && _game_loaded){
+		_inTransition=false;
+		$('#_button_start').removeClass("Disable");
+	} 
 }
 
 function setupPixi(){
