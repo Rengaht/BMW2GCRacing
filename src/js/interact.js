@@ -60,9 +60,10 @@ function closePage(page_,next_page){
 			
 			break;
 		case '_game':
-			hideItem($('#_button_rank'));
 			if(next_page==='home'){
 				hideItem($('#_score'));
+			}else{
+				hideItem($('#_button_rank'));
 			} 
 	  		break;
 	  	case '_campaign':
