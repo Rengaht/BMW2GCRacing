@@ -486,7 +486,8 @@ function processData(data){
 					var z=index*segmentLength;
 				    var color=Math.floor(Math.random()*3);
 				    var sprite = onRoadPosition[k-2]<0?OTHER_CAR[color].left:(onRoadPosition[k-2]>0?OTHER_CAR[color].right:OTHER_CAR[color].center);
-				    var speed  = (sceneSpeedRatio[scene]*.5 + Math.random()) * BaseSpeed;
+				    var speed  = Util.interpolate(sceneSpeedRatio[scene],sceneSpeedRatio[scene+1],
+                        (index-sceneSegment[scene])/(index-sceneSegment[scene-1]||0)) * BaseSpeed;
 				    
 				    car = { offsetX: onRoadPosition[k-2], 
 				              offsetY:0,

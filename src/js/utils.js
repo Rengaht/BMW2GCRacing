@@ -62,6 +62,8 @@ var Util = {
     p.camera.y     = (p.world.y || 0) - cameraY;
     p.camera.z     = (p.world.z || 0) - cameraZ;
 
+
+
     let iseg=Math.floor(index/segmentPerDraw);
     let inter=index/segmentPerDraw-iseg;
     let d_=Util.interpolate(dk[iseg],dk[Math.min(dk.length,iseg+1)],inter);
@@ -70,7 +72,7 @@ var Util = {
 
     let xp=p.camera.x*d_/p.camera.z;
     let yp=p.camera.y*d_/p.camera.z;
-
+    
     // console.log();
 
     p.project.x=xp;

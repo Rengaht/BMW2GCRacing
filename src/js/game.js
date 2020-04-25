@@ -34,7 +34,9 @@ var audio_context;
 
 let url=window.location.href;
 // let MapURL="https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/asset/map/map-3.csv";
-let MapURL="http://127.0.0.1/BMW2GCRacing/asset/map/map-3.csv";
+let MapURL="http://127.0.0.1/2gc/asset/map/map-3.csv";
+let OtherCarCount=9;
+
 // if(url.indexOf('?')>-1) MapURL=url.substring(0,url.indexOf('?')-1)+"/asset/map/map-3.csv";
 // else MapURL=url+"asset/map/map-3.csv";
 
@@ -314,7 +316,7 @@ function loadFinish(loader,resources_){
 	setupCarSprite(_driver_color);
 	
 	_other_car=new Container();
-	for(var n=0;n<10;++n){
+	for(var n=0;n<OtherCarCount;++n){
 		_other_car.addChild(new PIXI.Sprite(resources.other_car.textures['car1-center.png']));
 	}
 	_other_car.sortableChildren=true;
