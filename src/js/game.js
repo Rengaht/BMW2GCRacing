@@ -536,6 +536,12 @@ function endGame(fail){
 
   if(!isPlaying) return;
 
+  // var total_score=score+life*10;
+ 
+  _sound_game.stop();
+  isPlaying=false;
+  console.log("------------- End Game "+formatTime(currentLapTime)+"-------------");
+ 
   if(fail){
   	_sound_fx['fail'].play();
   }else{
@@ -543,31 +549,31 @@ function endGame(fail){
 	  _sound_fx['goal'].volume(1.0);
 
 	  if(life>0){
-	  	for(var i=0;i<life;++i){
+	  	for(var i=0;i<=life;++i){
 	  		setTimeout(function(){
-	  			score+=10;
-	  			life-=1;
-	  			updateHud();
-	  			_sound_fx['combo'].play();
-
+	  			
+	  			if(life>0){
+	  				score+=10;
+		  			life-=1;
+		  			updateHud();
+	  				_sound_fx['combo'].play();
+	  			}else{
+	  				doneScore();
+	  			}
 	  		},300*(i+1));
 	  	}
-	  }
+	  }else doneScore();
   }
   // _sound_fx['goal'].fade(0.0,1.0,500);
 
-  _sound_game.stop();
-  isPlaying=false;
-  	   
- 
+}
+function doneScore(){
 
-  console.log("------------- End Game "+formatTime(currentLapTime)+"-------------");
  
   setDriverScore(score);
 
   setTimeout(function(){
-  		
-  	    
+  		 	    
     showScore();  	   
    	if(_sound_fx['goal'].playing())
    		_sound_fx['goal'].fade(1.0,0.0,500);
