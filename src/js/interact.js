@@ -96,6 +96,7 @@ function setupPage(page_){
 			$('#'+page_).addClass('pageToBase');
 
 			ga('send','back');
+			gtag('event','back');
 			break;
 		case '_driver':
 			$('#_button_ok').removeClass('Click');
@@ -159,6 +160,8 @@ function setupPage(page_){
 			$('#'+page_).addClass('pageToBase');
 			
 			ga('send','Participate');
+			gtag('event','Participate');
+				
 
 			break;
 		case '_campaign':
@@ -527,6 +530,7 @@ function sendInfo(callback){
 			if(data.result==='success'){
 				toggleLotteryError(true,'成功!');
 				ga('send','complete');
+				gtag('event','complete');
 
 				// update rank
 				_rank=data.rank;

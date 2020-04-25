@@ -512,6 +512,7 @@ function startGame(){
 	},500);
 
 	ga('send','Start_game');
+	gtag('event','Start_game');
 }
 
 function createQuadGeometry(index,x1, y1, x2, y2, x3, y3, x4, y4){
