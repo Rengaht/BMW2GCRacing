@@ -136,11 +136,18 @@ function resize(){
 function doResize(){
 	var ww_ = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; 
   	var wh_ = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+	
+	if(!isIpad()){
+  		showItem($('#_hint_ipad_only'));
+  		return;		
+  	}
+
 	if(ww_<wh_){
   		// landscape!!!
   		showItem($('#_hint_landscape'));
   		return;	
   	}
+
 
 
   	// rank board

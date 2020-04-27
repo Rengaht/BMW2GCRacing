@@ -70,7 +70,7 @@ function closePage(page_,next_page){
 	  		$('#_button_ok_campaign').removeClass('Click');
 	  		if(next_page==='_home'){
 	  			hideItem($('#_button_back'));	
-	  		}else if(next_page==='_driver'){
+	  		}else if(next_page==='_driver'||next_page==='_lottery'){
 	  			$('#'+page_).removeClass('pageToBase');		
 	  		}
 	  		break;
@@ -180,6 +180,7 @@ function setupPage(page_){
 
 			break;
 		case '_campaign':
+			$('#_campaign_wrapper').scrollTop(0);
 			if(!$('#_campaign').hasClass('pageToBase'))
 				$('#'+page_).addClass('pageToBase');		
 			break;
@@ -257,6 +258,7 @@ function onPageTransitionEnd(){
 					showItem($('#_rule'));	
 					movePage($('#_rule_board'),'pageFromTop');
 					$('#_button_lottery').removeClass('Disable');
+					$('#_button_lottery').removeClass('Click');
 				}else{
 					movePage($('#_score_board'),'pageFromBase');
 				}
@@ -603,7 +605,9 @@ function onButtonBackClick(){
 			gotoPage('_game','sb');
 			break;
 		case '_campaign':
-			gotoPage('_home','sb');
+			if(_pre_page==='_lottery') gotoPage('_lottery','sb');
+			if(_pre_page==='_home' || _pre_page==="_driver") 
+				gotoPage('_home','sb');
 			break;
 	}
 }
@@ -754,5 +758,28 @@ function onButtonCampaignOkClick(){
 	if(_inTransition) return;
 
 	$('#_button_ok_campaign').addClass('Click');
-	gotoPage('_driver','bb');
+	
+	if(_pre_page==='_lottery') gotoPage('_lottery','sb');
+	else gotoPage('_driver','bb');
+
+}
+function onClickCampaignInfo(){
+	if(_inTransition) return;
+	
+	gotoPage('_campaign','bb');	
+}
+function isIpad(){
+    const ua = window.navigator.userAgent;
+    if (ua.indexOf('iPad') > -1) {
+        return true;
+    }
+
+    if (ua.indexOf('Macintosh') > -1) {
+        try {
+            document.createEvent("TouchEvent");
+            return true;
+        } catch (e) {}
+    }
+
+    return false;
 }
