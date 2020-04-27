@@ -32,6 +32,7 @@
 	transform:translate3d(0,0,0);
 	transition:.5s easein;
 }
+
 .moveLoop{
 	animation:moveToTopLoop 3s infinite ease;
 }

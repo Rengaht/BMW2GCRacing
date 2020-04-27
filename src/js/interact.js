@@ -14,14 +14,14 @@ var _inTransition=false;
 var RankCount=50;
 
 function closePage(page_,next_page){
-	console.log('close '+page_);
+	// console.log('close '+page_);
 	
 	// $('#'+page_).find('.Button').addClass('Disable');
 	switch(page_){
 		case '_home':
 			hideItem($('#_button_rank'));			
 			
-			if(next_page==='_driver') $('#'+page_).removeClass('pageToBase');
+			if(next_page==='_campaign') $('#'+page_).removeClass('pageToBase');
 			
 			break;
 		case '_lottery':
@@ -41,8 +41,8 @@ function closePage(page_,next_page){
 				$('#'+page_).removeClass('pageToBase');
 				$('#'+page_).addClass('pageToTop');
 			}
-			if(next_page==='_home'){
-				hideItem($('#_button_back'));
+			if(next_page==='_campaign'){
+				// hideItem($('#_button_back'));
 				$('#'+page_).removeClass('pageToTop');				
 			}
 			break;
@@ -66,14 +66,19 @@ function closePage(page_,next_page){
 				hideItem($('#_button_rank'));
 			} 
 	  		break;
-	  	case '_campaign':
-	  		$('#'+page_).removeClass('pageToBase');		
+	  	case '_campaign':	  		
+	  		$('#_button_ok_campaign').removeClass('Click');
+	  		if(next_page==='_home'){
+	  			hideItem($('#_button_back'));	
+	  		}else if(next_page==='_driver'){
+	  			$('#'+page_).removeClass('pageToBase');		
+	  		}
 	  		break;
 	}
 }
 function setupPage(page_){
 
-	console.log('setup '+page_);
+	// console.log('setup '+page_);
 
 	if(page_!=='game'){		
 		try{
@@ -95,6 +100,9 @@ function setupPage(page_){
 			$('#_button_start').removeClass('Click');			
 			$('#'+page_).addClass('pageToBase');
 
+			if(!$('#_campaign').hasClass('pageToBase'))
+				$('#_campaign').addClass('pageToBase');
+
 			// ga('send','back');
 			gtag('event','back');
 			gtag('event', 'Nav Click', {
@@ -108,7 +116,7 @@ function setupPage(page_){
 			$('#_button_back').removeClass('Click');
 			$('#_input_driver').blur();
 			
-			if(_cur_page==='_home'){
+			if(_cur_page==='_campaign'){
 				$('#_input_driver').val("");			
 				_driver_name="";
 			}
@@ -172,7 +180,8 @@ function setupPage(page_){
 
 			break;
 		case '_campaign':
-			$('#'+page_).addClass('pageToBase');		
+			if(!$('#_campaign').hasClass('pageToBase'))
+				$('#'+page_).addClass('pageToBase');		
 			break;
 	}
 
@@ -220,7 +229,7 @@ function onPageTransitionEnd(){
 
 	_pre_page=_cur_page;
 	_cur_page=_next_page;
-	console.log('page transition end! cur='+_cur_page+' pre= '+_pre_page);
+	// console.log('page transition end! cur='+_cur_page+' pre= '+_pre_page);
 
 	// $('#'+_pre_page).addClass('close');
 	$('#_button_back').removeClass('Click');
@@ -320,8 +329,8 @@ function onButtonStartClick(){
 	if(_inTransition) return;
 
 	$('#_button_start').addClass('Click');
-	gotoPage('_driver','bb');
-
+	// gotoPage('_driver','bb');
+	gotoPage('_campaign','bb');
 
 }
 function onDriverNameClick(){
@@ -585,7 +594,7 @@ function onButtonBackClick(){
 			gotoPage(_pre_page,'sb');
 			break;
 		case '_driver':
-			gotoPage('_home','sb');
+			gotoPage('_campaign','sb');
 			break;
 		case '_color':
 			gotoPage('_driver','sb');
@@ -594,7 +603,7 @@ function onButtonBackClick(){
 			gotoPage('_game','sb');
 			break;
 		case '_campaign':
-			gotoPage('_lottery','sb');
+			gotoPage('_home','sb');
 			break;
 	}
 }
@@ -741,6 +750,9 @@ function get(name) {
 
 getUrlParameter();
 
-function onClickCampaignInfo(){	
-	gotoPage('_campaign');
+function onButtonCampaignOkClick(){	
+	if(_inTransition) return;
+
+	$('#_button_ok_campaign').addClass('Click');
+	gotoPage('_driver','bb');
 }
