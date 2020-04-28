@@ -783,3 +783,19 @@ function isIpad(){
 
     return false;
 }
+
+function onSoundButtonClick(){
+
+}
+function onContinueButtonClick(){
+
+
+}
+function onExitButtonClick(){
+
+
+}
+function onButtonControlClick(){
+	
+}
+

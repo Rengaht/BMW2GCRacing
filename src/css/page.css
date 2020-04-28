@@ -141,6 +141,11 @@ input:-webkit-autofill:active {
 	background-color: #001368;
 	z-index:4;
 }
+
+#_control{
+	background-color: rgb(0,0,0,0.85);
+	z-index: 51;
+}
 /* page home */
 .GameLogo{
 	position: relative;
@@ -738,7 +743,7 @@ input:-webkit-autofill:active {
 	position: fixed;
 	top:0;
 	right:6%;
-	z-index: 100;
+	z-index: 50;
 	max-height:15vh;
 
 	transition:opacity .5s ease-out .7s;
@@ -833,3 +838,20 @@ input:-webkit-autofill:active {
 .CampaignItem li{
     line-height: 1.5rem;
 }
+
+
+/*control page*/
+.ControlButton{
+	font-size: 3rem;
+	height:16%;
+	display: inline-block;
+	margin: 20px;
+}
+.ControlButton>img{
+	height:60%;
+}
+
+
+
+
+

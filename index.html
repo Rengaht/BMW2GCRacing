@@ -14,7 +14,14 @@
 	<script src="src/lib/jquery-3.3.1.min.js"></script>
 	<script src="src/lib/howler/howler.core.min.js"></script>  
 	<script src="src/lib/fastclick.js"></script> 
-	<!-- <script src="src/lib/projection/pixi-projection.js"></script> -->
+	<script src="src/lib/mobile-detect.min.js"></script> 
+	<script>
+		var md = new MobileDetect(window.navigator.userAgent);
+		if(!md.mobile()){
+			window.location.href="desktop.html";
+		}
+	</script>
+
 	<script src="src/js/interact.js"></script>
 	<script src="src/js/utils.js"></script>
 	<script src="src/js/render.js"></script>
@@ -29,6 +36,24 @@
 	
 	<div class="ButtonBack">
 		<img id="_button_back" class="Button hidden close" src="asset/img/ui/button_back.png" onclick="onButtonBackClick()"/>
+	</div>
+
+	<img id="_button_control" class="ButtonControl" src="asset/img/ui/button_control.png" onclick="onButtonControlClick()" />
+	<div id="_control" class="PageContainer LightBlue">
+		<div class="Center">
+			<div class="ControlButton" onclik="onSoundButtonClick()">
+				<img src="asset/img/ui/button_sound_on.png"/>
+				<div>音效開關</div>
+			</div>
+			<div class="ControlButton" onclik="onContinueButtonClick()">
+				<img src="asset/img/ui/button_continue.png"/>
+				<div>繼續遊戲</div>
+			</div>
+			<div class="ControlButton" onclik="onExitButtonClick()">
+				<img src="asset/img/ui/button_exit.png"/>
+				<div>離開遊戲</div>
+			</div>
+		</div>
 	</div>
 			
 	<div id="_home" class="PageContainer pageToTop pageToBase">
