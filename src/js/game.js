@@ -3,7 +3,10 @@ var Ticker;
 var _app;
 
 var _background;
-var _sky,_mountain,_road,_car,_scene_side,_scene_road,_other_car;
+var _sky,_mountain,_road,_scene_side,_scene_road,_other_car;
+var _car;
+var _car_texture_arr;
+
 var _ribbon;
 var _container_traffic_light,_start_gate;
 var _index_traffic_light;
@@ -40,6 +43,8 @@ let OtherCarCount=10;
 
 var _game_loaded=false;
 var _sound_loaded=false;
+
+var _game_elapse_time=0;
 
 // if(url.indexOf('?')>-1) MapURL=url.substring(0,url.indexOf('?')-1)+"/asset/map/map-3.csv";
 // else MapURL=url+"asset/map/map-3.csv";
@@ -241,7 +246,7 @@ function loadTexture(){
 			.add('road','asset/img/texture/txt-24.png')
 			.add('side_road','asset/img/texture/txt-27.png')
 			.add('ref','asset/img/ref.png')
-			.add('car','asset/img/sprite/car.json')
+			// .add('car','asset/img/sprite/car.json')
 			.add('road_element','asset/img/sprite/road.json')
 			.add('other_car','asset/img/sprite/other_car.json')
 			.add('scene1','asset/img/sprite/scene1.json')
@@ -249,6 +254,12 @@ function loadTexture(){
 			.add('scene3','asset/img/sprite/scene3.json')
 			.add('gate','asset/img/sprite/gate.json')
 			.add('ribbon','asset/img/sprite/ribbon.json')
+			.add('car_1','asset/img/sprite/car-1.json')
+			.add('car_2','asset/img/sprite/car-2.json')
+			.add('car_3','asset/img/sprite/car-3.json')
+			.add('car_4','asset/img/sprite/car-4.json')
+			.add('car_5','asset/img/sprite/car-5.json')
+			.add('car_6','asset/img/sprite/car-6.json')
 			.load(loadFinish);
 
 }
@@ -283,7 +294,7 @@ function loadFinish(loader,resources_){
 	
 
 	_texture_road=resources.road_element.textures;
-	_texture_car=resources.car.textures;
+	// _texture_car=resources.car.textures;
 
 	_container_traffic_light=new PIXI.Container();
 	for(var i=0;i<6;++i){
@@ -371,12 +382,14 @@ function loadFinish(loader,resources_){
 
 	
 	// laod car texture
-	_car=new PIXI.Sprite(_texture_car['car1-center.png']);
-	CarScale=width/3*0.8/_texture_car['car1-center.png'].width;
+	// _car=new PIXI.Sprite(_texture_car['car1-center.png']);
+	
 
+	
 	_driver_color='blue';
 	setupCarSprite(_driver_color);
-	
+	CarScale=width/3*0.8/_car.textures[0].width;
+
 	_other_car=new Container();
 	for(var n=0;n<OtherCarCount;++n){
 		_other_car.addChild(new PIXI.Sprite(resources.other_car.textures['car1-center.png']));
@@ -413,6 +426,9 @@ function loadFinish(loader,resources_){
 
 }
 function setupCarSprite(color_){
+
+
+
 	let id=null;
 	switch(color_){
 		case 'blue': id='1'; break;
@@ -420,16 +436,42 @@ function setupCarSprite(color_){
 		case 'gray': id='3'; break;
 		case 'white': id='4'; break;
 	}
-	_sprite_car={'center':'car'+id+'-center.png',
-				 'left':'car'+id+'-left.png',
-				 'right':'car'+id+'-right.png'};
-	_last_car_pos='center';
+	// _sprite_car={'center':'car'+id+'-center.png',
+	// 			 'left':'car'+id+'-left.png',
+	// 			 'right':'car'+id+'-right.png'};
 
-	_car.texture=_texture_car[_sprite_car[_last_car_pos]];
+	if(_car_texture_arr==null){
+		_car_texture_arr={
+			left:[],
+			right:[],
+			center:[]
+		};
+	}else{
+		_car_texture_arr.left=[];
+		_car_texture_arr.right=[];
+		_car_texture_arr.center=[];
+	}
+	
+	for(var n=0;n<6;++n){
+		_car_texture_arr.left.push(resources['car_'+(n+1)].textures['car-'+(n+1)+'-'+color_+'-left.png']);
+		_car_texture_arr.right.push(resources['car_'+(n+1)].textures['car-'+(n+1)+'-'+color_+'-right.png']);
+		_car_texture_arr.center.push(resources['car_'+(n+1)].textures['car-'+(n+1)+'-'+color_+'-center.png']);
+	}
+
+
+	_last_car_pos='center';
+	
+
+	if(_car==null) _car=new PIXI.AnimatedSprite(_car_texture_arr[_last_car_pos]);
+	else _car.textures=_car_texture_arr[_last_car_pos];
+
+
+	// _car.texture=_texture_car[_sprite_car[_last_car_pos]];
 }
 
 
 function setupGame(){
+
 	position=0;
 	score=0;
 	life=MaxLife;
@@ -438,6 +480,8 @@ function setupGame(){
 	lastSegment=0;
 	setupScene(0);
 	playerX=0;
+
+	_game_elapse_time=-1;
 
 	updateHud();
 
@@ -464,6 +508,8 @@ function setupGame(){
 	setupScene(indexScene);
 	setShaderUniforms(indexScene,indexScene,0);
 	
+	setTrafficLight(0);	
+		
 	Ticker.start();
 
 	resetRoad(MapURL,function(){
@@ -473,6 +519,7 @@ function setupGame(){
 	
 		setTrafficLight(0);	
 
+	
 		update(0);
 		render();
 	
@@ -490,33 +537,40 @@ function startGame(){
 	for(var n=0;n<RibbonCount;++n)
 		_ribbon.getChildAt(i).visible=false;
 
-	setTimeout(function(){
+	// setTimeout(function(){
 	
 		_sound_bgm.stop();
+		
 		_sound_fx['light_count'].play();
-	
+		_sound_fx['light_count'].seek(0);
+		
 		//TODO: countdown here 
-		setTrafficLight(0);	
-		setTimeout(function(){
-			setTrafficLight(1);
-			
-		},1000);
-		setTimeout(function(){
-			setTrafficLight(2);
-		
-		},2000);
+		_game_elapse_time=0;
 
-		setTimeout(function(){
-			isPlaying=true;	
-			console.log("------------- Start Game -------------");	
+		// setTimeout(function(){
+		// 	setTrafficLight(1);
 			
-			_sound_game.play();
-			_sound_game.fade(0.5,1.0,1000);
-			_sound_game.seek(0);
-		},3000);
+		// },1000);
+		// setTimeout(function(){
+		// 	setTrafficLight(2);
+		
+		// },2000);
+
+		// setTimeout(function(){
+		// 	isPlaying=true;	
+		// 	console.log("------------- Start Game -------------");	
+			
+		// 	_car.gotoAndPlay(0);
+
+
+		// 	_sound_game.play();
+		// 	_sound_game.fade(0.5,1.0,1000);
+		// 	_sound_game.seek(0);
+		
+		// },3000);
 
 		
-	},500);
+	// },500);
 
 	// ga('send','Start_game');
 	gtag('event','Start_game');
@@ -584,6 +638,37 @@ function endGame(fail){
   // _sound_fx['goal'].fade(0.0,1.0,500);
 
 }
+function pauseGame(){
+
+	if(_game_elapse_time<0) return;
+
+	// TODO: handle sound
+	if(_game_elapse_time>=3) _sound_game.fade(1.0,0.2,500);
+    else if(_game_elapse_time>=0){
+		_sound_fx['light_count'].pause();
+    }      
+	Ticker.stop();
+}
+function resumeGame(){
+	
+	if(_game_elapse_time<0) return;
+
+	// TODO: handle sound
+	if(_game_elapse_time>=3) _sound_game.fade(0.2,1.0,500);
+	else if(_game_elapse_time>=0){
+		_sound_fx['light_count'].play();
+	}
+    
+	Ticker.start();
+}
+function exitGame(){
+	_sound_game.stop();
+	isPlaying=false;
+	_game_elapse_time=-1;
+	Ticker.stop();
+}
+
+
 function doneScore(){
 
  
@@ -603,6 +688,9 @@ function doneScore(){
 }
 
 function setTrafficLight(set_){
+
+	if(!_container_traffic_light.getChildAt(set_).visible) return;
+
 	for(var i=0;i<2;++i){
 		for(var j=0;j<3;++j){
 			if(j==set_) _container_traffic_light.getChildAt(i*3+j).visible=false;
@@ -631,7 +719,8 @@ function loadSound(){
 
 	_sound_game=new Howl({
 		src:['asset/sound/webm/game.webm',
-			'asset/sound/mp3/game.mp3']
+			'asset/sound/mp3/game.mp3'],
+		loop:true
 	});
 
 	_sound_fx['button_large']=new Howl({

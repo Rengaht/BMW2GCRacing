@@ -144,7 +144,7 @@ function setupPage(page_){
 				// setTimeout(function(){			
 	  	// 			movePage($('#_rule_board'),'pageFromTop');
 	  	// 		},700);
-				setupGame();			
+				// setupGame();			
 			}else{
 				showItem($('#_button_rank'));
 				showItem($('#_score'));
@@ -785,17 +785,39 @@ function isIpad(){
 }
 
 function onSoundButtonClick(){
-
+	if(Howler._muted){
+		Howler.mute(false);
+		$('#_button_sound').attr('src','asset/img/ui/button_sound_on.png');
+	}else{
+		Howler.mute(true);
+		$('#_button_sound').attr('src','asset/img/ui/button_sound_off.png');
+	}
 }
 function onContinueButtonClick(){
 
-
+	hideItem($('#_control'));
+	resumeGame();	
 }
 function onExitButtonClick(){
 
+	hideItem($('#_control'));
+	if(_cur_page==='_game'){
+		exitGame();
+		gotoPage('_home');
+	}
 
 }
 function onButtonControlClick(){
 	
+	if($('#_control').hasClass('hidden')){
+			
+		pauseGame();
+		showItem($('#_control'));
+
+	}else{
+		
+		resumeGame();
+		hideItem($('#_control'));
+	}
 }
 

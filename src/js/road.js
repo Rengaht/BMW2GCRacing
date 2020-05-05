@@ -114,6 +114,32 @@ var hud = null;
 
 function update(dt) {
 
+
+  if(_game_elapse_time>=0) _game_elapse_time+=dt;
+  
+  // handle count down
+  if(_game_elapse_time>=1){
+    if(_game_elapse_time>=2){
+      if(_game_elapse_time>=3){
+        
+        if(!isPlaying){
+          isPlaying=true;
+          _car.gotoAndPlay(0);
+
+          _sound_game.play();
+          _sound_game.fade(0.5,1.0,1000);
+          _sound_game.seek(0);
+        }
+
+      }else{
+        setTrafficLight(2);
+      }
+    }else{
+      setTrafficLight(1);
+    }
+  }
+
+
   var n, car, carW, sprite, spriteW;
   var playerSegment = findSegment(position+playerZ);
   
@@ -196,7 +222,7 @@ function update(dt) {
   }
 
   // var playerW       = SPRITES.PLAYER_STRAIGHT.w * SPRITES.SCALE;
-  var playerW       = _texture_car['car1-center.png'].width * CarScale;
+  var playerW       = _car.textures[0].width * CarScale;
   var speedPercent  = Math.min(2,speed/BaseSpeed*4);
   var move_dx            = dt * 2 * speedPercent; // at top speed, should be able to cross from left to right (-1 to 1) in 1 second
   var startPosition = position;
@@ -418,7 +444,7 @@ function updateHudElement(key, value){ // accessing DOM can be slow, so only do 
 function formatTime(dt) {
   
   var seconds = Math.floor(dt);
-  var tenths  = Math.floor(10 * (dt - Math.floor(dt)));
+  var tenths  = Math.floor(100 * (dt - Math.floor(dt)));
 
   return pad(seconds,2) + ":" + pad(tenths,2);
 }

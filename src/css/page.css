@@ -178,7 +178,7 @@ input:-webkit-autofill:active {
 	height:8%;
 	max-height: 100px;
 
-	z-index: 100;
+	z-index: 40;
 	transition:opacity .5s ease-out .7s;
 
 	overflow: hidden;
@@ -843,14 +843,21 @@ input:-webkit-autofill:active {
 /*control page*/
 .ControlButton{
 	font-size: 3rem;
-	height:16%;
+	height:16vh;
+	min-height: 120px;
 	display: inline-block;
 	margin: 20px;
 }
 .ControlButton>img{
 	height:60%;
+	margin-bottom: 5px;
 }
-
+#_button_control{
+	z-index: 60;
+    position: fixed;
+    right: 20px;
+    top: 20px;
+}
 
 
 

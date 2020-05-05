@@ -219,7 +219,9 @@ var Render = {
 
     
     if(_last_car_pos!=next_car_pos){
-      _car.texture=_texture_car[_sprite_car[next_car_pos]];
+      // _car.texture=_texture_car[_sprite_car[next_car_pos]];
+      _car.textures=_car_texture_arr[next_car_pos];
+      _car.gotoAndPlay(0);
     }
     _last_car_pos=next_car_pos;
 

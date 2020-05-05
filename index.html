@@ -38,21 +38,25 @@
 		<img id="_button_back" class="Button hidden close" src="asset/img/ui/button_back.png" onclick="onButtonBackClick()"/>
 	</div>
 
-	<img id="_button_control" class="ButtonControl" src="asset/img/ui/button_control.png" onclick="onButtonControlClick()" />
-	<div id="_control" class="PageContainer LightBlue">
+	<img id="_button_control" src="asset/img/ui/button_control.png" onclick="onButtonControlClick()" />
+	<div id="_control" class="PageContainer LightBlue hidden close">
+		<div class="VerticalWrapper" style="width:100%">
+		
 		<div class="Center">
-			<div class="ControlButton" onclik="onSoundButtonClick()">
-				<img src="asset/img/ui/button_sound_on.png"/>
+			<div class="ControlButton" onclick="onSoundButtonClick()">
+				<img id="_button_sound" src="asset/img/ui/button_sound_on.png"/>
 				<div>音效開關</div>
 			</div>
-			<div class="ControlButton" onclik="onContinueButtonClick()">
+			<div class="ControlButton" onclick="onContinueButtonClick()">
 				<img src="asset/img/ui/button_continue.png"/>
 				<div>繼續遊戲</div>
 			</div>
-			<div class="ControlButton" onclik="onExitButtonClick()">
+			<div class="ControlButton" onclick="onExitButtonClick()">
 				<img src="asset/img/ui/button_exit.png"/>
 				<div>離開遊戲</div>
 			</div>
+		</div>
+
 		</div>
 	</div>
 			
@@ -149,7 +153,11 @@
 			</div>			
 		</div>
 		<div id="_game_touch_frame"></div>
-		
+
+		<div id="_hint" onClick="startGame()" class="Button hidden close">
+			<img src="asset/img/ui/hint.png" class="Center"/>
+		</div>
+
 		<div id="_rule" class="PageContainer hidden close">
 			<div id="_rule_board" class="Center">
 			<div class="BoardWrapper">
@@ -204,10 +212,7 @@
 			</div>
 		</div>
 
-		<div id="_hint" onClick="startGame()" class="Button hidden close">
-			<img src="asset/img/ui/hint.png" class="Center"/>
-		</div>
-
+		
 		<div id="_score" class="PageContainer hidden close">
 			<div id="_score_board" class="Center">
 				<div class="BoardWrapper">			
