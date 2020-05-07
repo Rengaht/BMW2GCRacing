@@ -563,7 +563,10 @@ function sendInfo(callback){
 				$('#_button_send').addClass('Disable');
 				
 				setTimeout(function(){
-					$('#_button_lottery').addClass('Disable');
+					
+					hideItem($('#_button_lottery'));
+					showItem($('#_button_share'));
+
 					if(callback) callback();			
 					gotoPage('_game','bb');			
 				},300);
@@ -819,5 +822,15 @@ function onButtonControlClick(){
 		resumeGame();
 		hideItem($('#_control'));
 	}
+}
+
+function onButtonShareClick(){
+
+	// generate pic
+
+	// upload
+
+	// share url
+	
 }
 

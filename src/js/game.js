@@ -143,8 +143,8 @@ function doResize(){
   	var wh_ = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 	
 	if(!isIpad()){
-  		showItem($('#_hint_ipad_only'));
-  		return;		
+  		// showItem($('#_hint_ipad_only'));
+  		// return;		
   	}
 
 	if(ww_<wh_){

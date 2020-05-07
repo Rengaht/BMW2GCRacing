@@ -850,13 +850,14 @@ input:-webkit-autofill:active {
 }
 .ControlButton>img{
 	height:60%;
-	margin-bottom: 5px;
+	margin-bottom: 4vh;
 }
 #_button_control{
 	z-index: 60;
     position: fixed;
-    right: 20px;
-    top: 20px;
+    right: 1.6vh;
+    top: 1.6vh;
+    max-height: 4vw;
 }
 
 
