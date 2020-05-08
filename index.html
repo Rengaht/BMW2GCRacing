@@ -42,7 +42,7 @@
 	<div id="_control" class="PageContainer LightBlue hidden close">
 		<div class="VerticalWrapper" style="width:100%">
 		
-		<div class="Center">
+		<div class="Center" id="_control_wrapper">
 			<div class="ControlButton" onclick="onSoundButtonClick()">
 				<img id="_button_sound" src="asset/img/ui/button_sound_on.png"/>
 				<div>音效開關</div>
@@ -72,9 +72,9 @@
 	</div>
 	<div id="_driver" class="PageContainer pageToBase">
 		<div id="_flag_top" class="Flag Center">
-			<div id="_hint_driver_name" class="FontT2 MiddleBlue DisableSelect">Enter Driver's Name</div>
+			<!-- <div id="_hint_driver_name" class="FontT2 MiddleBlue DisableSelect">Enter Driver's Name</div> -->
 			<div>
-				<span id="_driver_title" class="FontText DisableSelect">DRIVER</span>	
+				<!-- <span id="_driver_title" class="FontText DisableSelect">DRIVER</span>	 -->
 				<input type="text" id="_input_driver" maxlength="6" class="FontT1 LightBlue" placeholder="YOUR NAME..." autocomplete="off" />
 				
 			</div>			
@@ -89,7 +89,7 @@
 	</div>
 	<div id="_color" class="PageContainer pageToBottom">
 		<div id="_flag_bottom" class="Flag Center">
-			<div id="_hint_car_color" class="FontT2 LightBlue DisableSelect">CHOOSE THE COLOR</div>			
+			<!-- <div id="_hint_car_color" class="FontT2 LightBlue DisableSelect">CHOOSE THE COLOR</div>			 -->
 		</div>
 		<div class="ColorCarWrapper">
 			<img id="_img_car_color_blue" class="FrontCar" src="asset/img/ui/frontcar_blue.png"/>		
@@ -170,32 +170,32 @@
 					<div class="Center">
 					<div class="RuleItem">
 						<img src="asset/img/ui/point.png"/>
-						<p>遊戲時間60秒，擁有3個星星生命
+						<div>遊戲時間60秒，擁有3個星星生命
 							<img src="asset/img/ui/star.png"/>
 							<img src="asset/img/ui/star.png"/>
 							<img src="asset/img/ui/star.png"/>
-						</p>
+						</div>
 					</div>
 					<div class="RuleItem">
 						<img src="asset/img/ui/point.png"/>
-						<p>吃到
+						<div>吃到
 						<img src="asset/img/ui/rules_logo.png"/>
 						加一分，
 						<img src="asset/img/ui/rules_m.png"/>
 						加五分
-						</p>
+						</div>
 					</div>
 					<div class="RuleItem">
 						<img src="asset/img/ui/point.png"/>
-						<p>碰到障礙或其他車輛，扣１個星星</p>
+						<div>碰到障礙或其他車輛，扣１個星星</div>
 					</div>
 					<div class="RuleItem">
 						<img src="asset/img/ui/point.png"/>
-						<p>失去３個星星，遊戲提早結束</p>
+						<div>失去３個星星，遊戲提早結束</div>
 					</div>
 					<div class="RuleItem">
 						<img src="asset/img/ui/point.png"/>
-						<p>抵達終點時，剩下的星星每個可加10分</p>
+						<div>抵達終點時，剩下的星星每個可加10分</div>
 					</div>
 					</div>
 				</div>
@@ -264,10 +264,10 @@
 			<span>輸入資料參加抽獎</span>
 			<img src="asset/img/ui/line_title.png"/>
 		</div>
-		<div class="VerticalWrapper">
-		<div class="Center">
+		<!-- <div class="VerticalWrapper">
+		<div class="Center"> -->
 		<div id="_lottery_info" class="Center FontInfo MiddleBlue">
-			<div class="LotteryColumn">
+			<!-- <div class="LotteryColumn"> -->
 				<div class="LotteryItem">
 					<span>姓名</span>
 					<div class="FormInput">
@@ -336,10 +336,12 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="LotteryColumn">
-				<div class="LotteryItem" style="flex-grow:1">
-					<p class="FontFormSmall LightBlue">是否需為您安排前往BMW展示中心進行試乘體驗，如欲參加請選擇您欲前往的展示中心，我們將針對您感興趣之車款，將由BMW專業銷售顧問與您聯絡，提供進一步的產品資訊。</p>
+			<!-- </div> -->
+			<!-- <div class="LotteryColumn"> -->
+				<div class="LotteryItem LightBlue" style="flex-grow:1">
+					<!-- <p class="FontFormSmall LightBlue"> -->
+					是否需為您安排前往BMW展示中心進行試乘體驗，如欲參加請選擇您欲前往的展示中心，我們將針對您感興趣之車款，將由BMW專業銷售顧問與您聯絡，提供進一步的產品資訊。
+					<!-- </p> -->
 				</div>
 				<div class="LotteryItem">
 					<span>試乘體驗</span>
@@ -384,26 +386,26 @@
 						</div>
 					</div>
 				</div>
-			</div>			
-		</div>	
-				<div class="LotteryAuth FontFormSmall LightBlue">
-				<span id="_button_agree" class="RadioMark" onclick="onClickAgree()"></span>
-				<span id="_auth_text">我同意BMW總代理汎德股份有限公司得將本人之個人資料經電腦處理後，BMW總代理汎德股份有限公司及其所屬汎德股份有限公司其他關係企業暨其特約經銷商等使用，以及為提升客戶服務品質、車輛資訊之提供及推廣客戶關懷活動而使用。</span>
-			</div>
-		</div>	
-		</div>
-		
-		
-		<div class="InputError">
-			<span id="_lottery_input_error" class="Orange FontInfo Center"></span>
-		</div>
+	<!-- 		</div>			
+		</div>	 -->
+				<div class="LotteryItem LightBlue">
+				<!-- <div class="LotteryAuth FontFormSmall LightBlue"> -->
+					<span id="_button_agree" class="RadioMark" onclick="onClickAgree()"></span>
+					<span id="_auth_text">我同意BMW總代理汎德股份有限公司得將本人之個人資料經電腦處理後，BMW總代理汎德股份有限公司及其所屬汎德股份有限公司其他關係企業暨其特約經銷商等使用，以及為提升客戶服務品質、車輛資訊之提供及推廣客戶關懷活動而使用。</span>
+				</div>
 
-		<div id="_lottery_button_wrapper" class="Center BottomWrapper">
-			<img id="_button_campaign" class="Button" onclick="onClickCampaignInfo()" src="asset/img/ui/button_info.png"/>
-			<img id="_button_send" class="Button" onclick="sendInfo()" src="asset/img/ui/button_send.png"/>
-			</div>		
-		</div>
+				<div class="InputError">
+					<span id="_lottery_input_error" class="Orange FontInfo Center"></span>
+				</div>
+
+				<div id="_lottery_button_wrapper" class="Center BottomWrapper">
+					<img id="_button_campaign" class="Button" onclick="onClickCampaignInfo()" src="asset/img/ui/button_info.png"/>
+					<img id="_button_send" class="Button" onclick="sendInfo()" src="asset/img/ui/button_send.png"/>
+					</div>		
+				</div>
+		</div>	
 	</div>
+
 	<div id="_campaign" class="PageContainer pageToTop pageToBase">
 		<div id="_lottery_title" class="Center WaveTitle FontT2 LightBlue">
 			<img src="asset/img/ui/line_title.png"/>
@@ -466,6 +468,7 @@
 	</div>
 
 	<div id="_rank" class="PageContainer pageToRight">
+		<img src="asset/img/ui/BG_rank.png" id="_rank_back"/>
 		<img src="asset/img/ui/game_logo_rank.png" id="_rank_logo"/>
 		<div id="_rank_info" class="Center FontInfo LightBlue DisableSelect">
 			<!-- <div class="RankItem">

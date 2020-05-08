@@ -43,9 +43,11 @@ input:-webkit-autofill:active {
 }
 .BottomWrapper{
 	position: absolute;
-	bottom: 5vh;
-	max-height:11vh;
-	height:11vh;
+	
+	bottom: 1rem;
+	/*max-height:11vh;*/
+	height:3.8rem;
+	
 	overflow: hidden;
 	width: 100%;
 }
@@ -57,10 +59,7 @@ input:-webkit-autofill:active {
 	top:0;
 	bottom:0;
 }
-#hud{
-	position: absolute;
-	right:0;
-}
+
 
 .Button{
 	cursor: pointer;
@@ -132,9 +131,10 @@ input:-webkit-autofill:active {
 	z-index: 1;
 }
 #_rank{
-	background-image:url(../../asset/img/ui/BG_rank.png);
+	/*background-image:url(../../asset/img/ui/BG_rank.png);*/
 	z-index: 11;
 	background-position: top;
+	overflow-y:auto;
 }
 #_game{
 	z-index: 3;
@@ -173,12 +173,13 @@ input:-webkit-autofill:active {
 }
 /* page driver */
 .ButtonBack{
-	position: absolute;
-	top:85px;
-	left:64px;
+	position: fixed;
 	
-	height:8%;
-	max-height: 100px;
+	top:1rem;
+	left:1rem;
+	height:3rem;	
+	/*height:8%;
+	max-height: 100px;*/
 
 	z-index: 12;
 	transition:opacity .5s ease-out .7s;
@@ -199,14 +200,17 @@ input:-webkit-autofill:active {
 
 .Flag{
 	position: relative;
-	background-image: url(../../asset/img/ui/flag.png);
+	/*background-image: url(../../asset/img/ui/flag.png);*/
 	background-size: 100% auto;
 	width: 103vh;
 	background-repeat: no-repeat;
 }
 #_flag_top{
+	background-image: url(../../asset/img/ui/flag-1.png);
+	background-position: bottom;
 	height:75vh;
 	top:25vh; 
+
 }
 
 
@@ -228,11 +232,13 @@ input:-webkit-autofill:active {
 	top:calc(28vh - .5rem);
 	left:29vh;
 	vertical-align: middle;
+
+	font-size: 10vh;
 }
 #_input_driver{
 
 	position:absolute;
-	top:calc(35vh - 1.5rem);
+	top:calc(42vh - 1.5rem);
 	left:29vh;
 	width:65vh;
 	background:transparent;	
@@ -246,15 +252,17 @@ input:-webkit-autofill:active {
 }
 .InputError{
 	position: absolute;
-	bottom: 18vh;	
+	bottom: 5rem;	
 	width: 100%;
+	z-index: 10;
 }
 
 /* page color */
 #_flag_bottom{
+	background-image: url(../../asset/img/ui/flag-2.png);
 	height:72vh;
 	top:0; 
-	background-position:bottom;
+	background-position:top;
 }
 #_hint_car_color{
 	position: absolute;
@@ -307,9 +315,9 @@ input:-webkit-autofill:active {
 
 #_hud{
 	position:absolute;
-	top:43px;
-	left:50px;
-	right:50px;
+	top:1rem;
+	left:4rem;
+	right:5rem;
 
 	display:flex;
 	flex-direction: row;
@@ -319,16 +327,18 @@ input:-webkit-autofill:active {
 }
 .HudElement{
 	display:flex;	
+	width:33%;
 }
 .HudElement>span{
-	width:7.5rem;
+	/*width:7.5rem;*/
 	margin-right:1rem;
 	text-align: left;
 }
 
 
 #_life_star>img{
-	height:2rem;
+	max-height:2rem;
+	max-width: 20%;
 }
 
 
@@ -384,27 +394,27 @@ input:-webkit-autofill:active {
 }
 /* rules */
 #_rule_text{
-	max-height: 60%;
-	margin-top: 20px;
-	margin-bottom: 20px;
+	/*max-height: 60%;*/
+	margin-top: 2rem;
+	/*margin-bottom: 20px;*/
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
 }
 .RuleItem{
 	text-align: left;
-
+	margin-bottom: 1rem;
 }
 .RuleItem img{
 	vertical-align: middle;
 	max-height: 2rem;
 	max-width: 2rem;
 }
-.RuleItem img:first-child{
+.RuleItem>img:first-child{
 	margin-right:10px;
 
 }
-.RuleItem img,p{
+.RuleItem img, .RuleItem>div{
 	display: inline-block;
 }
 #_button_ok_rule,#_button_ok_campaign{
@@ -425,8 +435,8 @@ input:-webkit-autofill:active {
 	background-color:rgba(255,131,69,0.5);
 }
 #_score_board,#_rule_board{
-	width:94%;
-	height:90%;
+	width:94vw;
+	height:90vh;
 
 	/*background-image: url(../../asset/img/ui/frame_complete.png);
 	background-size: cover;
@@ -435,11 +445,11 @@ input:-webkit-autofill:active {
 .BoardWrapper{
 	position:relative;
 	width:100%;
-	max-height:100%;
-	min-height: 85%;
+	height:100%;
 	background-color:#010F6D;
-	padding-top:70px;
-	padding-bottom: 50px;
+	
+	padding-top:1rem;
+	padding-bottom: 1rem;
 }
 
 .BoardBorder:first-of-type{
@@ -491,8 +501,8 @@ input:-webkit-autofill:active {
 	position: relative;
 	overflow: hidden;
 
-	margin-left:10%;
-	margin-right:10%;
+	margin-left:2rem;
+	margin-right:2rem;
 }
 #_congradulation{
 	position: relative;
@@ -509,7 +519,7 @@ input:-webkit-autofill:active {
 	flex-direction: row;	
 	justify-content: space-between;
 	
-	margin-top: 30px;
+	margin-top: 1rem;
 }
 .ScoreElement{
 	display:flex;
@@ -522,22 +532,22 @@ input:-webkit-autofill:active {
 }
 
 #_car_complete{
-	margin-top: 50px;
+	margin-top: 1.5rem;
 }
 #_complete_button_wrapper>img:first-child{
-	margin-right:100px;
+	margin-right:2rem;
 }
-#_complete_button_wrapper{
-	/*position: relative;*/
-	margin-top: 30px;
-}
+/*#_complete_button_wrapper{
+	position: relative;
+	margin-top: 1rem;
+}*/
 
 
 /* lottery */
 #_lottery_title{
 	position: absolute;
 	width:100%;
-	top:85px;
+	top:1rem;
 }
 .VerticalWrapper{
 	position: absolute;
@@ -547,38 +557,43 @@ input:-webkit-autofill:active {
 	justify-content: center;
 }
 #_lottery_info{
-	max-width:90%;
-	max-height:65%;
-	overflow-y: auto;
+	position: absolute;
+    top: 6rem;
+    left: 8rem;
+    right: 0rem;
+    bottom: 2rem;
+    padding-right:8rem;
 
-	display:flex;
+    overflow-y: auto;
+
+/*	display:flex;
 	flex-direction: row;
-	justify-content: space-between;
+	justify-content: space-between;*/
 }
 .LotteryColumn{
 	
 	/*margin-right: 70px;*/
-	width: 50%;
-	display: flex;	
-	flex-direction: column;
-	justify-content: space-between;
-	padding:20px;
+	/*width: 50%;*/
+	/*display: flex;	*/
+	/*flex-direction: column;*/
+	/*justify-content: space-between;*/
+	/*padding:20px;*/
 }
 .LotteryItem{
 	width:100%;
-	margin-bottom:42px;
+	margin-bottom:2rem;
 	
 	display: flex;
 	flex-direction: row;
 	justify-content: start;
 
 	text-align: left;
-	height: 2rem;
+	/*height: 2rem;*/
 }
 .LotteryItem>span{
 	margin-right:1rem;
 	text-overflow: ellipsis;
-    white-space: nowrap;
+    /*white-space: nowrap;*/
 }
 /*.LotteryItem>input,select{
 	flex-grow:1;
@@ -590,6 +605,12 @@ input:-webkit-autofill:active {
 
 	text-align: left;
 	line-height: 150%;
+}
+#_lottery_button_wrapper{
+	position: relative;
+	z-index: 2;
+	bottom: unset;
+    margin-top: 2rem;
 }
 .FormInput{
 	
@@ -695,7 +716,7 @@ input:-webkit-autofill:active {
 }
 
 #_button_campaign{
-	margin-right:100px;
+	margin-right:2rem;
 }
 /* rank page */
 
@@ -745,10 +766,10 @@ input:-webkit-autofill:active {
 #_button_rank{
 	position: fixed;
 	top:0;
-	right:6%;
+	right:5rem;
+	height:7.4rem;
+	
 	z-index: 10;
-	max-height:15vh;
-
 	transition:opacity .5s ease-out .7s;
 }
 #_button_rank.hidden{
@@ -757,9 +778,12 @@ input:-webkit-autofill:active {
 
 #_rank_logo{
 	position: fixed;
-	top:40px;
-	right:40px;
+	top:1rem;
+	right:1rem;
 	max-height:18%;
+}
+#_rank_back{
+	width: 100%;
 }
 
 /* width */
@@ -809,10 +833,12 @@ input:-webkit-autofill:active {
 
 #_campaign_wrapper{
 	position: absolute;
-    top: 180px;
-    left: 20%;
-    right: 20%;
-    bottom: 20vh;
+    top: 6rem;
+    left: 4rem;
+    right: 0rem;
+    bottom: 6rem;
+    padding-right:4rem;
+
     overflow-y: auto;
 
     line-height: 2rem;
@@ -845,22 +871,30 @@ input:-webkit-autofill:active {
 
 /*control page*/
 .ControlButton{
-	font-size: 3rem;
-	height:16vh;
-	min-height: 120px;
+	font-size: 1rem;
+	/*height:10rem;*/
+	/*min-height: 120px;*/
 	display: inline-block;
-	margin: 20px;
+	margin: 1.5rem;
 }
 .ControlButton>img{
-	height:60%;
-	margin-bottom: 4vh;
+	height:3rem;
+	margin-bottom: 1rem;
 }
 #_button_control{
 	z-index: 8;
     position: fixed;
-    right: 1.6vh;
-    top: 1.6vh;
-    max-height: 4vw;
+    right: 1rem;
+    top: 1rem;
+    /*max-height: 4vw;*/
+
+    height:3rem;
+}
+#_control_wrapper{
+	width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 
 
