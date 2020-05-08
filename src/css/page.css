@@ -115,36 +115,38 @@ input:-webkit-autofill:active {
 /* pages */
 #_home{
 	background-image: url(../../asset/img/ui/BG_home.png);
-	z-index: 5;
+	z-index: 7;
 }
 #_color{
 	background-image: url(../../asset/img/ui/BG_car.png);	
-	z-index: 2;
+	z-index: 4;
 	animation-timing-function: linear !important;
 }
 #_driver{
 	background-image: url(../../asset/img/ui/BG_info.png);
-	z-index: 3;	
+	z-index: 5;	
 	animation-timing-function: linear !important;
 }
 #_lottery{
 	background-color: #001368;
-	z-index: 3;
+	z-index: 1;
 }
 #_rank{
 	background-image:url(../../asset/img/ui/BG_rank.png);
-	z-index: 7;
+	z-index: 11;
 	background-position: top;
 }
-
+#_game{
+	z-index: 3;
+}
 #_campaign{
 	background-color: #001368;
-	z-index:4;
+	z-index:6;
 }
 
 #_control{
 	background-color: rgb(0,0,0,0.85);
-	z-index: 51;
+	z-index: 13;
 }
 /* page home */
 .GameLogo{
@@ -178,7 +180,7 @@ input:-webkit-autofill:active {
 	height:8%;
 	max-height: 100px;
 
-	z-index: 40;
+	z-index: 12;
 	transition:opacity .5s ease-out .7s;
 
 	overflow: hidden;
@@ -418,6 +420,7 @@ input:-webkit-autofill:active {
 
 /* congradulation !!! */
 #_score,#_rule{
+	z-index: 9;
 	position: fixed;
 	background-color:rgba(255,131,69,0.5);
 }
@@ -743,7 +746,7 @@ input:-webkit-autofill:active {
 	position: fixed;
 	top:0;
 	right:6%;
-	z-index: 50;
+	z-index: 10;
 	max-height:15vh;
 
 	transition:opacity .5s ease-out .7s;
@@ -853,7 +856,7 @@ input:-webkit-autofill:active {
 	margin-bottom: 4vh;
 }
 #_button_control{
-	z-index: 60;
+	z-index: 8;
     position: fixed;
     right: 1.6vh;
     top: 1.6vh;

@@ -55,8 +55,8 @@ var lastPlayerSegment =0;
 // scene settings
 var indexScene =0;
 var totalScene =3;
-var sceneInterval=[25,20,15];  // 20s for each scene
-// var sceneInterval=[2,2,5];  // 20s for each scene
+// var sceneInterval=[25,20,15];  // 20s for each scene
+var sceneInterval=[2,2,5];  // test time
 var sceneLapsedInterval=[];
 var tmp=0;
 for(var i=0;i<totalScene;++i){
@@ -117,29 +117,6 @@ function update(dt) {
 
   if(_game_elapse_time>=0) _game_elapse_time+=dt;
   
-  // handle count down
-  if(_game_elapse_time>=1){
-    if(_game_elapse_time>=2){
-      if(_game_elapse_time>=3){
-        
-        if(!isPlaying){
-          isPlaying=true;
-          _car.gotoAndPlay(0);
-
-          _sound_game.play();
-          _sound_game.fade(0.5,1.0,1000);
-          _sound_game.seek(0);
-        }
-
-      }else{
-        setTrafficLight(2);
-      }
-    }else{
-      setTrafficLight(1);
-    }
-  }
-
-
   var n, car, carW, sprite, spriteW;
   var playerSegment = findSegment(position+playerZ);
   
@@ -167,6 +144,31 @@ function update(dt) {
        _ribbon.visible=true;
        endGame();
     } 
+  }else{
+    if(indexScene==0){
+      // handle count down
+      if(_game_elapse_time>=1){
+        if(_game_elapse_time>=2){
+          if(_game_elapse_time>=3){
+            
+            if(!isPlaying){
+              isPlaying=true;
+              _car.gotoAndPlay(0);
+
+              _sound_game.play();
+              _sound_game.fade(0.5,1.0,1000);
+              _sound_game.seek(0);
+            }
+
+          }else{
+            setTrafficLight(2);
+          }
+        }else{
+          setTrafficLight(1);
+        }
+      }
+    }
+
   }
 
  

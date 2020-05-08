@@ -19,7 +19,7 @@ function closePage(page_,next_page){
 	// $('#'+page_).find('.Button').addClass('Disable');
 	switch(page_){
 		case '_home':
-			hideItem($('#_button_rank'));			
+			if(next_page!=='_rank') hideItem($('#_button_rank'));			
 			
 			if(next_page==='_campaign') $('#'+page_).removeClass('pageToBase');
 			
@@ -64,6 +64,8 @@ function closePage(page_,next_page){
 				hideItem($('#_score'));
 			}else{
 				hideItem($('#_button_rank'));
+				$('#'+page_).addClass('pageToTop');
+				$('#_score').addClass('pageToTop');
 			} 
 	  		break;
 	  	case '_campaign':	  		
@@ -145,12 +147,15 @@ function setupPage(page_){
 	  	// 			movePage($('#_rule_board'),'pageFromTop');
 	  	// 		},700);
 				// setupGame();			
-			}else{
-				showItem($('#_button_rank'));
-				showItem($('#_score'));
-			}
+				movePage($('#'+page_),'pageFromBase');	
 
-			movePage($('#'+page_),'pageFromBase');
+			}else{ // from lottery
+				showItem($('#_button_rank'));
+				// showItem($('#_score'));
+
+				$('#'+page_).removeClass('pageToTop');
+				$('#_score').removeClass('pageToTop');
+			}
 			
 			break;
 		case '_rank':			
