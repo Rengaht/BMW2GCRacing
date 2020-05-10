@@ -31,7 +31,23 @@
 	
 </head>
 <body onload="onload();">
-	 
+	<div class="PageContainer" id="_loading">
+		<div class="VerticalWrapper" style="width:100%">
+		<div class="Center">
+			<div class="LightBlue" style="margin-bottom: .5rem">Loading...</div>
+			<div class="Loading">
+				<img class="LoadingDot" src="asset/img/ui/loading_dot.png"/>
+				<img class="LoadingDot" src="asset/img/ui/loading_dot.png"/>
+				<img class="LoadingDot" src="asset/img/ui/loading_dot.png"/>
+				<img class="LoadingDot" src="asset/img/ui/loading_dot.png"/>
+				<img class="LoadingDot" src="asset/img/ui/loading_dot.png"/>
+				<img class="LoadingDot" src="asset/img/ui/loading_dot.png"/>
+				<img class="LoadingDot" src="asset/img/ui/loading_dot.png"/>
+			</div>
+		</div>
+		</div>
+	</div>
+
 	<img id="_button_rank" src="asset/img/ui/button_rank.png" class="Button" onclick="gotoPage('_rank','sb')"/>
 	
 	<div class="ButtonBack">
@@ -71,12 +87,19 @@
 		</div>
 	</div>
 	<div id="_driver" class="PageContainer pageToBase">
-		<div id="_flag_top" class="Flag Center">
+		<div class="Flag Center">
+			<img src="asset/img/ui/flag_bar.png" class="FlagBar" id="_flag_top"/>
+			<div id="_flag_top">
+			<div class="FlagTitle">
+				<img src="asset/img/ui/flag_name_title.png"/>
+			</div>
+			<div class="FlagTitle">
+				<img src="asset/img/ui/flag_name.png"/>
 			<!-- <div id="_hint_driver_name" class="FontT2 MiddleBlue DisableSelect">Enter Driver's Name</div> -->
-			<div>
+			<!-- <div> -->
 				<!-- <span id="_driver_title" class="FontText DisableSelect">DRIVER</span>	 -->
 				<input type="text" id="_input_driver" maxlength="6" class="FontT1 LightBlue" placeholder="YOUR NAME..." autocomplete="off" />
-				
+			</div>
 			</div>			
 		</div>
 		<div class="InputError">
@@ -88,15 +111,21 @@
 		</div>
 	</div>
 	<div id="_color" class="PageContainer pageToBottom">
-		<div id="_flag_bottom" class="Flag Center">
+		<div class="Flag FlagBottom Center">
+		<img src="asset/img/ui/flag_bar.png" class="FlagBar" id="_flag_bottom"/>
+		<div class="FlagTitle" style="top:3rem">
+			<img src="asset/img/ui/flag_color_title.png"/>
+		</div>
+			<div class="ColorCarWrapper">
+			<img id="_img_car_color_blue" class="" src="asset/img/ui/frontcar_blue.png"/>		
+			<img id="_img_car_color_red" class=" hidden close" src="asset/img/ui/frontcar_red.png"/>		
+			<img id="_img_car_color_gray" class=" hidden close" src="asset/img/ui/frontcar_gray.png"/>		
+			<img id="_img_car_color_white" class=" hidden close" src="asset/img/ui/frontcar_white.png"/>		
+			</div>
+
 			<!-- <div id="_hint_car_color" class="FontT2 LightBlue DisableSelect">CHOOSE THE COLOR</div>			 -->
 		</div>
-		<div class="ColorCarWrapper">
-			<img id="_img_car_color_blue" class="FrontCar" src="asset/img/ui/frontcar_blue.png"/>		
-			<img id="_img_car_color_red" class="FrontCar hidden close" src="asset/img/ui/frontcar_red.png"/>		
-			<img id="_img_car_color_gray" class="FrontCar hidden close" src="asset/img/ui/frontcar_gray.png"/>		
-			<img id="_img_car_color_white" class="FrontCar hidden close" src="asset/img/ui/frontcar_white.png"/>		
-		</div>
+		
 		<div class="ColorButtonWrapper">			
 			<div id="_button_blue" class="Button ColorButton" onClick="setDriverColor('blue')">
 				<img src="asset/img/ui/button_blue.png" class="Button"/>

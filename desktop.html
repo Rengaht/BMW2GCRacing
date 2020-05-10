@@ -5,7 +5,13 @@
 	
 	<link rel="stylesheet" type="text/css" href="src/css/font.css">
 	<link rel="stylesheet" type="text/css" href="src/css/desktop.css">
-
+	<script src="src/lib/mobile-detect.min.js"></script> 
+	<script>
+		var md = new MobileDetect(window.navigator.userAgent);
+		if(md.mobile()){
+			window.location.href="index.html";
+		}
+	</script>
 </head>
 <body>
 <div class="DesktopBack">

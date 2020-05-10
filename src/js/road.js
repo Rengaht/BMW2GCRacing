@@ -433,7 +433,7 @@ function updateHud(){
   let seg_offset=playerZ/segmentLength;
   updateHudElement('time', formatTime(sceneLapsedInterval[totalScene-1]*Math.max(0,1-(lastPlayerSegment-seg_offset)/(sceneSegment[totalScene-1]-seg_offset))));  
   updateHudElement('life',Math.max(0,life));
-  updateHudElement('score',pad(score,4));
+  updateHudElement('score',pad(score,3));
 }
 
 function updateHudElement(key, value){ // accessing DOM can be slow, so only do it if value has changed

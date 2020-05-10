@@ -23,7 +23,8 @@ body{
 }
 #_car_desktop{
 	position:absolute;
-	top:24%;
+	/*top:24%;*/
+	bottom: 30%;
 	right:90px;
 	max-height:46%;
 	max-width:64%;

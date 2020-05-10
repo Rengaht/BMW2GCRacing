@@ -148,6 +148,12 @@ input:-webkit-autofill:active {
 	background-color: rgb(0,0,0,0.85);
 	z-index: 13;
 }
+#_loading{
+	z-index: 50;
+	background-color: #001368;
+}
+
+
 /* page home */
 .GameLogo{
 	position: relative;
@@ -199,18 +205,37 @@ input:-webkit-autofill:active {
 }
 
 .Flag{
-	position: relative;
-	/*background-image: url(../../asset/img/ui/flag.png);*/
-	background-size: 100% auto;
-	width: 103vh;
+	position: absolute;
+	bottom: 0;
+
+	left: 10%;
+    top: 3rem;
+    width: 75%;
+    /*background-image: url(../../asset/img/ui/flag.png);*/
+	/*background-size: 100% auto;*/
+	/*width: 103vh;*/
+	/*max-height: 80%;*/
 	background-repeat: no-repeat;
 }
 #_flag_top{
-	background-image: url(../../asset/img/ui/flag-1.png);
-	background-position: bottom;
-	height:75vh;
-	top:25vh; 
-
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
+.FlagBar{
+	position: absolute;
+	width:7.7%;
+	left:0;
+	/*left: 1.5%;*/
+}
+.FlagTitle{
+	position: relative;
+	width: 94%;
+	left:5%;
+	margin-bottom: 2rem;
+}
+.FlagTitle img{
+	width: 100%;
 }
 
 
@@ -238,9 +263,10 @@ input:-webkit-autofill:active {
 #_input_driver{
 
 	position:absolute;
-	top:calc(42vh - 1.5rem);
-	left:29vh;
-	width:65vh;
+	top: 35%;
+    left: 25%;
+    width: 70%;
+
 	background:transparent;	
 	margin:0;  
    	padding:0;  
@@ -258,12 +284,14 @@ input:-webkit-autofill:active {
 }
 
 /* page color */
-#_flag_bottom{
-	background-image: url(../../asset/img/ui/flag-2.png);
-	height:72vh;
-	top:0; 
-	background-position:top;
+.FlagBottom{
+	top:0;
+	bottom: 5rem;
 }
+#_flag_bottom{
+	bottom:0;
+}
+
 #_hint_car_color{
 	position: absolute;
 	top:calc(20vh - 1rem);
@@ -275,24 +303,26 @@ input:-webkit-autofill:active {
 	max-width:86vh;
 }
 .ColorCarWrapper{
-	position: absolute;
-	top:40%;
-	left:calc(50vw - 51vh + 13vh);
-
+	position: relative;
+    width: 90%;
+    height: 70%;
+    left: 9%;
 }
 .ColorCarWrapper>img{
 	position: absolute;
-	top:0;
+    width: 90%;
+    bottom: 5%;
+    left: 5%;
 }
 .ColorButtonWrapper{
 	position: absolute;
-	right:10%;
-	top:32%;
-	width: 8%;
+   	right: 2.5rem;
+    bottom: 5rem;
+    width: 5rem;
 }
 .ColorButton{
-	margin-top:20px;
-	height:10vh;
+	margin-top:1rem;
+	height:3rem;
 }
 .ColorButton>img{
 	height: 100%;
@@ -327,18 +357,24 @@ input:-webkit-autofill:active {
 }
 .HudElement{
 	display:flex;	
-	width:33%;
+	/*width:33%;*/
+	padding-right: .5rem;
+    padding-left: .5rem;
+    justify-content: space-between;
 }
 .HudElement>span{
 	/*width:7.5rem;*/
-	margin-right:1rem;
+	/*margin-right:1rem;*/
 	text-align: left;
+}
+.HudElement>span:first-child{
+	margin-right: 1rem;
 }
 
 
 #_life_star>img{
 	max-height:2rem;
-	max-width: 20%;
+	/*max-width: 20%;*/
 }
 
 
@@ -895,6 +931,30 @@ input:-webkit-autofill:active {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+}
+
+/* loading page */
+.Loading{
+	width:12rem;
+	height:2rem;
+
+	background-image: url(../../asset/img/ui/loading_frame.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+
+	overflow: hidden;
+}
+.LoadingDot{
+	margin-top:0.5rem;
+	height:0.9rem;
+	box-shadow: 0 0 10px 0 #79fbff;
+
+	animation:loadingMove 1s infinite linear;
+}
+@keyframes loadingMove{
+	0%{transform:translate3d(800%,0,0);opacity: 0;}
+	50%{transform:translate3d(0%,0,0); opacity: 1;}
+	100%{transform:translate3d(-800%,0,0);opacity: 1;}
 }
 
 

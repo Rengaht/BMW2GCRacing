@@ -205,6 +205,7 @@ function checkLoading(){
 	if(_sound_loaded && _game_loaded){
 		_inTransition=false;
 		$('#_button_start').removeClass("Disable");
+		hideItem($('#_loading'));
 	} 
 }
 

@@ -42,46 +42,4 @@
 	60% { opacity: 1; -webkit-transform: translateY(-100%); transform: translateY(-100%); }
 	100% { -webkit-transform: translateY(0); transform: translateY(0); }
 } 
-@keyframes moveToTopFade {
-	from { }
-	to { opacity: 1; transform: translateY(-50rem); }
-}
-@keyframes moveFromTopFade {
-	from { opacity: 1; transform: translateY(-50rem); }
-}
-@keyframes moveFromBottomFade {
-	from { opacity: 1; transform: translateY(50rem); }
-}
-@keyframes moveToBottomFade{
-	from { }
-	to { opacity: 1; transform: translateY(50rem); }
-}
-@keyframes moveFromRightFade {
-	from { opacity: 1; transform: translateX(50rem); }
-}
-@keyframes moveToRightFade{
-	from { }
-	to { opacity: 1; transform: translateX(50rem); }
-}
 
-@-webkit-keyframes moveToTopFade {
-	from { }
-	to { opacity: 1; -webkit-transform: translateY(-50rem);  }
-}
-@-webkit-keyframes moveFromTopFade {
-	from { opacity: 1; -webkit-transform: translateY(-50rem); }
-}
-@-webkit-keyframes moveFromBottomFade {
-	from { opacity: 1; -webkit-transform: translateY(50rem);}
-}
-@-webkit-keyframes moveToBottomFade{
-	from { }
-	to { opacity: 1; -webkit-transform: translateY(50rem); }
-}
-@-webkit-keyframes moveFromRightFade {
-	from { opacity: 1; -webkit-transform: translateX(50rem); }
-}
-@-webkit-keyframes moveToRightFade{
-	from { }
-	to { opacity: 1; -webkit-transform: translateX(50rem); }
-}
