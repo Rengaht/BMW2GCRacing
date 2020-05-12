@@ -10,7 +10,7 @@
 	<script src="src/js/mobile.js"></script>
 	<script src="src/lib/screenfull.min.js"></script> 
 	<script>
-		checkDevice();
+		// checkDevice();
 	</script>
 
 	<link rel="stylesheet" type="text/css" href="src/css/font.css">
@@ -78,7 +78,6 @@
 
 		</div>
 	</div>
-			
 	<div id="_home" class="PageContainer pageToTop pageToBase">
 		<div class="GameLogo Center">
 			<img src="asset/img/ui/game_logo_glow.png" class="LogoGlow"/>
@@ -89,6 +88,8 @@
 			<img id="_button_start" class="Button Center" onclick="onButtonStartClick()" src="asset/img/ui/button_start.png"/>		
 		</div>
 	</div>
+
+<div class="PageWrapper">			
 	<div id="_driver" class="PageContainer pageToBase">
 		<div class="Flag Center">
 			<img src="asset/img/ui/flag_bar.png" class="FlagBar"/>
@@ -110,9 +111,10 @@
 		</div>
 		<div class="BottomWrapper">
 			<img id="_button_ok" class="Button Center" onclick="onDriverNameClick()" src="asset/img/ui/button_ok.png"/>		
-			</div>		
 		</div>
 	</div>
+</div>
+<div class="PageWrapper">			
 	<div id="_color" class="PageContainer pageToBottom">
 		<div class="Flag FlagBottom Center">
 		<img src="asset/img/ui/flag_bar.png" class="FlagBar" id="_flag_bottom_bar"/>
@@ -151,10 +153,10 @@
 		</div>
 		<div class="BottomWrapper">
 			<img id="_button_go" class="Button Center" onclick="onButtonGoClick()" src="asset/img/ui/button_go.png"/>		
-			</div>		
 		</div>
 	</div>
-	
+</div>
+<div class="PageWrapper">			
 	<div id="_game" class="PageContainer">
 		<div id="_game_frame"></div>
 		<div id="_speed_meter">
@@ -278,7 +280,7 @@
 							</div>
 						</div>
 					</div>
-					<img id="_car_complete" class="Center FrontCar" src="asset/img/ui/frontcar_blue.png"/>
+					<img id="_car_complete" class="Center" src="asset/img/ui/frontcar_blue.png"/>
 					<div id="_complete_button_wrapper" class="BoardBottomWrapper">
 						<img id="_button_the2" class="Button hidden close" src="asset/img/ui/button_the2.png" onclick="onButtonThe2Click()"/>
 						<img id="_button_home" class="Button" src="asset/img/ui/button_home.png" onclick="onButtonHomeClick()"/>
@@ -295,7 +297,9 @@
 				</div>
 			</div>
 		</div>
-	
+</div>
+
+<div class="PageWrapper">			
 	<div id="_lottery" class="PageContainer pageToRight">
 		<div id="_lottery_title" class="Center WaveTitle FontT2 LightBlue">
 			<img src="asset/img/ui/line_title.png"/>
@@ -431,6 +435,7 @@
 					<span id="_button_agree" class="RadioMark" onclick="onClickAgree()"></span>
 					<span id="_auth_text">我同意BMW總代理汎德股份有限公司得將本人之個人資料經電腦處理後，BMW總代理汎德股份有限公司及其所屬汎德股份有限公司其他關係企業暨其特約經銷商等使用，以及為提升客戶服務品質、車輛資訊之提供及推廣客戶關懷活動而使用。</span>
 				</div>
+
 		</div>	
 		<div class="InputError">
 			<span id="_lottery_input_error" class="Orange FontInfo Center"></span>
@@ -439,10 +444,10 @@
 		<div id="_lottery_button_wrapper" class="Center BottomWrapper">
 			<img id="_button_campaign" class="Button" onclick="onClickCampaignInfo()" src="asset/img/ui/button_info.png"/>
 			<img id="_button_send" class="Button" onclick="sendInfo()" src="asset/img/ui/button_send.png"/>
-			</div>		
-		</div>
+		</div>		
 	</div>
-
+</div>
+<div class="PageWrapper">			
 	<div id="_campaign" class="PageContainer pageToTop pageToBase">
 		<div id="_lottery_title" class="Center WaveTitle FontT2 LightBlue">
 			<img src="asset/img/ui/line_title.png"/>
@@ -503,6 +508,7 @@
 			<img id="_button_ok_campaign" class="Button Center" src="asset/img/ui/button_ok.png" onclick="onButtonCampaignOkClick()"/>
 		</div>		
 	</div>
+</div>
 
 	<div id="_rank" class="PageContainer pageToRight">
 		<img src="asset/img/ui/BG_rank_mobile.jpg" id="_rank_back"/>
@@ -513,17 +519,18 @@
 			</div> -->
 		</div>
 	</div>
-	<div id="_hint_landscape" class="PageContainer hidden close">
+
+	<div id="_hint_landscape" class="PageContainer">
 		<div class="VerticalWrapper" style="width:100%">
 			<img class="Center" src="asset/img/ui/hint_landscape.png"/>
 		</div>
 	</div>
-	<div id="_hint_webview" class="PageContainer hidden close">
+	<div id="_hint_webview" class="PageContainer">
 		<div class="VerticalWrapper" style="width:100%">
 			<img class="Center" src="asset/img/ui/hint_webview.png"/>
 		</div>
 	</div>
-
+</div>
 	<script src="src/js/game.js"></script>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-53535602-8"></script>

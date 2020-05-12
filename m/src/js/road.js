@@ -239,7 +239,7 @@ function update(dt) {
     playerX = playerX + move_dx;
 
   // playerX = playerX - (dx * speedPercent * playerSegment.curve * centrifugal);
-  playerX = Util.limit(playerX, onRoadPosition[0],onRoadPosition[2]);     // dont ever let it go too far out of bounds
+  playerX = Util.limit(playerX, -1.5,1.5);     // dont ever let it go too far out of bounds
   
   if(isPlaying){
     // check coins and obstacles

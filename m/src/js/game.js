@@ -52,11 +52,12 @@ var _game_elapse_time=0;
 function onload(){
 
 	if(invalid_device){
-		$('#_hint_webview').removeClass('hidden');			
-		$('#_hint_webview').removeClass('close');
-		
+		$('#_hint_webview').css('display','block');		
 		return;
 	}
+
+	$('body').scrollTop(0);
+
 	_inTransition=true;
 	$('#_button_start').addClass("Disable");
 	// setup pixi
@@ -142,13 +143,13 @@ function onload(){
 }
 function resize(){
 	
-	if(screenfull.isEnabled){
-		try{
-			screenfull.request().then().catch();
-		}catch(e){
+	// if(screenfull.isEnabled){
+	// 	try{
+	// 		screenfull.request().then().catch();
+	// 	}catch(e){
 
-		}
-	}
+	// 	}
+	// }
 
 	clearTimeout(_resize_timeout);
 
@@ -156,24 +157,18 @@ function resize(){
 	_resize_timeout=setTimeout(doResize,10);
 }
 function doResize(){
-	var ww_ = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; 
-  	var wh_ = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+	// var ww_ = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; 
+ //  	var wh_ = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 	
-	// if(!isIpad()){
- //  		// showItem($('#_hint_ipad_only'));
- //  		// return;		
- //  	}
- 
+ 	ww_=$('#_game').width();
+ 	wh_=$('#_game').height();
+
 	if(ww_<wh_){
-  		// landscape!!!
-  		$('#_hint_landscape').removeClass('hidden');
-  		$('#_hint_landscape').removeClass('close');
+  		$('#_hint_landscape').css('display','block');
   		return;	
   	}
-
-
-  	hideItem($('#_hint_landscape'));
-  		
+  	$('#_hint_landscape').css('display','none');
+  			
 
   	console.log('window size:'+ww_+' x '+wh_);
 

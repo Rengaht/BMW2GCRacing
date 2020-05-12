@@ -240,6 +240,9 @@ function gotoPage(page_,sound_){
 }
 function onPageTransitionEnd(){
 
+
+	$('body').scrollTop(0);
+
 	_inTransition=false;
 
 	_pre_page=_cur_page;
@@ -344,9 +347,7 @@ function onButtonStartClick(){
 	if($('#_button_start').hasClass('Disable')) return;
 	if(_inTransition) return;
 
-	if(screenfull.isEnabled){
-		screenfull.request();
-	}
+	
 
 	$('#_button_start').addClass('Click');
 	// gotoPage('_driver','bb');
