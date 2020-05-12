@@ -1,0 +1,77 @@
+@font-face {
+	font-family: 'BMWFont-Bold';
+	src:url("../../asset/font/arudjingxiheipe1xg30_hv.ttf");
+}
+@font-face {
+	font-family: 'BMWFont-Bold';
+	unicode-range: U+00-024F;
+	src:url("../../asset/font/BMWTypeNextLatinTT-Bold.ttf");
+}
+html{
+	font-size: 18px;
+	-webkit-text-size-adjust:none;
+
+}
+@media (max-width: 640px){
+	html{
+		font-size: 9px;
+		-webkit-text-size-adjust:none;
+	}
+}
+@media (max-width: 1024px) and (min-width:640px){
+	html{
+		font-size: 14px;
+		-webkit-text-size-adjust:none;
+	}
+}
+@media (min-width: 2048px){
+	html{
+		font-size: 32px;
+		-webkit-text-size-adjust:none;
+	}
+}
+.FontT1{
+	font-size: 2.5rem;
+	letter-spacing:8px;
+}
+.FontT2{
+	font-size: 1.5rem;
+	letter-spacing:3px;
+}
+.FontT3{
+	font-size: 1.64rem;
+	letter-spacing:3px;
+}
+.FontText{
+	font-size:1rem;
+	letter-spacing:3px;
+}
+.FontSpeedMeter{
+	font-size: 1.33rem;
+	letter-spacing:3px;
+}
+.FontInfo{
+	font-size: 1.2rem;
+	letter-spacing:1px;
+}
+
+.FontFormSmall{
+	font-size: 1rem;
+	letter-spacing:1px;
+}
+.FontCampaign{
+	font-size:1rem;
+}
+
+.DeepBlue{
+	color:#1B2495;
+}
+.MiddleBlue{
+	color:#008AFF;
+}
+.LightBlue{
+	color:#7CFFFB;
+}
+.Orange{
+	color:#FF8345;
+}

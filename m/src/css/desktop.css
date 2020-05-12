@@ -1,0 +1,83 @@
+body{
+
+	font-family:'BMWFont-Bold';
+	font-size:1.5em;
+
+	background-image: url(../../asset/img/ui/BG_desktop.jpg);
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
+#_game_logo{
+	position:absolute;
+	top:5%;
+	left:5%;
+	height:42%;
+}
+
+#_bmw_logo{
+	position:absolute;
+	top:5%;
+	right:5%;
+	height:17%;
+}
+#_car_desktop{
+	position:absolute;
+	/*top:24%;*/
+	bottom: 30%;
+	right:90px;
+	max-height:46%;
+	max-width:64%;
+}
+
+.Bottom{
+	position: absolute;
+	bottom: 5%;
+	left:5%;
+	height:27vh;
+	max-width: 80%;
+
+}
+
+.QRCode{
+	width:27vh;
+	height:27vh;
+
+	border-radius: 10px;
+	border: solid 3px #30fffc;
+  	background-color: #0f084f;
+
+	display: inline-block;
+	-webkit-box-flex: 0;
+	    -ms-flex-positive: 0;
+	        flex-grow: 0;
+	-ms-flex-negative: 0;
+	    flex-shrink: 0;
+	margin-right:2rem;
+}
+.QRCode>img{
+	margin: 2.5%;
+	width: 95%;
+}
+.DesktopText{
+	
+	position: absolute;
+	top:0;
+	left:calc(27vh + 2rem);
+	height:100%;
+	width:50vw;
+
+	display: -webkit-box;
+
+	display: -ms-flexbox;
+
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
+	-webkit-box-pack: end;
+	    -ms-flex-pack: end;
+	        justify-content: flex-end;
+
+}
