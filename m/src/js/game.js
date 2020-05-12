@@ -36,7 +36,7 @@ var _resize_timeout;
 var audio_context;
 
 let url=window.location.href;
-let MapURL="https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/asset/map/map-3.csv";
+let MapURL="https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/vender/asset/map/map-3.csv";
 // let MapURL="https://mmlab.com.tw/project/the2/asset/map/map-3.csv";
 // let MapURL="http://127.0.0.1/2gc/asset/map/map-3.csv";
 let OtherCarCount=10;
@@ -141,6 +141,15 @@ function onload(){
 	doResize();
 }
 function resize(){
+	
+	if(screenfull.isEnabled){
+		try{
+			screenfull.request().then().catch();
+		}catch(e){
+
+		}
+	}
+
 	clearTimeout(_resize_timeout);
 
 	if(Ticker.started) Ticker.stop(); 		
@@ -154,22 +163,13 @@ function doResize(){
  //  		// showItem($('#_hint_ipad_only'));
  //  		// return;		
  //  	}
-
+ 
 	if(ww_<wh_){
   		// landscape!!!
   		$('#_hint_landscape').removeClass('hidden');
   		$('#_hint_landscape').removeClass('close');
   		return;	
   	}
-
-
-
-  	// rank board
- //  	var frameh_=Math.max(ww_/2048,wh_/1366)*1366;
- //  	$('#_rank_info').css('top',0.22*frameh_);
-	// $('#_rank_info').css('left',ww_/2-0.30*frameh_);
- //  	$('#_rank_info').css('width',0.60*frameh_);
- //  	$('#_rank_info').css('height',0.49*frameh_);
 
 
   	hideItem($('#_hint_landscape'));
@@ -194,8 +194,8 @@ function doResize(){
 		if(_mountain)
 			_mountain.y=_windowHeight*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]);
 		
-		if(_texture_car)
-			CarScale=width/3*0.8/_texture_car['car1-center.png'].width;
+		if(_texture_car) computeCarScale();
+			
 
 
 		 _app.renderer.resize(ww_,wh_);
@@ -210,6 +210,11 @@ function doResize(){
 
 
 }
+function computeCarScale(){
+	CarScale=Math.max(width/3*0.8/480,
+					 height/5/413);
+}
+
 function checkLoading(){
 	if(_sound_loaded && _game_loaded){
 		_inTransition=false;
@@ -398,7 +403,7 @@ function loadFinish(loader,resources_){
 	
 	_driver_color='blue';
 	setupCarSprite(_driver_color);
-	CarScale=width/3*0.8/_car.textures[0].width;
+	computeCarScale();
 
 	_other_car=new Container();
 	for(var n=0;n<OtherCarCount;++n){

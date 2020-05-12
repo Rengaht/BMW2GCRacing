@@ -8,6 +8,7 @@
 	<script src="src/lib/mobile-detect.min.js"></script> 
 	<script src="src/lib/jquery-3.3.1.min.js"></script>
 	<script src="src/js/mobile.js"></script>
+	<script src="src/lib/screenfull.min.js"></script> 
 	<script>
 		checkDevice();
 	</script>
@@ -22,6 +23,7 @@
 	
 	<script src="src/lib/howler/howler.core.min.js"></script>  
 	<script src="src/lib/fastclick.js"></script> 
+
 	
 	<script src="src/js/interact.js"></script>
 	<script src="src/js/utils.js"></script>
@@ -113,20 +115,21 @@
 	</div>
 	<div id="_color" class="PageContainer pageToBottom">
 		<div class="Flag FlagBottom Center">
-		<img src="asset/img/ui/flag_bar.png" class="FlagBar" id="_flag_bottom"/>
-		<div class="FlagTitle" style="position:absolute; top:3rem">
-			<img src="asset/img/ui/flag_color_title.png"/>
-		</div>
-			<div class="ColorCarWrapper">
-			<img id="_img_car_color_blue" class="" src="asset/img/ui/frontcar_blue.png"/>		
-			<img id="_img_car_color_red" class=" hidden close" src="asset/img/ui/frontcar_red.png"/>		
-			<img id="_img_car_color_gray" class=" hidden close" src="asset/img/ui/frontcar_gray.png"/>		
-			<img id="_img_car_color_white" class=" hidden close" src="asset/img/ui/frontcar_white.png"/>		
+		<img src="asset/img/ui/flag_bar.png" class="FlagBar" id="_flag_bottom_bar"/>
+		<div id="_flag_bottom">
+			<div class="FlagTitle">
+				<img src="asset/img/ui/flag_color_title.png"/>
 			</div>
+				<div class="ColorCarWrapper">
+				<img id="_img_car_color_blue" class="" src="asset/img/ui/frontcar_blue.png"/>		
+				<img id="_img_car_color_red" class=" hidden close" src="asset/img/ui/frontcar_red.png"/>		
+				<img id="_img_car_color_gray" class=" hidden close" src="asset/img/ui/frontcar_gray.png"/>		
+				<img id="_img_car_color_white" class=" hidden close" src="asset/img/ui/frontcar_white.png"/>		
+				</div>
 
-			<!-- <div id="_hint_car_color" class="FontT2 LightBlue DisableSelect">CHOOSE THE COLOR</div>			 -->
+				<!-- <div id="_hint_car_color" class="FontT2 LightBlue DisableSelect">CHOOSE THE COLOR</div>			 -->
+			</div>
 		</div>
-		
 		<div class="ColorButtonWrapper">			
 			<div id="_button_blue" class="Button ColorButton" onClick="setDriverColor('blue')">
 				<img src="asset/img/ui/button_blue.png" class="Button"/>
@@ -191,6 +194,7 @@
 	<div id="_rule" class="PageContainer hidden close">
 			<div id="_rule_board" class="Center">
 			<div class="BoardWrapper">
+				<div class="BoardContent">
 				<div id="_rule_title" class="Center WaveTitle FontT1 Orange">
 					<img src="asset/img/ui/line_rules.png"/>
 					<span>RULES</span>
@@ -230,8 +234,9 @@
 					</div>
 				</div>
 				
-				<div id="_rule_button_wrapper" class="BottomWrapper">
+				<div id="_rule_button_wrapper" class="BoardBottomWrapper">
 					<img id="_button_ok_rule" class="Button" src="asset/img/ui/button_ok.png" onclick="onButtonRuleOkClick()"/>
+				</div>
 				</div>
 				<span class="BoardBorder"></span>
 				<span class="BoardBorder"></span>
@@ -245,7 +250,8 @@
 		
 		<div id="_score" class="PageContainer hidden close">
 			<div id="_score_board" class="Center">
-				<div class="BoardWrapper">			
+				<div class="BoardWrapper">	
+				<div class="BoardContent">		
 					<div id="_board_title">
 						<div id="_congradulation"class="FontT1 Orange DisableSelect">CONGRATULATIONS !!!</div>
 						<div id="_info_complete" class="FontText">
@@ -273,12 +279,13 @@
 						</div>
 					</div>
 					<img id="_car_complete" class="Center FrontCar" src="asset/img/ui/frontcar_blue.png"/>
-					<div id="_complete_button_wrapper" class="BottomWrapper">
+					<div id="_complete_button_wrapper" class="BoardBottomWrapper">
 						<img id="_button_the2" class="Button hidden close" src="asset/img/ui/button_the2.png" onclick="onButtonThe2Click()"/>
 						<img id="_button_home" class="Button" src="asset/img/ui/button_home.png" onclick="onButtonHomeClick()"/>
 						<img id="_button_lottery" class="Button" src="asset/img/ui/button_next.png" onclick="onButtonLotteryClick()"/>
 						<img id="_button_share" class="Button hidden close" src="asset/img/ui/button_share.png" onclick="onButtonShareClick()"/>
 					</div>
+				</div>
 					<span class="BoardBorder"></span>
 					<span class="BoardBorder"></span>
 					<span class="BoardBorder"></span>

@@ -13,6 +13,19 @@
     .ButtonBack{
         left:calc(44px + 1rem);
     }
+    .BottomWrapper{
+        bottom:calc(16px + 1rem);
+    }
+    .BoardWrapper{
+        height:calc(100% - 16px);        
+    }
+    #_flag_top{
+        height: calc(80% - 16px);
+    }
+    .InputError{
+        bottom: calc(5rem + 10px);
+    }
+
 }
 
 /* iPhone XR */
@@ -30,6 +43,18 @@
     .ButtonBack{
         left:calc(44px + 1rem);
     }
+    .BottomWrapper{
+        bottom:calc(16px + 1rem);
+    }
+    .BoardWrapper{
+       height:calc(100% - 16px); 
+    }
+    #_flag_top{
+        height: calc(80% - 16px);
+    }
+    .InputError{
+        bottom: calc(5rem + 10px);
+    }
 }
 
 /* iPhone Xs Max */
@@ -46,5 +71,17 @@
     }
     .ButtonBack{
         left:calc(44px + 1rem);
+    }
+    .BottomWrapper{
+        bottom:calc(16px + 1rem);
+    }
+    .BoardWrapper{
+       height:calc(100% - 16px); 
+    }
+    #_flag_top{
+        height: calc(80% - 16px);
+    }
+    .InputError{
+        bottom: calc(5rem + 10px);
     }
 }

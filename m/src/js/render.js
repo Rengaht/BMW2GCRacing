@@ -233,8 +233,8 @@ var Render = {
     var destW  = _car.texture.width*scale;
     var destH  = _car.texture.height*scale;
 
-    destX = destX + (destW * (offsetX || 0));
-    destY = destY + (destH * (offsetY || 0));
+    destX = destX - destW/2;
+    destY = destY - destH;
 
     var clipH = clipY ? Math.max(0, destY+destH-clipY) : 0;
 

@@ -27,7 +27,9 @@ function checkDevice(){
 	// $('#_hint_webview').removeClass('hidden');			
 	// $('#_hint_webview').removeClass('close');
 
-	var host="https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/m/";
+	var host="https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/";
+	// var host="https://127.0.0.1/BMW2GCRacing/";
+
 
 	var md = new MobileDetect(window.navigator.userAgent);
 	if(checkVender()){

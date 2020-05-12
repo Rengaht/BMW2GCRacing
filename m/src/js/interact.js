@@ -324,7 +324,7 @@ function showItem(item_){
 }
 function movePage(page_,direction,callback){
 	
-	console.log('move '+page_.attr('id')+' '+direction);
+	// console.log('move '+page_.attr('id')+' '+direction);
 	
 	var dir=direction;
 	setTimeout(function(){
@@ -343,6 +343,10 @@ function onButtonStartClick(){
 
 	if($('#_button_start').hasClass('Disable')) return;
 	if(_inTransition) return;
+
+	if(screenfull.isEnabled){
+		screenfull.request();
+	}
 
 	$('#_button_start').addClass('Click');
 	// gotoPage('_driver','bb');
@@ -378,10 +382,13 @@ function setDriverColor(set_){
 	_sound_fx['button_small'].play();
 
 	hideItem($('#_button_'+_driver_color+'_selected'));
-	hideItem($('#_img_car_color_'+_driver_color));
+	$('#_img_car_color_'+_driver_color).addClass('hidden');
+	$('#_img_car_color_'+_driver_color).addClass('close');
 	
 	showItem($('#_button_'+set_+'_selected'));
-	showItem($('#_img_car_color_'+set_));
+	// showItem($('#_img_car_color_'+set_));
+	$('#_img_car_color_'+set_).removeClass('hidden');
+	$('#_img_car_color_'+set_).removeClass('close');
 
 	$('#_car_complete').attr('src','asset/img/ui/frontcar_'+set_+'.png');
 	
@@ -585,6 +592,8 @@ function sendInfo(callback){
 				_guid=data.uid;
 
 				hideItem($('#_button_lottery'));
+
+				$('#_button_share').removeClass('Click');
 				showItem($('#_button_share'));
 				showItem($('#_button_the2'));
 
@@ -820,10 +829,16 @@ function onSoundButtonClick(){
 }
 function onContinueButtonClick(){
 
+	_sound_fx['button_small'].play();
+
 	hideItem($('#_control'));
-	resumeGame();	
+	if(_cur_page==='_game'){
+		resumeGame();	
+	}
 }
 function onExitButtonClick(){
+
+	_sound_fx['button_small'].play();
 
 	hideItem($('#_control'));
 	if(isPlaying){
@@ -834,6 +849,8 @@ function onExitButtonClick(){
 }
 function onButtonControlClick(){
 	
+	_sound_fx['button_small'].play();
+
 	if($('#_control').hasClass('hidden')){
 			
 		pauseGame();
@@ -848,13 +865,12 @@ function onButtonControlClick(){
 
 function onButtonShareClick(){
 
-	// var data={
-	// 	action:'get_share_url',
-	// 	name:_driver_name,
-	// 	color:_driver_color,
-	// 	score:score,
-	// 	rank:_rank		
-	// };
+	if(_inTransition) return;
+
+	_sound_fx['button_large'].play();
+	$('#_button_share').addClass('Click');
+	_inTransition=true;	
+
 	var fd=new FormData();
 	fd.append('action','get_share_url');
 	fd.append('guid',_guid);
@@ -863,28 +879,26 @@ function onButtonShareClick(){
 	fd.append('score',score);
 	fd.append('rank',_rank);
 
-
-	// fd.append('guid','1234');
-	// fd.append('name','reng');
-	// fd.append('color','white');
-	// fd.append('score',999);
-	// fd.append('rank',999);
-
+	var share_url='https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/m/src/php/action.php';
 
 	$.ajax({
-		url:'https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/m/src/php/action.php',
-		// url:'http://127.0.0.1/BMW2GCRacing/src/php/action.php',
+		url:share_url,
 		type:'POST',
 		data:fd,
 		processData: false,
 		contentType: false,
 		cache:false,
 		success:function(response){
+
+			_inTransition=false;
 			console.log(response);
-			window.open(response.share_url,'_blank');
+			// window.open(response.share_url,'_blank');
+
+			window.location.href=response.share_url;
 		},
 		error:function(jqXHR, textStatus, errorThrown){
 			// alert('something wrong^^');
+			_inTransition=false;
 			console.log(jqXHR);
 		}
 	});

@@ -18,6 +18,7 @@ body{
 	position: fixed;
   	overflow: hidden;
   	width: 100%;
+  	min-height: 56.25vw;
   	height: 100%;
 }
 img, a {border:none; outline: none;}
@@ -68,6 +69,20 @@ input:-webkit-autofill:active {
 	overflow: hidden;
 	width: 100%;
 }
+.BoardBottomWrapper{
+	height:3.8rem;	
+	overflow: hidden;		
+	width: 100%;
+	min-height: 3.8rem;
+}
+.BoardContent{
+	overflow-y:auto;
+	display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
 
 #_frame{
 	position: absolute;
@@ -88,14 +103,15 @@ input:-webkit-autofill:active {
 	opacity: .8;
 }
 
-.BottomWrapper>.Button{
+.BottomWrapper>.Button,.BoardBottomWrapper>.Button{
 	position: relative;
 	top:0;
 	height:200%;
 }
-.BottomWrapper>.Button.Click{
+.BottomWrapper>.Button.Click,.BoardBottomWrapper>.Button.Click{
 	top:-100%;
 }
+
 
 
 .hidden{
@@ -335,8 +351,15 @@ input:-webkit-autofill:active {
 	top:0;
 	bottom: 5rem;
 }
-#_flag_bottom{
+#_flag_bottom_bar{
 	bottom:0;
+}
+#_flag_bottom{
+	display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding-top: 2rem;
 }
 
 #_hint_car_color{
@@ -350,18 +373,20 @@ input:-webkit-autofill:active {
 	max-width:86vh;
 }
 .ColorCarWrapper{
-	position: absolute;
-    width: 90%;
+	/*position: absolute;*/
+    /*width: 90%;*/
     height: 55%;
-    left: 9%;
-    bottom:0;
+    padding-bottom: 2rem;
+    align-self: flex-end;
+    /*left: 9%;*/
+    /*bottom:0;*/
 }
 .ColorCarWrapper>img{
-	position: absolute;
+	position: relative;
     max-width: 95%;
-    max-height: 100%;
-    bottom: 0;
-    right: 5%;
+    max-height: 96%;    
+    float: right;
+    padding-right: 2rem;
 }
 .ColorButtonWrapper{
 	position: absolute;
@@ -515,7 +540,8 @@ input:-webkit-autofill:active {
 /* rules */
 #_rule_text{
 	/*max-height: 60%;*/
-	margin-top: 2rem;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
 	/*margin-bottom: 20px;*/
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -542,12 +568,12 @@ input:-webkit-autofill:active {
         -ms-flex-pack: justify;
             justify-content: space-between;
     height: 100%;
-    padding-bottom: 6rem;
+    padding-bottom: 2rem;
 }
 
 .RuleItem{
 	text-align: left;
-	margin-bottom: 1rem;
+	/*margin-bottom: 1rem;*/
 }
 .RuleItem img{
 	vertical-align: middle;
@@ -569,7 +595,7 @@ input:-webkit-autofill:active {
 }
 #_rule_button_wrapper{
 	/*position: relative;*/
-	margin-top: 30px;
+	/*margin-top: 30px;*/
 }
 
 /* congradulation !!! */
@@ -579,8 +605,8 @@ input:-webkit-autofill:active {
 	background-color:rgba(255,131,69,0.5);
 }
 #_score_board,#_rule_board{
-	width:94vw;
-	height:90vh;
+	width:94%;
+	height:90%;
 
 	/*background-image: url(../../asset/img/ui/frame_complete.png);
 	background-size: cover;
@@ -685,7 +711,7 @@ input:-webkit-autofill:active {
 	    -ms-flex-pack: justify;	
 	        justify-content: space-between;
 	
-	margin-top: 1rem;
+	/*margin-top: 1rem;*/
 }
 .ScoreElement{
 	display:-webkit-box;
@@ -700,13 +726,15 @@ input:-webkit-autofill:active {
 }
 .ScoreElement>div{
 	max-height: 3rem;
+	text-overflow:ellipsis;
+	white-space:nowrap;
 }
 
 #_car_complete{
 	margin-top: 1.5rem;
-	-webkit-box-flex: 1;
+/*	-webkit-box-flex: 1;
 	    -ms-flex-positive: 1;
-	        flex-grow: 1;
+	        flex-grow: 1;*/
 }
 #_complete_button_wrapper>img{
 	margin-right:1rem;
@@ -1006,6 +1034,7 @@ input:-webkit-autofill:active {
   width: .5rem;
   border:#0030A9 .1rem solid;
   border-radius: .25rem;
+   -webkit-overflow-scrolling: auto;
 }
 
 /* Track */
