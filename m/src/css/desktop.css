@@ -48,8 +48,11 @@ body{
   	background-color: #0f084f;
 
 	display: inline-block;
-	flex-grow: 0;
-	flex-shrink: 0;
+	-webkit-box-flex: 0;
+	    -ms-flex-positive: 0;
+	        flex-grow: 0;
+	-ms-flex-negative: 0;
+	    flex-shrink: 0;
 	margin-right:2rem;
 }
 .QRCode>img{
@@ -64,8 +67,17 @@ body{
 	height:100%;
 	width:50vw;
 
+	display: -webkit-box;
+
+	display: -ms-flexbox;
+
 	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
+	-webkit-box-pack: end;
+	    -ms-flex-pack: end;
+	        justify-content: flex-end;
 
 }

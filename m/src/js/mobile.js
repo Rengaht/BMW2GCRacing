@@ -35,7 +35,7 @@ function checkDevice(){
 		
 		window.stop();
 		
-		window.location.href=host+"vender/index.html";
+		window.location.href=host+"vender/index.html?vender=true";
 		return true;
 	}
 
