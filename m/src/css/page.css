@@ -15,7 +15,7 @@ body{
 
 	text-transform: uppercase;
 
-	/*position: fixed;*/
+	position: fixed;
   	overflow: hidden;
   	/*overflow-y:auto;*/
   	width: 100%;
