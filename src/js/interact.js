@@ -3,7 +3,7 @@ var _pre_page='_home';
 var _next_page;
 var _driver_name;
 var _driver_color='blue';
-var _uuid;
+var _guid;
 var _agree=false;
 
 var _trial_selected=true;
@@ -25,7 +25,7 @@ function closePage(page_,next_page){
 			
 			break;
 		case '_lottery':
-			if(next_page==='_game'){
+			if(next_page!=='_campaign'){
 				hideItem($('#_button_back'));
 				$('#'+page_).removeClass('pageToBase');	
 			}
@@ -105,13 +105,15 @@ function setupPage(page_){
 			if(!$('#_campaign').hasClass('pageToBase'))
 				$('#_campaign').addClass('pageToBase');
 
+			_game_elapse_time=-1;
+
+
 			// ga('send','back');
 			gtag('event','back');
 			gtag('event', 'Nav Click', {
 						'event_category': 'Click',
 						'event_label': 'back'
 				});
-
 			break;
 		case '_driver':
 			$('#_button_ok').removeClass('Click');
@@ -132,11 +134,15 @@ function setupPage(page_){
 			$('#_button_back').removeClass('Click');
 			
 			// movePage($('#'+page_),'pageFromBottom');
+
 			$('#'+page_).addClass('pageToBase');
 			break;
 		case '_game':				
 			
 			if(_cur_page==='_color'){
+
+				setupGame();	
+				
 				hideItem($('#_button_rank'));
 				hideItem($('#_score'));	
 				movePage($('#_score_board'),'pageToTop');
@@ -147,6 +153,9 @@ function setupPage(page_){
 	  	// 			movePage($('#_rule_board'),'pageFromTop');
 	  	// 		},700);
 				// setupGame();			
+				$('#'+page_).removeClass('pageToTop');
+				$('#_score').removeClass('pageToTop');
+
 				movePage($('#'+page_),'pageFromBase');	
 
 			}else{ // from lottery
@@ -259,7 +268,7 @@ function onPageTransitionEnd(){
 				break;		
 			case '_game':
 				if(_pre_page==='_color'){
-					setupGame();			
+					// setupGame();			
 					showItem($('#_rule'));	
 					movePage($('#_rule_board'),'pageFromTop');
 					$('#_button_lottery').removeClass('Disable');
@@ -315,7 +324,7 @@ function showItem(item_){
 }
 function movePage(page_,direction,callback){
 	
-	console.log('move '+page_+' '+direction);
+	console.log('move '+page_.attr('id')+' '+direction);
 	
 	var dir=direction;
 	setTimeout(function(){
@@ -433,7 +442,7 @@ function onButtonLotteryClick(){
 	if($('#_button_lottery').hasClass('Disable')) return;
 	if(_inTransition) return;
 
-	$('#_button_lottery').addClass('Click');
+	// $('#_button_lottery').addClass('Click');
 	gotoPage('_lottery','bb');
 }
 function onButtonHomeClick(){
@@ -481,12 +490,18 @@ function showScore(){
 	
   	$('#_rank_to_show').addClass('hidden');
 
+  	$('#_score').removeClass('pageToTop');
 	showItem($('#_score'));
 	showItem($('#_button_rank'));
 	
 	$('#_button_home').removeClass('Click');
 	$('#_button_lottery').removeClass('Click');
 	$('#_button_lottery').removeClass('Disable');
+
+	showItem($('#_button_lottery'));
+	hideItem($('#_button_share'));
+	hideItem($('#_button_the2'));
+
 
 	setTimeout(function(){
 		movePage($('#_score_board'),'pageFromTop');
@@ -567,11 +582,13 @@ function sendInfo(callback){
 				$('#_rank_to_show').removeClass('hidden');
 				$('#_button_send').addClass('Disable');
 				
-				setTimeout(function(){
-					
-					hideItem($('#_button_lottery'));
-					showItem($('#_button_share'));
+				_guid=data.uid;
 
+				hideItem($('#_button_lottery'));
+				showItem($('#_button_share'));
+				showItem($('#_button_the2'));
+
+				setTimeout(function(){				
 					if(callback) callback();			
 					gotoPage('_game','bb');			
 				},300);
@@ -809,10 +826,10 @@ function onContinueButtonClick(){
 function onExitButtonClick(){
 
 	hideItem($('#_control'));
-	if(_cur_page==='_game'){
-		exitGame();
-		gotoPage('_home');
+	if(isPlaying){
+		exitGame();	
 	}
+	gotoPage('_home');
 
 }
 function onButtonControlClick(){
@@ -831,11 +848,52 @@ function onButtonControlClick(){
 
 function onButtonShareClick(){
 
-	// generate pic
+	// var data={
+	// 	action:'get_share_url',
+	// 	name:_driver_name,
+	// 	color:_driver_color,
+	// 	score:score,
+	// 	rank:_rank		
+	// };
+	var fd=new FormData();
+	fd.append('action','get_share_url');
+	fd.append('guid',_guid);
+	fd.append('name',_driver_name);
+	fd.append('color',_driver_color);
+	fd.append('score',score);
+	fd.append('rank',_rank);
 
-	// upload
 
-	// share url
+	// fd.append('guid','1234');
+	// fd.append('name','reng');
+	// fd.append('color','white');
+	// fd.append('score',999);
+	// fd.append('rank',999);
+
+
+	$.ajax({
+		url:'https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/m/src/php/action.php',
+		// url:'http://127.0.0.1/BMW2GCRacing/src/php/action.php',
+		type:'POST',
+		data:fd,
+		processData: false,
+		contentType: false,
+		cache:false,
+		success:function(response){
+			console.log(response);
+			window.open(response.share_url,'_blank');
+		},
+		error:function(jqXHR, textStatus, errorThrown){
+			// alert('something wrong^^');
+			console.log(jqXHR);
+		}
+	});
+
 	
 }
+function onButtonThe2Click(){
+	window.open("https://event.bmw.com.tw/campaign/2020/2series-gran-coupe/?utm_source=THE2RACINGCHALLENGE","_blank");
+}
 
+
+// onButtonShareClick();

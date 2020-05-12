@@ -4,24 +4,25 @@
 	<title>THE 2 RACING CHALLENGE</title>
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="viewport" content="viewport-fit=cover, user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1,minimal-ui">
+	
+	<script src="src/lib/mobile-detect.min.js"></script> 
+	<script src="src/lib/jquery-3.3.1.min.js"></script>
+	<script src="src/js/mobile.js"></script>
+	<script>
+		checkDevice();
+	</script>
 
 	<link rel="stylesheet" type="text/css" href="src/css/font.css">
 	<link rel="stylesheet" type="text/css" href="src/css/transition.css">
 	<link rel="stylesheet" type="text/css" href="src/css/page.css">
+	<link rel="stylesheet" type="text/css" href="src/css/mobile.css">
 		
 	<script src="src/lib/pixi/5.2.0/pixi.js"></script>
 	<script src="src/lib/pixi/5.2.0/pixi-legacy.js"></script>
-	<script src="src/lib/jquery-3.3.1.min.js"></script>
+	
 	<script src="src/lib/howler/howler.core.min.js"></script>  
 	<script src="src/lib/fastclick.js"></script> 
-	<script src="src/lib/mobile-detect.min.js"></script> 
-	<script>
-		var md = new MobileDetect(window.navigator.userAgent);
-		if(!md.mobile()){
-			window.location.href="desktop.html";
-		}
-	</script>
-
+	
 	<script src="src/js/interact.js"></script>
 	<script src="src/js/utils.js"></script>
 	<script src="src/js/render.js"></script>
@@ -88,7 +89,7 @@
 	</div>
 	<div id="_driver" class="PageContainer pageToBase">
 		<div class="Flag Center">
-			<img src="asset/img/ui/flag_bar.png" class="FlagBar" id="_flag_top"/>
+			<img src="asset/img/ui/flag_bar.png" class="FlagBar"/>
 			<div id="_flag_top">
 			<div class="FlagTitle">
 				<img src="asset/img/ui/flag_name_title.png"/>
@@ -113,7 +114,7 @@
 	<div id="_color" class="PageContainer pageToBottom">
 		<div class="Flag FlagBottom Center">
 		<img src="asset/img/ui/flag_bar.png" class="FlagBar" id="_flag_bottom"/>
-		<div class="FlagTitle" style="top:3rem">
+		<div class="FlagTitle" style="position:absolute; top:3rem">
 			<img src="asset/img/ui/flag_color_title.png"/>
 		</div>
 			<div class="ColorCarWrapper">
@@ -271,8 +272,9 @@
 							</div>
 						</div>
 					</div>
-					<img id="_car_complete" class="FrontCar" src="asset/img/ui/frontcar_blue.png"/>
+					<img id="_car_complete" class="Center FrontCar" src="asset/img/ui/frontcar_blue.png"/>
 					<div id="_complete_button_wrapper" class="BottomWrapper">
+						<img id="_button_the2" class="Button hidden close" src="asset/img/ui/button_the2.png" onclick="onButtonThe2Click()"/>
 						<img id="_button_home" class="Button" src="asset/img/ui/button_home.png" onclick="onButtonHomeClick()"/>
 						<img id="_button_lottery" class="Button" src="asset/img/ui/button_next.png" onclick="onButtonLotteryClick()"/>
 						<img id="_button_share" class="Button hidden close" src="asset/img/ui/button_share.png" onclick="onButtonShareClick()"/>
@@ -422,17 +424,16 @@
 					<span id="_button_agree" class="RadioMark" onclick="onClickAgree()"></span>
 					<span id="_auth_text">我同意BMW總代理汎德股份有限公司得將本人之個人資料經電腦處理後，BMW總代理汎德股份有限公司及其所屬汎德股份有限公司其他關係企業暨其特約經銷商等使用，以及為提升客戶服務品質、車輛資訊之提供及推廣客戶關懷活動而使用。</span>
 				</div>
-
-				<div class="InputError">
-					<span id="_lottery_input_error" class="Orange FontInfo Center"></span>
-				</div>
-
-				<div id="_lottery_button_wrapper" class="Center BottomWrapper">
-					<img id="_button_campaign" class="Button" onclick="onClickCampaignInfo()" src="asset/img/ui/button_info.png"/>
-					<img id="_button_send" class="Button" onclick="sendInfo()" src="asset/img/ui/button_send.png"/>
-					</div>		
-				</div>
 		</div>	
+		<div class="InputError">
+			<span id="_lottery_input_error" class="Orange FontInfo Center"></span>
+		</div>
+
+		<div id="_lottery_button_wrapper" class="Center BottomWrapper">
+			<img id="_button_campaign" class="Button" onclick="onClickCampaignInfo()" src="asset/img/ui/button_info.png"/>
+			<img id="_button_send" class="Button" onclick="sendInfo()" src="asset/img/ui/button_send.png"/>
+			</div>		
+		</div>
 	</div>
 
 	<div id="_campaign" class="PageContainer pageToTop pageToBase">
@@ -497,7 +498,7 @@
 	</div>
 
 	<div id="_rank" class="PageContainer pageToRight">
-		<img src="asset/img/ui/BG_rank.png" id="_rank_back"/>
+		<img src="asset/img/ui/BG_rank_mobile.jpg" id="_rank_back"/>
 		<img src="asset/img/ui/game_logo_rank.png" id="_rank_logo"/>
 		<div id="_rank_info" class="Center FontInfo LightBlue DisableSelect">
 			<!-- <div class="RankItem">
@@ -510,9 +511,9 @@
 			<img class="Center" src="asset/img/ui/hint_landscape.png"/>
 		</div>
 	</div>
-	<div id="_hint_ipad_only" class="PageContainer hidden close">
+	<div id="_hint_webview" class="PageContainer hidden close">
 		<div class="VerticalWrapper" style="width:100%">
-			<img class="Center" src="asset/img/ui/hint_ipad_only.png"/>
+			<img class="Center" src="asset/img/ui/hint_webview.png"/>
 		</div>
 	</div>
 

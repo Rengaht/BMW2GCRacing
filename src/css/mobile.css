@@ -1,0 +1,50 @@
+/* iPhone XS */
+@media only screen 
+    and (min-device-width: 812px) 
+    and (min-device-height: 375px) 
+    and (-webkit-device-pixel-ratio: 3){ 
+
+     #_button_rank{
+        right:calc(44px + 5rem);
+    }
+    #_button_control{
+        right:calc(44px + 1rem);
+    }
+    .ButtonBack{
+        left:calc(44px + 1rem);
+    }
+}
+
+/* iPhone XR */
+@media only screen 
+    and (min-device-width: 896px) 
+    and (min-device-height: 414px) 
+    and (-webkit-device-pixel-ratio: 2){ 
+    
+    #_button_rank{
+        right:calc(44px + 5rem);
+    }
+    #_button_control{
+        right:calc(44px + 1rem);
+    }
+    .ButtonBack{
+        left:calc(44px + 1rem);
+    }
+}
+
+/* iPhone Xs Max */
+@media only screen 
+    and (device-width : 896px) 
+    and (device-height : 414px) 
+    and (-webkit-device-pixel-ratio : 3) { 
+
+     #_button_rank{
+        right:calc(44px + 5rem);
+    }
+    #_button_control{
+        right:calc(44px + 1rem);
+    }
+    .ButtonBack{
+        left:calc(44px + 1rem);
+    }
+}

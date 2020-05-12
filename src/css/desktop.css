@@ -3,7 +3,7 @@ body{
 	font-family:'BMWFont-Bold';
 	font-size:1.5em;
 
-	background-image: url(../../asset/img/ui/BG_desktop.png);
+	background-image: url(../../asset/img/ui/BG_desktop.jpg);
 	background-size: cover;
 	background-repeat: no-repeat;
 }
@@ -37,10 +37,6 @@ body{
 	height:27vh;
 	max-width: 80%;
 
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-end;
-	flex-wrap: nowrap;
 }
 
 .QRCode{
@@ -54,12 +50,22 @@ body{
 	display: inline-block;
 	flex-grow: 0;
 	flex-shrink: 0;
-	margin-right:50px;
+	margin-right:2rem;
 }
-
+.QRCode>img{
+	margin: 2.5%;
+	width: 95%;
+}
 .DesktopText{
+	
+	position: absolute;
+	top:0;
+	left:calc(27vh + 2rem);
+	height:100%;
+	width:50vw;
+
 	display: flex;
 	flex-direction: column;
-	align-content:end;
-	height:100%;
+	justify-content: flex-end;
+
 }

@@ -12,7 +12,13 @@ html{
 	-webkit-text-size-adjust:none;
 
 }
-@media (max-width: 1024px){
+@media (max-width: 640px){
+	html{
+		font-size: 9px;
+		-webkit-text-size-adjust:none;
+	}
+}
+@media (max-width: 1024px) and (min-width:640px){
 	html{
 		font-size: 14px;
 		-webkit-text-size-adjust:none;
@@ -25,11 +31,11 @@ html{
 	}
 }
 .FontT1{
-	font-size: 3rem;
+	font-size: 2.5rem;
 	letter-spacing:8px;
 }
 .FontT2{
-	font-size: 2rem;
+	font-size: 1.5rem;
 	letter-spacing:3px;
 }
 .FontT3{

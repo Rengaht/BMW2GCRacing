@@ -55,8 +55,8 @@ var lastPlayerSegment =0;
 // scene settings
 var indexScene =0;
 var totalScene =3;
-// var sceneInterval=[25,20,15];  // 20s for each scene
-var sceneInterval=[2,2,5];  // test time
+var sceneInterval=[25,20,15];  // 20s for each scene
+// var sceneInterval=[2,2,5];  // test time
 var sceneLapsedInterval=[];
 var tmp=0;
 for(var i=0;i<totalScene;++i){
@@ -145,7 +145,7 @@ function update(dt) {
        endGame();
     } 
   }else{
-    if(indexScene==0){
+    if(indexScene==0 && _game_elapse_time<4){
       // handle count down
       if(_game_elapse_time>=1){
         if(_game_elapse_time>=2){

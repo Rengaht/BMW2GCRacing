@@ -51,6 +51,12 @@ var _game_elapse_time=0;
 
 function onload(){
 
+	if(invalid_device){
+		$('#_hint_webview').removeClass('hidden');			
+		$('#_hint_webview').removeClass('close');
+		
+		return;
+	}
 	_inTransition=true;
 	$('#_button_start').addClass("Disable");
 	// setup pixi
@@ -72,7 +78,9 @@ function onload(){
 	    { keys: [KEY.LEFT,  KEY.A], mode: 'up',   action: function() { keyLeft   = false; } },
 	    { keys: [KEY.RIGHT, KEY.D], mode: 'up',   action: function() { keyRight  = false; } }]);
 
-	 window.addEventListener('resize', resize);
+	
+	 window.addEventListener('resize', resize,false);
+	 window.addEventListener('orientationchange', resize,false);
 
 
 	if(window.PointerEvent){
@@ -136,31 +144,32 @@ function resize(){
 	clearTimeout(_resize_timeout);
 
 	if(Ticker.started) Ticker.stop(); 		
-	_resize_timeout=setTimeout(doResize,100);
+	_resize_timeout=setTimeout(doResize,10);
 }
 function doResize(){
 	var ww_ = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; 
   	var wh_ = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 	
-	if(!isIpad()){
-  		// showItem($('#_hint_ipad_only'));
-  		// return;		
-  	}
+	// if(!isIpad()){
+ //  		// showItem($('#_hint_ipad_only'));
+ //  		// return;		
+ //  	}
 
 	if(ww_<wh_){
   		// landscape!!!
-  		showItem($('#_hint_landscape'));
+  		$('#_hint_landscape').removeClass('hidden');
+  		$('#_hint_landscape').removeClass('close');
   		return;	
   	}
 
 
 
   	// rank board
-  	var frameh_=Math.max(ww_/2048,wh_/1366)*1366;
-  	$('#_rank_info').css('top',0.22*frameh_);
-	$('#_rank_info').css('left',ww_/2-0.30*frameh_);
-  	$('#_rank_info').css('width',0.60*frameh_);
-  	$('#_rank_info').css('height',0.49*frameh_);
+ //  	var frameh_=Math.max(ww_/2048,wh_/1366)*1366;
+ //  	$('#_rank_info').css('top',0.22*frameh_);
+	// $('#_rank_info').css('left',ww_/2-0.30*frameh_);
+ //  	$('#_rank_info').css('width',0.60*frameh_);
+ //  	$('#_rank_info').css('height',0.49*frameh_);
 
 
   	hideItem($('#_hint_landscape'));
@@ -473,6 +482,7 @@ function setupCarSprite(color_){
 
 function setupGame(){
 
+	console.log("------ set up game ----------");
 	position=0;
 	score=0;
 	life=MaxLife;
@@ -481,6 +491,7 @@ function setupGame(){
 	lastSegment=0;
 	setupScene(0);
 	playerX=0;
+	isPlaying=false;
 
 	_game_elapse_time=-1;
 
@@ -534,7 +545,9 @@ function startGame(){
 
 	_sound_game.seek(0);	
 	_sound_game.stop();
-	
+
+
+
 	for(var n=0;n<RibbonCount;++n)
 		_ribbon.getChildAt(i).visible=false;
 
@@ -559,7 +572,7 @@ function startGame(){
 
 		// setTimeout(function(){
 		// 	isPlaying=true;	
-		// 	console.log("------------- Start Game -------------");	
+			console.log("------------- Start Game -------------");	
 			
 		// 	_car.gotoAndPlay(0);
 
@@ -663,9 +676,11 @@ function resumeGame(){
 	Ticker.start();
 }
 function exitGame(){
+	
 	_sound_game.stop();
 	isPlaying=false;
 	_game_elapse_time=-1;
+
 	Ticker.stop();
 }
 
