@@ -187,7 +187,7 @@ input:-webkit-autofill:active {
 #_lottery{
 	background-color: #001368;
 	z-index: 1;
-	min-height: 100%;
+	/*min-height: 100%;*/
 }
 #_rank{
 	/*background-image:url(../../asset/img/ui/BG_rank.png);*/
@@ -201,7 +201,7 @@ input:-webkit-autofill:active {
 #_campaign{
 	background-color: #001368;
 	z-index:6;
-	min-height: 100%;
+	/*min-height: 100%;*/
 }
 
 #_control{
@@ -592,7 +592,7 @@ input:-webkit-autofill:active {
 
 .RuleItem{
 	text-align: left;
-	/*margin-bottom: 1rem;*/
+	margin-bottom: 1rem;
 }
 .RuleItem img{
 	vertical-align: middle;
@@ -622,7 +622,9 @@ input:-webkit-autofill:active {
 	z-index: 9;
 	/*position: fixed;*/
 	background-color:rgba(255,131,69,0.5);
-	overflow-y:auto;
+	/*overflow-y:auto;*/
+    height: unset;
+    min-height: 100%;
 }
 #_score_board,#_rule_board{
 	width:94%;
