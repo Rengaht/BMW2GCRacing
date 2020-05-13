@@ -622,10 +622,11 @@ input:-webkit-autofill:active {
 	z-index: 9;
 	/*position: fixed;*/
 	background-color:rgba(255,131,69,0.5);
+	overflow-y:auto;
 }
 #_score_board,#_rule_board{
 	width:94%;
-	height:90%;
+	/*height:90%;*/
 
 	/*background-image: url(../../asset/img/ui/frame_complete.png);
 	background-size: cover;
