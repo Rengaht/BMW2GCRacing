@@ -10,7 +10,7 @@
 	<script src="src/js/mobile.js"></script>
 	<script src="src/lib/screenfull.min.js"></script> 
 	<script>
-		// checkDevice();
+		checkDevice();
 	</script>
 
 	<link rel="stylesheet" type="text/css" href="src/css/font.css">
@@ -56,7 +56,7 @@
 	<div class="ButtonBack">
 		<img id="_button_back" class="Button hidden close" src="asset/img/ui/button_back.png" onclick="onButtonBackClick()"/>
 	</div>
-
+	
 	<img id="_button_control" src="asset/img/ui/button_control.png" onclick="onButtonControlClick()" />
 	<div id="_control" class="PageContainer LightBlue hidden close">
 		<div class="VerticalWrapper" style="width:100%">
@@ -78,6 +78,9 @@
 
 		</div>
 	</div>
+	<img id="_scroll_arrow" src="asset/img/ui/scroll_arrow.png" style="display: none"/>
+
+
 	<div id="_home" class="PageContainer pageToTop pageToBase">
 		<div class="GameLogo Center">
 			<img src="asset/img/ui/game_logo_glow.png" class="LogoGlow"/>
@@ -438,15 +441,17 @@
 					<span id="_auth_text">我同意BMW總代理汎德股份有限公司得將本人之個人資料經電腦處理後，BMW總代理汎德股份有限公司及其所屬汎德股份有限公司其他關係企業暨其特約經銷商等使用，以及為提升客戶服務品質、車輛資訊之提供及推廣客戶關懷活動而使用。</span>
 				</div>
 
-		</div>	
-		<div class="InputError">
-			<span id="_lottery_input_error" class="Orange FontInfo Center"></span>
-		</div>
+				<div class="InputError" style="position: unset;">
+					<span id="_lottery_input_error" class="Orange FontInfo Center"></span>
+				</div>
 
-		<div id="_lottery_button_wrapper" class="Center BottomWrapper">
-			<img id="_button_campaign" class="Button" onclick="onClickCampaignInfo()" src="asset/img/ui/button_info.png"/>
-			<img id="_button_send" class="Button" onclick="sendInfo()" src="asset/img/ui/button_send.png"/>
-		</div>		
+				<div id="_lottery_button_wrapper" class="Center BottomWrapper">
+					<img id="_button_campaign" class="Button" onclick="onClickCampaignInfo()" src="asset/img/ui/button_info.png"/>
+					<img id="_button_send" class="Button" onclick="sendInfo()" src="asset/img/ui/button_send.png"/>
+				</div>		
+
+		</div>	
+		
 	</div>
 </div>
 <div class="PageWrapper">			

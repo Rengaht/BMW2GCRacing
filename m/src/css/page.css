@@ -30,6 +30,8 @@ body{
   	height: 100%;
 
   	overflow-y: auto;
+
+  	background-color: transparent;
 }
 
 img, a {border:none; outline: none;}
@@ -187,6 +189,7 @@ input:-webkit-autofill:active {
 #_lottery{
 	background-color: #001368;
 	z-index: 1;
+	height: unset;
 	/*min-height: 100%;*/
 }
 #_rank{
@@ -201,7 +204,7 @@ input:-webkit-autofill:active {
 #_campaign{
 	background-color: #001368;
 	z-index:6;
-	/*min-height: 100%;*/
+	min-height: 100%;
 }
 
 #_control{
@@ -279,6 +282,16 @@ input:-webkit-autofill:active {
 	transition:opacity .4s ease-out 0s;
 }
 
+#_scroll_arrow{
+	position: fixed;
+	bottom:1rem;
+	right:1rem;
+
+	height:2rem;
+
+	z-index: 500;
+}
+
 .Flag{
 	position: absolute;
 	bottom: 0;
@@ -291,6 +304,7 @@ input:-webkit-autofill:active {
 	/*width: 103vh;*/
 	/*max-height: 80%;*/
 	background-repeat: no-repeat;
+	overflow: hidden;
 }
 #_flag_top{
 	display: -webkit-box;
@@ -303,6 +317,7 @@ input:-webkit-autofill:active {
 	-ms-flex-pack: distribute;
 	    justify-content: space-around;
 	height: 80%;
+	
 }
 .FlagBar{
 	position: absolute;
@@ -624,7 +639,7 @@ input:-webkit-autofill:active {
 	background-color:rgba(255,131,69,0.5);
 	/*overflow-y:auto;*/
     height: unset;
-    min-height: 100%;
+    /*min-height: 100%;*/
 }
 #_score_board,#_rule_board{
 	width:94%;
@@ -792,14 +807,17 @@ input:-webkit-autofill:active {
 	        justify-content: center;
 }
 #_lottery_info{
-	position: absolute;
-    top: 6rem;
-    left: 8rem;
-    right: 8rem;
-    bottom: 6.5rem;
-    padding-right:.5rem;
-
+    position: relative;
+    /* width: 100%; */
+    padding-left: 8rem;
+    padding-top: 6rem;
+    /* left: 8rem; */
+    /* right: 8rem; */
+    /* bottom: 6.5rem; */
+    padding-right: 8rem;
+    padding-bottom: 6rem;
     overflow-y: auto;
+    overflow-x: hidden;
 
 /*	display:flex;
 	flex-direction: row;
@@ -852,7 +870,7 @@ input:-webkit-autofill:active {
 	line-height: 150%;
 }
 #_lottery_button_wrapper{
-	/*position: unset;*/
+	position: unset;
 /*	position: relative;
 	z-index: 2;
 	bottom: unset;
@@ -1105,15 +1123,16 @@ input:-webkit-autofill:active {
 #_campaign_wrapper{
 	position: absolute;
     top: 6rem;
-    left: 8rem;
-    right: 8rem;
+    left: 0rem;
+    right: 0rem;
     bottom: 6rem;
     padding-right:.5rem;
 
     overflow-y: auto;
 
     line-height: 2rem;
-    padding-right: 1rem;
+    padding-right: 8rem;
+    padding-left: 8rem;
 }
 .CampaignItem{
 	text-align: left;

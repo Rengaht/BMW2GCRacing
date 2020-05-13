@@ -127,6 +127,7 @@ function setupPage(page_){
 			if(_cur_page==='_color'){
 				$('#'+page_).removeClass('pageToTop');
 			}
+
 			break;
 		case '_color':
 			//resetDriverColor();
@@ -165,7 +166,6 @@ function setupPage(page_){
 				$('#'+page_).removeClass('pageToTop');
 				$('#_score').removeClass('pageToTop');
 			}
-			
 			break;
 		case '_rank':			
 			hideItem($('#_button_rank'));
@@ -192,17 +192,21 @@ function setupPage(page_){
 					'event_label': 'Participate'
 			});
 
+
 			break;
 		case '_campaign':
 			$('#_campaign_wrapper').scrollTop(0);
 			if(!$('#_campaign').hasClass('pageToBase'))
 				$('#'+page_).addClass('pageToBase');		
+
 			break;
 	}
 
 	
 }
-
+function needScroll(element){
+		return element.parent().get(0).scrollHeight>element.parent().get(0).clientHeight;
+}
 function gotoPage(page_,sound_){
 	
 	if(_cur_page===page_) return;
@@ -262,12 +266,21 @@ function onPageTransitionEnd(){
 				$('#_color').removeClass('pageToTop');
 				$('#_color').addClass('pageToBottom');
 
+
+				$('#_scroll_arrow').css('display','none');
 				resetDriverColor();						
 				break;
 			case '_driver':
 				showItem($('#_button_back'));
+
+				if(needScroll($('#'+_cur_page))) $('#_scroll_arrow').css('display','block');
+				else $('#_scroll_arrow').css('display','none');
 				break;
 			case '_color':	
+
+				if(needScroll($('#'+_cur_page))) $('#_scroll_arrow').css('display','block');
+				else $('#_scroll_arrow').css('display','none');
+			
 				break;		
 			case '_game':
 				if(_pre_page==='_color'){
@@ -279,19 +292,28 @@ function onPageTransitionEnd(){
 				}else{
 					movePage($('#_score_board'),'pageFromBase');
 				}
+				$('#_scroll_arrow').css('display','none');
 				break;
 			case '_lottery':
 				showItem($('#_button_back'));
 				$('#_button_send').removeClass('Disable');
 				$('#_button_send').removeClass('Click');
+				
+				if(needScroll($('#'+_cur_page))) $('#_scroll_arrow').css('display','block');
+				else $('#_scroll_arrow').css('display','none');
+			
 				break;
 			case '_rank':
 				// $('#'+_cur_page).removeClass('pageToRight');
 				showItem($('#_button_back'));	
 				updateRank();
+				
+				$('#_scroll_arrow').css('display','block');
+				
 				break;
 			case '_campaign':
 				showItem($('#_button_back'));		
+				$('#_scroll_arrow').css('display','none');
 				break;
 	}
 	// $('#'+_cur_page).find('.Button').removeClass('Disable');
