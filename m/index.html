@@ -10,7 +10,7 @@
 	<script src="src/js/mobile.js"></script>
 	<script src="src/lib/screenfull.min.js"></script> 
 	<script>
-		checkDevice();
+		// checkDevice();
 	</script>
 
 	<link rel="stylesheet" type="text/css" href="src/css/font.css">
@@ -34,7 +34,7 @@
 	
 </head>
 <body onload="onload();">
-	<div class="PageContainer" id="_loading">
+	<div class="FullPageContainer" id="_loading">
 		<div class="VerticalWrapper" style="width:100%">
 		<div class="Center">
 			<div class="LightBlue" style="margin-bottom: .5rem">Loading...</div>
@@ -58,7 +58,7 @@
 	</div>
 	
 	<img id="_button_control" src="asset/img/ui/button_control.png" onclick="onButtonControlClick()" />
-	<div id="_control" class="PageContainer LightBlue hidden close">
+	<div id="_control" class="FullPageContainer LightBlue hidden close">
 		<div class="VerticalWrapper" style="width:100%">
 		
 		<div class="Center" id="_control_wrapper">
@@ -81,7 +81,7 @@
 	<img id="_scroll_arrow" src="asset/img/ui/scroll_arrow.png" style="display: none"/>
 
 
-	<div id="_home" class="PageContainer pageToTop pageToBase">
+	<div id="_home" class="FullPageContainer pageToTop pageToBase">
 		<div class="GameLogo Center">
 			<img src="asset/img/ui/game_logo_glow.png" class="LogoGlow"/>
 			<img id="_game_logo" src="asset/img/ui/game_logo.png"/>
@@ -92,8 +92,8 @@
 		</div>
 	</div>
 
-<div class="PageWrapper">			
-	<div id="_driver" class="PageContainer pageToBase">
+<div id="_driver" class="PageWrapper pageToBase">			
+	<div class="Center PageContainer">
 		<div class="Flag Center">
 			<img src="asset/img/ui/flag_bar.png" class="FlagBar"/>
 			<div id="_flag_top">
@@ -117,8 +117,8 @@
 		</div>
 	</div>
 </div>
-<div class="PageWrapper">			
-	<div id="_color" class="PageContainer pageToBottom">
+<div id="_color" class="PageWrapper pageToBottom">			
+	<div class="Center PageContainer">
 		<div class="Flag FlagBottom Center">
 		<img src="asset/img/ui/flag_bar.png" class="FlagBar" id="_flag_bottom_bar"/>
 		<div id="_flag_bottom">
@@ -159,10 +159,11 @@
 		</div>
 	</div>
 </div>
-<div class="PageWrapper">			
-	<div id="_game" class="PageContainer hidden">
-		<div id="_game_frame"></div>
-		<div id="_speed_meter">
+<div class="PageWrapper hidden" id="_game">			
+	<div class="PageContainer GamePageContainer" id="_game_container">
+		<div id="_game_frame"></div>		
+	</div>
+	<div id="_speed_meter">
 			<img src="asset/img/ui/meter.png"/>
 			<img id="_speed_pointer" src="asset/img/ui/meter_pointer.png"/>
 			<div id="_speed_value" class="LightBlue FontSpeedMeter DisableSelect">160</div>
@@ -192,13 +193,13 @@
 		</div>
 		<div id="_game_touch_frame"></div>
 
-		<div id="_hint" onClick="startGame()" class="Button hidden close">
+		<div id="_hint" onClick="startGame()" class="Button VerticalWrapper hidden close">
 			<img src="asset/img/ui/hint.png" class="Center"/>
 		</div>
-	</div>
+		
 <!-- </div>
 <div class="PageWrapper">	 -->
-	<div id="_rule" class="PageContainer hidden close">
+	<div id="_rule" class="FullPageContainer hidden close">
 			<div id="_rule_board" class="Center">
 			<div class="BoardWrapper">
 				<div class="BoardContent">
@@ -255,7 +256,7 @@
 		</div>
 <!-- </div>
 <div class="PageWrapper">	 -->
-		<div id="_score" class="PageContainer hidden close">
+		<div id="_score" class="FullPageContainer hidden close">
 			<div id="_score_board" class="Center">
 				<div class="BoardWrapper">	
 				<div class="BoardContent">		
@@ -304,8 +305,8 @@
 		</div>
 </div>
 
-<div class="PageWrapper">			
-	<div id="_lottery" class="PageContainer pageToRight">
+<div id="_lottery" class="FullPageWrapper pageToRight">			
+	<div class="Center PageContainer">
 		<div id="_lottery_title" class="Center WaveTitle FontT2 LightBlue">
 			<img src="asset/img/ui/line_title.png"/>
 			<span>輸入資料參加抽獎</span>
@@ -313,7 +314,8 @@
 		</div>
 		<!-- <div class="VerticalWrapper">
 		<div class="Center"> -->
-		<div id="_lottery_info" class="Center FontInfo MiddleBlue">
+		<div id="_lottery_info" class="Center FontInfo MiddleBlue" style="overflow-y:auto">
+		<div>
 			<!-- <div class="LotteryColumn"> -->
 				<div class="LotteryItem">
 					<span>姓名</span>
@@ -439,23 +441,21 @@
 				<!-- <div class="LotteryAuth FontFormSmall LightBlue"> -->
 					<span id="_button_agree" class="RadioMark" onclick="onClickAgree()"></span>
 					<span id="_auth_text">我同意BMW總代理汎德股份有限公司得將本人之個人資料經電腦處理後，BMW總代理汎德股份有限公司及其所屬汎德股份有限公司其他關係企業暨其特約經銷商等使用，以及為提升客戶服務品質、車輛資訊之提供及推廣客戶關懷活動而使用。</span>
-				</div>
-
-				<div class="InputError" style="position: unset;">
-					<span id="_lottery_input_error" class="Orange FontInfo Center"></span>
-				</div>
-
-				<div id="_lottery_button_wrapper" class="Center BottomWrapper">
-					<img id="_button_campaign" class="Button" onclick="onClickCampaignInfo()" src="asset/img/ui/button_info.png"/>
-					<img id="_button_send" class="Button" onclick="sendInfo()" src="asset/img/ui/button_send.png"/>
-				</div>		
-
+				</div>				
 		</div>	
-		
+		</div>
+		<div class="InputError">
+			<span id="_lottery_input_error" class="Orange FontInfo Center"></span>
+		</div>
+
+		<div id="_lottery_button_wrapper" class="Center BottomWrapper">
+			<img id="_button_campaign" class="Button" onclick="onClickCampaignInfo()" src="asset/img/ui/button_info.png"/>
+			<img id="_button_send" class="Button" onclick="sendInfo()" src="asset/img/ui/button_send.png"/>
+		</div>		
 	</div>
 </div>
-<div class="PageWrapper">			
-	<div id="_campaign" class="PageContainer pageToTop pageToBase">
+<div id="_campaign" class="PageWrapper pageToTop pageToBase">			
+	<div class="Center PageContainer">
 		<div id="_lottery_title" class="Center WaveTitle FontT2 LightBlue">
 			<img src="asset/img/ui/line_title.png"/>
 			<span>活動詳情</span>
@@ -517,7 +517,7 @@
 	</div>
 </div>
 
-	<div id="_rank" class="PageContainer pageToRight">
+	<div id="_rank" class="FullPageContainer pageToRight">
 		<img src="asset/img/ui/BG_rank_mobile.jpg" id="_rank_back"/>
 		<img src="asset/img/ui/game_logo_rank.png" id="_rank_logo"/>
 		<div id="_rank_info" class="Center FontInfo LightBlue DisableSelect">
@@ -527,12 +527,12 @@
 		</div>
 	</div>
 
-	<div id="_hint_landscape" class="PageContainer">
+	<div id="_hint_landscape" class="FullPageContainer">
 		<div class="VerticalWrapper" style="width:100%">
 			<img class="Center" src="asset/img/ui/hint_landscape.png"/>
 		</div>
 	</div>
-	<div id="_hint_webview" class="PageContainer">
+	<div id="_hint_webview" class="FullPageContainer">
 		<div class="VerticalWrapper" style="width:100%">
 			<img class="Center" src="asset/img/ui/hint_webview.png"/>
 		</div>
@@ -548,7 +548,9 @@
 
 	  gtag('config', 'UA-53535602-8');
 	</script>
-	<!-- Facebook Pixel Code --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init', '436643020262829'); fbq('track', 'PageView');</script><noscript><img height="1" width="1" src="https://www.facebook.com/tr?id=436643020262829&ev=PageView&noscript=1"/></noscript><!-- End Facebook Pixel Code -->
+	<!-- Facebook Pixel Code -->
+		<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init', '436643020262829'); fbq('track', 'PageView');</script><noscript><img height="1" width="1" src="https://www.facebook.com/tr?id=436643020262829&ev=PageView&noscript=1"/></noscript>
+		<!-- End Facebook Pixel Code -->
 
 
 </body>

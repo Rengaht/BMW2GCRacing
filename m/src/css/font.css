@@ -31,23 +31,23 @@ html{
 	}
 }
 .FontT1{
-	font-size: 2.5rem;
+	font-size: min(2.5rem, 8vh);
 	letter-spacing:8px;
 }
 .FontT2{
-	font-size: 1.5rem;
+	font-size: min(1.5rem, 10vh);
 	letter-spacing:3px;
 }
 .FontT3{
-	font-size: 1.64rem;
+	font-size: min(1.64rem, 11vh);
 	letter-spacing:3px;
 }
 .FontText{
-	font-size:1rem;
+	font-size:min(1rem , 6vh);
 	letter-spacing:3px;
 }
 .FontSpeedMeter{
-	font-size: 1.33rem;
+	font-size: min(1.33rem, 4vh);
 	letter-spacing:3px;
 }
 .FontInfo{
@@ -56,11 +56,11 @@ html{
 }
 
 .FontFormSmall{
-	font-size: 1rem;
+	font-size: min(1rem , 6vh);
 	letter-spacing:1px;
 }
 .FontCampaign{
-	font-size:1rem;
+	font-size:min(1rem , 6vh);
 }
 
 .DeepBlue{

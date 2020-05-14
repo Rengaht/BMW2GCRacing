@@ -160,8 +160,8 @@ function doResize(){
 	// var ww_ = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; 
  //  	var wh_ = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 	
- 	ww_=$('#_game').width();
- 	wh_=$('#_game').height();
+ 	ww_=$('#_game_container').width();
+ 	wh_=$('#_game_container').height();
 
 	if(ww_<wh_){
   		$('#_hint_landscape').css('display','block');
@@ -230,8 +230,8 @@ function setupPixi(){
 	Ticker.autoStart=false;
 
 
-	width=_windowWidth=window.innerWidth;
-	height=_windowHeight=window.innerHeight;
+	width=_windowWidth=$('#_game_container').width();
+	height=_windowHeight=$('#_game_container').height();
 
 	
 

@@ -11,7 +11,7 @@
     and (-webkit-device-pixel-ratio: 3){ 
 
      #_button_rank{
-        right:calc(44px + 5rem);
+        right:calc(44px + 4rem);
     }
     #_button_control{
         right:calc(44px + 1rem);
@@ -29,9 +29,11 @@
         height: calc(80% - 16px);
     }
     .InputError{
-        bottom: calc(5rem + 10px);
+        bottom: calc(11% + 1rem + 10px);
     }
-
+      #_hud{
+        right:calc (44px + 4rem);
+    }
 }
 
 /* iPhone XR */
@@ -41,7 +43,7 @@
     and (-webkit-device-pixel-ratio: 2){ 
     
     #_button_rank{
-        right:calc(44px + 5rem);
+        right:calc(44px + 4rem);
     }
     #_button_control{
         right:calc(44px + 1rem);
@@ -59,7 +61,10 @@
         height: calc(80% - 16px);
     }
     .InputError{
-        bottom: calc(5rem + 10px);
+          bottom: calc(11% + 1rem + 10px);
+    }
+    #_hud{
+        right:calc (44px + 4rem);
     }
 }
 
@@ -70,7 +75,7 @@
     and (-webkit-device-pixel-ratio : 3) { 
 
      #_button_rank{
-        right:calc(44px + 5rem);
+        right:calc(44px + 4rem);
     }
     #_button_control{
         right:calc(44px + 1rem);
@@ -88,6 +93,9 @@
         height: calc(80% - 16px);
     }
     .InputError{
-        bottom: calc(5rem + 10px);
+         bottom: calc(11% + 1rem + 10px);
+    }
+    #_hud{
+        right:calc (44px + 4rem);
     }
 }
