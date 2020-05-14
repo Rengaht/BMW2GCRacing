@@ -1,0 +1,162 @@
+{"frames": {
+
+"1-board1.png":
+{
+	"frame": {"x":286,"y":189,"w":314,"h":205},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":314,"h":205},
+	"sourceSize": {"w":314,"h":205}
+},
+"1-board2.png":
+{
+	"frame": {"x":600,"y":189,"w":307,"h":262},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":307,"h":262},
+	"sourceSize": {"w":307,"h":262}
+},
+"1-grass1.png":
+{
+	"frame": {"x":572,"y":0,"w":374,"h":189},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":374,"h":189},
+	"sourceSize": {"w":374,"h":189}
+},
+"1-grass2.png":
+{
+	"frame": {"x":946,"y":0,"w":374,"h":189},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":374,"h":189},
+	"sourceSize": {"w":374,"h":189}
+},
+"1-grass3.png":
+{
+	"frame": {"x":1320,"y":0,"w":374,"h":189},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":374,"h":189},
+	"sourceSize": {"w":374,"h":189}
+},
+"1-grass4.png":
+{
+	"frame": {"x":0,"y":0,"w":286,"h":188},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":286,"h":188},
+	"sourceSize": {"w":286,"h":188}
+},
+"1-grass5.png":
+{
+	"frame": {"x":286,"y":0,"w":286,"h":188},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":286,"h":188},
+	"sourceSize": {"w":286,"h":188}
+},
+"1-grass6.png":
+{
+	"frame": {"x":0,"y":189,"w":286,"h":189},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":286,"h":189},
+	"sourceSize": {"w":286,"h":189}
+},
+"1-house1-left.png":
+{
+	"frame": {"x":907,"y":189,"w":559,"h":323},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":559,"h":323},
+	"sourceSize": {"w":559,"h":323}
+},
+"1-house1-right.png":
+{
+	"frame": {"x":0,"y":512,"w":559,"h":323},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":559,"h":323},
+	"sourceSize": {"w":559,"h":323}
+},
+"1-house2-left.png":
+{
+	"frame": {"x":559,"y":512,"w":559,"h":323},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":559,"h":323},
+	"sourceSize": {"w":559,"h":323}
+},
+"1-house2-right.png":
+{
+	"frame": {"x":1118,"y":512,"w":559,"h":323},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":559,"h":323},
+	"sourceSize": {"w":559,"h":323}
+},
+"1-tower1.png":
+{
+	"frame": {"x":843,"y":835,"w":236,"h":658},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":236,"h":658},
+	"sourceSize": {"w":236,"h":658}
+},
+"1-tower2.png":
+{
+	"frame": {"x":1079,"y":835,"w":232,"h":658},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":232,"h":658},
+	"sourceSize": {"w":232,"h":658}
+},
+"1-tree-1.png":
+{
+	"frame": {"x":281,"y":835,"w":313,"h":463},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":313,"h":463},
+	"sourceSize": {"w":313,"h":463}
+},
+"1-tree-2.png":
+{
+	"frame": {"x":594,"y":835,"w":249,"h":463},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":249,"h":463},
+	"sourceSize": {"w":249,"h":463}
+},
+"1-turn-left.png":
+{
+	"frame": {"x":0,"y":835,"w":141,"h":348},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":141,"h":348},
+	"sourceSize": {"w":141,"h":348}
+},
+"1-turn-right.png":
+{
+	"frame": {"x":141,"y":835,"w":140,"h":348},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":140,"h":348},
+	"sourceSize": {"w":140,"h":348}
+}},
+"animations": {
+	"1-board": ["1-board1.png","1-board2.png"],
+	"1-grass": ["1-grass1.png","1-grass2.png","1-grass3.png","1-grass4.png","1-grass5.png","1-grass6.png"],
+	"1-tower": ["1-tower1.png","1-tower2.png"],
+	"1-tree": ["1-tree-1.png","1-tree-2.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "scene1.png",
+	"format": "RGBA8888",
+	"size": {"w":1694,"h":1493},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:1926b03e291c9c7c664868e48c6b7e95:71ad977e5c211a963c3a079a442acefd:ec0eeeed5ced6e03397d7668d179ebf6$"
+}
+}

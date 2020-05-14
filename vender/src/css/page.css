@@ -1,0 +1,835 @@
+*:focus {
+    outline: none;
+}
+body{
+
+	font-family:'BMWFont-Bold';
+	line-height: 1.2;	
+
+	border:0;
+	margin:0;	
+	outline:none;
+	background-color: #001368;
+	overflow: hidden;
+	-webkit-overflow-scrolling: auto;
+
+	text-transform: uppercase;
+
+	position: fixed;
+  	overflow: hidden;
+  	width: 100%;
+  	height: 100%;
+}
+img, a {border:none; outline: none;}
+input,select{
+	font-family:'BMWFont-Bold';
+	text-transform: uppercase;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+::placeholder{
+	color:#7CFFFB;
+}
+
+.Center{
+	display:block;
+	text-align: center;
+	margin: auto;
+}
+.BottomWrapper{
+	position: absolute;
+	bottom: 5vh;
+	max-height:11vh;
+	height:11vh;
+	overflow: hidden;
+	width: 100%;
+}
+
+#_frame{
+	position: absolute;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
+}
+#hud{
+	position: absolute;
+	right:0;
+}
+
+.Button{
+	cursor: pointer;
+	transition: opacity .2s ease-out;	
+}
+.Button.Disable{
+	opacity: .8;
+}
+
+.BottomWrapper>.Button{
+	position: relative;
+	top:0;
+	height:200%;
+}
+.BottomWrapper>.Button.Click{
+	top:-100%;
+}
+
+
+.hidden{
+	opacity: 0;
+	transition:opacity .5s ease-out;
+}
+.close{
+	display:none !important;
+}
+.PageContainer{
+	position: absolute;
+    /*top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;*/
+    top:0;
+    width:100%;
+    height:100%;
+    background-size: cover;	
+    background-position: center center;
+	transition: .5s ease;
+	overflow: hidden;
+    /*transform:translateX(0%) translateY(0%);*/
+    /*transition: top 0s ease-in-out;*/
+}
+.PageContainer.hidden{
+	/*opacity: 0;*/
+	top:-100vh;
+	transition: top 1s ease-in-out;
+}
+/*.PageContainer.close{
+	top:0vh;
+}
+*/
+/* pages */
+#_home{
+	background-image: url(../../asset/img/ui/BG_home.png);
+	z-index: 5;
+}
+#_color{
+	background-image: url(../../asset/img/ui/BG_car.png);	
+	z-index: 2;
+	animation-timing-function: linear !important;
+}
+#_driver{
+	background-image: url(../../asset/img/ui/BG_info.png);
+	z-index: 3;	
+	animation-timing-function: linear !important;
+}
+#_lottery{
+	background-color: #001368;
+	z-index: 3;
+}
+#_rank{
+	background-image:url(../../asset/img/ui/BG_rank.png);
+	z-index: 7;
+	background-position: top;
+}
+
+#_campaign{
+	background-color: #001368;
+	z-index:4;
+}
+/* page home */
+.GameLogo{
+	position: relative;
+	margin-top:50px;
+	width:54vh;
+	height:46vh;	
+}
+.GameLogo>img{
+	position: absolute;
+	left:0;
+	height:100%;
+}
+.LogoGlow{
+	animation: glowglow 2.5s infinite;
+}
+@keyframes glowglow {
+  0%   { opacity:1; }
+  40%  { opacity:0; }  
+  41% { opacity:1; } 
+  44%  { opacity:0; }  
+  45% { opacity:1; } 
+  100% { opacity:1; }
+}
+/* page driver */
+.ButtonBack{
+	position: absolute;
+	top:85px;
+	left:64px;
+	
+	height:8%;
+	max-height: 100px;
+
+	z-index: 100;
+	transition:opacity .5s ease-out .7s;
+
+	overflow: hidden;
+}
+.ButtonBack>.Button{
+	position: relative;
+	top:0;
+	height:200%;
+}
+.ButtonBack>.Button.Click{
+	top:-100%;
+}
+#_button_back.hidden{
+	transition:opacity .4s ease-out 0s;
+}
+
+.Flag{
+	position: relative;
+	background-image: url(../../asset/img/ui/flag.png);
+	background-size: 100% auto;
+	width: 103vh;
+	background-repeat: no-repeat;
+}
+#_flag_top{
+	height:75vh;
+	top:25vh; 
+}
+
+
+#_hint_driver_name{	
+	position:absolute;
+	top:calc(9vh - 1rem);
+	left:29vh;
+	height:2rem;
+	overflow: hidden;
+	text-align: left;
+	vertical-align: middle;
+}
+
+#_driver_title{
+	text-align: left;	
+	color:white;
+
+	position:absolute;
+	top:calc(28vh - .5rem);
+	left:29vh;
+	vertical-align: middle;
+}
+#_input_driver{
+
+	position:absolute;
+	top:calc(35vh - 1.5rem);
+	left:29vh;
+	width:65vh;
+	background:transparent;	
+	margin:0;  
+   	padding:0;  
+   	border:0;  
+	vertical-align: middle;
+}
+#_input_driver:-webkit-autofill{
+	-webkit-text-fill-color:#7CFFFB !important;
+}
+.InputError{
+	position: absolute;
+	bottom: 18vh;	
+	width: 100%;
+}
+
+/* page color */
+#_flag_bottom{
+	height:72vh;
+	top:0; 
+	background-position:bottom;
+}
+#_hint_car_color{
+	position: absolute;
+	top:calc(20vh - 1rem);
+	left:29vh;
+	text-align: left;
+}
+.FrontCar{
+	max-height: 36vh;
+	max-width:86vh;
+}
+.ColorCarWrapper{
+	position: absolute;
+	top:40%;
+	left:calc(50vw - 51vh + 13vh);
+
+}
+.ColorCarWrapper>img{
+	position: absolute;
+	top:0;
+}
+.ColorButtonWrapper{
+	position: absolute;
+	right:10%;
+	top:32%;
+	width: 8%;
+}
+.ColorButton{
+	margin-top:20px;
+	height:10vh;
+}
+.ColorButton>img{
+	height: 100%;
+}
+.ColorButton>img:last-child{
+	position: relative;
+	top:-100%;	
+}
+
+
+/* page game */
+#_game_touch_frame{
+	position: fixed;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	background-color:transparent;
+}
+
+#_hud{
+	position:absolute;
+	top:43px;
+	left:50px;
+	right:50px;
+
+	display:flex;
+	flex-direction: row;
+	
+	justify-content: space-between;
+	
+}
+.HudElement{
+	display:flex;	
+}
+.HudElement>span{
+	width:7.5rem;
+	margin-right:1rem;
+	text-align: left;
+}
+
+
+#_life_star>img{
+	height:2rem;
+}
+
+
+#_speed_meter{
+	position:absolute;
+	left:50px;
+	bottom:32px;
+	/*width:14%;*/
+	height:18vh;
+}
+#_speed_meter>img:first-child{
+	max-height: 100%;
+}
+#_speed_pointer{
+	position: absolute;
+	left:28%;
+	top:40%;
+	height:36%;
+	transform-origin:76% 76%;
+	transform:rotate(45deg);
+
+	transition: .5s ease-in-out;
+}
+#_speed_value{
+	position: absolute;
+	right:45%;
+	bottom:0;
+}
+
+#_driver_in_game{
+	position:absolute;
+	right:50px;
+	bottom:32px;	
+	
+	text-align:right;
+
+}
+#_driver_name_in_game{
+	color:white;
+	margin-top:0.22rem;
+	margin-bottom:0.83rem;
+}
+
+#_hint{
+	position: absolute;
+	top:35%;
+	width:100%;
+	cursor: pointer;
+	/*z-index: 15;*/
+}
+#_hint>img{
+	width:60%;
+}
+/* rules */
+#_rule_text{
+	max-height: 60%;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
+.RuleItem{
+	text-align: left;
+
+}
+.RuleItem img{
+	vertical-align: middle;
+	max-height: 2rem;
+	max-width: 2rem;
+}
+.RuleItem img:first-child{
+	margin-right:10px;
+
+}
+.RuleItem img,p{
+	display: inline-block;
+}
+#_button_ok_rule,#_button_ok_campaign{
+	top:-100%;
+}
+#_button_ok_rule.Click,#_button_ok_campaign.Click{
+	top:0;
+}
+#_rule_button_wrapper{
+	/*position: relative;*/
+	margin-top: 30px;
+}
+
+/* congradulation !!! */
+#_score,#_rule{
+	position: fixed;
+	background-color:rgba(255,131,69,0.5);
+}
+#_score_board,#_rule_board{
+	width:94%;
+	height:90%;
+
+	/*background-image: url(../../asset/img/ui/frame_complete.png);
+	background-size: cover;
+	background-repeat: no-repeat;*/	
+}
+.BoardWrapper{
+	position:relative;
+	width:100%;
+	max-height:100%;
+	min-height: 85%;
+	background-color:#010F6D;
+	padding-top:70px;
+	padding-bottom: 50px;
+}
+
+.BoardBorder:first-of-type{
+	position: absolute;
+	top:0;
+	bottom:8px;
+	left:-8;
+	width:16px;	
+	background-image: url(../../asset/img/ui/board_border-left.png);
+	background-repeat: repeat-y;
+	background-size: contain;
+}
+.BoardBorder:nth-of-type(2){
+	position: absolute;
+	top:0;
+	bottom:8px;
+	right:-8;
+	width:16px;	
+	background-image: url(../../asset/img/ui/board_border-right.png);
+	background-repeat: repeat-y;
+	background-size: contain;
+}
+.BoardBorder:nth-of-type(3){
+	position: absolute;
+	bottom:-8;
+	left:8px;
+	right:8px;
+	height:16px;
+	background-image: url(../../asset/img/ui/board_border-bottom.png);
+	background-repeat: repeat-x;
+	background-size: contain;
+}
+.BoardBottomLeft{
+	position: absolute;
+	bottom:-8;
+	left:-8;
+	width:16px;	
+	height:16px;
+}
+.BoardBottomRight{
+	position: absolute;
+	bottom:-8;
+	right:-8;
+	width:16px;	
+	height:16px;
+}
+
+#_board_title{
+	position: relative;
+	overflow: hidden;
+
+	margin-left:10%;
+	margin-right:10%;
+}
+#_congradulation{
+	position: relative;
+	text-align: left;
+	width: 100%;
+	height:3rem;
+	overflow: hidden;
+}
+#_info_complete{
+	
+	color:white;
+
+	display:flex;
+	flex-direction: row;	
+	justify-content: space-between;
+	
+	margin-top: 30px;
+}
+.ScoreElement{
+	display:flex;
+	text-align: left;
+	flex-direction: column;
+	overflow: hidden;
+}
+.ScoreElement>div{
+	max-height: 3rem;
+}
+
+#_car_complete{
+	margin-top: 50px;
+}
+#_complete_button_wrapper>img:first-child{
+	margin-right:100px;
+}
+#_complete_button_wrapper{
+	/*position: relative;*/
+	margin-top: 30px;
+}
+
+
+/* lottery */
+#_lottery_title{
+	position: absolute;
+	width:100%;
+	top:85px;
+}
+.VerticalWrapper{
+	position: absolute;
+	height:100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+#_lottery_info{
+	max-width:90%;
+	max-height:65%;
+	overflow-y: auto;
+
+	display:flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.LotteryColumn{
+	
+	/*margin-right: 70px;*/
+	width: 50%;
+	display: flex;	
+	flex-direction: column;
+	justify-content: space-between;
+	padding:20px;
+}
+.LotteryItem{
+	width:100%;
+	margin-bottom:42px;
+	
+	display: flex;
+	flex-direction: row;
+	justify-content: start;
+
+	text-align: left;
+	height: 2rem;
+}
+.LotteryItem>span{
+	margin-right:1rem;
+	text-overflow: ellipsis;
+    white-space: nowrap;
+}
+/*.LotteryItem>input,select{
+	flex-grow:1;
+	
+	margin-right: 35px;
+	background-color: transparent;
+}*/
+.LotteryItem>p{
+
+	text-align: left;
+	line-height: 150%;
+}
+.FormInput{
+	
+	flex-grow: 1;
+}
+.FormInput input,select{
+	background-color: transparent;
+	border:0px;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	width: 100%;
+}
+.FormInput input:-webkit-autofill{
+	-webkit-text-fill-color:#7CFFFB !important;
+}
+.FormInput select{
+	background: url(../../asset/img/ui/form_arrow.png) no-repeat right transparent;
+    background-size: 1rem .6rem;
+    background-position: center right .5rem;
+    -webkit-appearance: none;
+    padding-right: 1.5rem;
+
+    -webkit-appearance: none;
+  	appearance: none;
+  	background-color:#001368; 
+}
+.FormInput option{
+	background-color: 
+}
+.FormInputWrapper{
+	position: relative;
+	/*width: 100%;
+	height:100%;*/
+	background-color: transparent;
+	margin-right: .5rem;
+
+	border:3px solid #00B2FF;
+}
+.FormInputText{
+	background-color: #1B2495;
+}
+.FormTopLeft{
+	position: absolute;
+	top:-3px;
+	left:-3px;
+	width: 10px;
+	height:10px;
+}
+.FormTopRight{
+	position: absolute;
+	top:-3;
+	right:-3;
+	width: 10px;
+	height:10px;
+}
+.FormBottomLeft{
+	position: absolute;
+	bottom:-3;
+	left:-3;
+	width: 10px;
+	height:10px;
+}
+.FormBottomRight{
+	position: absolute;
+	bottom:-3;
+	right:-3;
+	width: 10px;
+	height:10px;
+}
+.RadioMark{
+	/*position: absolute;*/
+	width:1.5rem;
+	height:1.5rem;
+	background-image: url(../../asset/img/ui/radio.png);
+	background-repeat: no-repeat;
+	background-size: contain;
+	cursor: pointer;
+}
+.RadioMark.checked{
+	background-image: url(../../asset/img/ui/radio_check.png);
+}
+
+#_input_lottery_email{
+	text-transform: none;
+}
+.LotteryAuth{
+	/*position: absolute;*/
+    /*bottom: 20vh;*/
+    left: 5%;
+    right: 5%;
+    padding: 20px;
+    text-align: left;
+    max-width: 90%;
+    position: relative;
+}
+#_auth_text{
+	display: inline-block;
+	margin-left:3rem;
+}
+
+#_button_agree{
+	position: absolute;
+}
+
+#_button_campaign{
+	margin-right:100px;
+}
+/* rank page */
+
+.WaveTitle>span{
+	margin-left:10px;
+	margin-right:10px;
+}
+.WaveTitle>img{
+	width:12%;
+	transform: translateY(-.5rem);
+}
+.WaveTitle>img:last-child{
+	transform:scaleX(-1)  translateY(-.5rem);
+}
+#_rank_info{
+	/*position: relative;*/
+	position: absolute;
+	top:16vw;
+	left:32vw;
+	width:61vh;
+	height:30vw;
+
+	overflow-y: auto;
+	transition: .2s ease;
+	
+	/*display: flex;
+    flex-direction: column;
+    justify-content: space-around;*/
+}
+.RankItem:first-child,.RankItem:nth-child(2),.RankItem:nth-child(3),.RankItem:nth-child(4){
+	color:#FF8345;
+}
+.RankItem{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	height:10%;
+	padding-right:1rem;
+	padding-left:1rem;
+
+	/*margin-bottom: 20px;*/
+}
+.RankItem>span{
+	display: flex;
+}
+
+#_button_rank{
+	position: fixed;
+	top:0;
+	right:6%;
+	z-index: 100;
+	max-height:15vh;
+
+	transition:opacity .5s ease-out .7s;
+}
+#_button_rank.hidden{
+	transition:opacity .4s ease-out;	
+}
+
+#_rank_logo{
+	position: fixed;
+	top:40px;
+	right:40px;
+	max-height:18%;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: .5rem;
+  border:#0030A9 .1rem solid;
+  border-radius: .25rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #00B2FF;
+  border-radius: .25rem;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #00B2FF;
+}
+
+
+.DisableSelect{
+    user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+
+#_hint_landscape{
+	z-index: 500;
+	background-color:rgba(0,0,0,0.8);
+}
+#_hint_ipad_only{
+	z-index: 501;
+	background-color:rgba(0,0,0,0.8);
+}
+#_hint_landscape img,#_hint_ipad_only img{
+	width:80%;
+}
+
+#_campaign_wrapper{
+	position: absolute;
+    top: 180px;
+    left: 20%;
+    right: 20%;
+    bottom: 20vh;
+    overflow-y: auto;
+
+    line-height: 2rem;
+    padding-right: 1rem;
+}
+.CampaignItem{
+	text-align: left;
+	margin-bottom: 30px;
+}
+.CampaignItem div{
+	margin-bottom: 10px;	
+}
+.CampaignItem>div:first-child{
+	/*color:#008AFF;*/
+	font-size: 1.2rem;
+	letter-spacing:1px;	
+}
+.CampaignItem img{
+	margin-right: .5rem;
+	width: 1rem;
+	height: 1rem;
+}
+.CampaignItem ul{
+	padding-inline-start: 1.5rem;
+}
+.CampaignItem li{
+    line-height: 1.5rem;
+}

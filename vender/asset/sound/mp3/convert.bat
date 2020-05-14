@@ -1,0 +1,1 @@
+FOR /F "tokens=*" %%G IN ('dir /b *.mp3') DO ffmpeg -i "%%G" -dash 1 "%%G.webm"
