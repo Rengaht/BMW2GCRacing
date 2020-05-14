@@ -239,7 +239,7 @@ function update(dt) {
     playerX = playerX + move_dx;
 
   // playerX = playerX - (dx * speedPercent * playerSegment.curve * centrifugal);
-  playerX = Util.limit(playerX, -1.5,1.5);     // dont ever let it go too far out of bounds
+  playerX = Util.limit(playerX, onRoadPosition[0],onRoadPosition[2]);     // dont ever let it go too far out of bounds
   
   if(isPlaying){
     // check coins and obstacles
@@ -626,10 +626,10 @@ function render() {
 
       car=segment.cars[i];
 
-      sprite = (Math.abs(car.offsetX-playerX)<.5)?OTHER_CAR[car.color].center:
-               (car.offsetX<playerX)?OTHER_CAR[car.color].left:
-               OTHER_CAR[car.color].right;
-     
+      if((car.offsetX<0 && playerX>=0) || (car.offsetX==0 && playerX>0)) sprite=OTHER_CAR[car.color].left;
+      else if((car.offsetX>0 && playerX<=0) || (car.offsetX==0 && playerX<0)) OTHER_CAR[car.color].right;
+      else sprite=OTHER_CAR[car.color].center;
+      
       texture=resources.other_car.textures[sprite];
       
       var py1=Util.interpolate(segment.p1.project.y,segment.p2.project.y||0,car.percent);

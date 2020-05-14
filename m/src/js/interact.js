@@ -60,6 +60,7 @@ function closePage(page_,next_page){
 			
 			break;
 		case '_game':
+			$('#_game').addClass('hidden');
 			if(next_page==='_home'){
 				hideItem($('#_score'));
 			}else{
@@ -139,7 +140,7 @@ function setupPage(page_){
 			$('#'+page_).addClass('pageToBase');
 			break;
 		case '_game':				
-			
+			$('#_game').removeClass('hidden');
 			if(_cur_page==='_color'){
 
 				setupGame();	
@@ -369,7 +370,13 @@ function onButtonStartClick(){
 	if($('#_button_start').hasClass('Disable')) return;
 	if(_inTransition) return;
 
-	
+	// ga code //
+	gtag('event','CLICK_M_START');
+	gtag('event', 'Nav Click', {
+		'event_category': 'Click',
+		'event_label': 'CLICK_M_START'
+	});
+	// ga code //
 
 	$('#_button_start').addClass('Click');
 	// gotoPage('_driver','bb');
@@ -472,12 +479,32 @@ function onButtonLotteryClick(){
 	if($('#_button_lottery').hasClass('Disable')) return;
 	if(_inTransition) return;
 
+	gtag('event','CLICK_M_RESULT_NEXT');
+	gtag('event', 'Nav Click', {
+		'event_category': 'Click',
+		'event_label': 'CLICK_M_RESULT_NEXT'
+	});
+
 	// $('#_button_lottery').addClass('Click');
 	gotoPage('_lottery','bb');
 }
 function onButtonHomeClick(){
 	
 	if(_inTransition) return;
+
+	// ga code //
+	
+	let ga_tag='CLICK_M_COMPLETE_BACK';
+	if($('#_button_share').hasClass('hidden')){
+		ga_tag='CLICK_M_RESULT_RETURN';
+	}
+
+	gtag('event',ga_tag);
+	gtag('event', 'Nav Click', {
+		'event_category': 'Click',
+		'event_label': ga_tag
+	});
+	// ga code //
 
 	$('#_button_home').addClass('Click');
 
@@ -567,6 +594,20 @@ function sendInfo(callback){
 		return;
 	}
 
+
+	// fb code //
+	if(_trial_selected) fbq('track', 'Lead');
+	// fb cod //
+
+	// ga code //
+	gtag('event','CLICK_M_FORM_COMPLETE');
+	gtag('event', 'Nav Click', {
+		'event_category': 'Click',
+		'event_label': 'CLICK_M_FORM_COMPLETE'
+	});
+	// ga code //
+
+
 	_inTransition=true;
 
 	toggleLotteryError(true,'傳送中...');
@@ -600,12 +641,16 @@ function sendInfo(callback){
 				
 			if(data.result==='success'){
 				toggleLotteryError(true,'成功!');
-				// ga('send','complete');
+				
+				// ga code //
 				gtag('event','complete');
 				gtag('event', 'Nav Click', {
 					'event_category': 'Click',
 					'event_label': 'complete'
 				});
+				// ga code //
+
+
 				// update rank
 				_rank=data.rank;
 				$('#_rank_complete').text(_rank);
@@ -822,6 +867,15 @@ function onButtonCampaignOkClick(){
 }
 function onClickCampaignInfo(){
 	if(_inTransition) return;
+
+	// ga code //
+	gtag('event','CLICK_M_FORM_MORE');
+	gtag('event', 'Nav Click', {
+		'event_category': 'Click',
+		'event_label': 'CLICK_M_FORM_MORE'
+	});
+	// ga code //
+
 	
 	gotoPage('_campaign','bb');	
 }
@@ -890,6 +944,16 @@ function onButtonShareClick(){
 
 	if(_inTransition) return;
 
+
+	// ga code //
+	gtag('event','CLICK_M_COMPLETE_SHARE');
+	gtag('event', 'Nav Click', {
+		'event_category': 'Click',
+		'event_label': 'CLICK_M_COMPLETE_SHARE'
+	});
+	// ga code //
+
+
 	_sound_fx['button_large'].play();
 	$('#_button_share').addClass('Click');
 	_inTransition=true;	
@@ -929,6 +993,15 @@ function onButtonShareClick(){
 	
 }
 function onButtonThe2Click(){
+
+	// ga code //
+	gtag('event','CLICK_M_COMPLETE_EVENTSITE');
+	gtag('event', 'Nav Click', {
+		'event_category': 'Click',
+		'event_label': 'CLICK_M_COMPLETE_EVENTSITE'
+	});
+	// ga code //
+
 	window.open("https://event.bmw.com.tw/campaign/2020/2series-gran-coupe/?utm_source=THE2RACINGCHALLENGE","_blank");
 }
 
