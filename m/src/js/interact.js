@@ -99,7 +99,7 @@ function setupPage(page_){
 
 	switch(page_){
 		case '_home':
-			
+			showItem($('#_button_control'));
 			$('#_button_start').removeClass('Click');			
 			$('#'+page_).addClass('pageToBase');
 
@@ -268,19 +268,19 @@ function onPageTransitionEnd(){
 				$('#_color').addClass('pageToBottom');
 
 
-				$('#_scroll_arrow').css('display','none');
+				// $('#_scroll_arrow').css('display','none');
 				resetDriverColor();						
 				break;
 			case '_driver':
 				showItem($('#_button_back'));
 
-				if(needScroll($('#'+_cur_page))) $('#_scroll_arrow').css('display','block');
-				else $('#_scroll_arrow').css('display','none');
+				// if(needScroll($('#'+_cur_page))) $('#_scroll_arrow').css('display','block');
+				// else $('#_scroll_arrow').css('display','none');
 				break;
 			case '_color':	
 
-				if(needScroll($('#'+_cur_page))) $('#_scroll_arrow').css('display','block');
-				else $('#_scroll_arrow').css('display','none');
+				// if(needScroll($('#'+_cur_page))) $('#_scroll_arrow').css('display','block');
+				// else $('#_scroll_arrow').css('display','none');
 			
 				break;		
 			case '_game':
@@ -288,20 +288,23 @@ function onPageTransitionEnd(){
 					// setupGame();			
 					showItem($('#_rule'));	
 					movePage($('#_rule_board'),'pageFromTop');
+					hideItem($('#_button_control'));
+
 					$('#_button_lottery').removeClass('Disable');
 					$('#_button_lottery').removeClass('Click');
 				}else{
 					movePage($('#_score_board'),'pageFromBase');
+					hideItem($('#_button_control'));
 				}
-				$('#_scroll_arrow').css('display','none');
+				// $('#_scroll_arrow').css('display','none');
 				break;
 			case '_lottery':
 				showItem($('#_button_back'));
 				$('#_button_send').removeClass('Disable');
 				$('#_button_send').removeClass('Click');
 				
-				if(needScroll($('#'+_cur_page))) $('#_scroll_arrow').css('display','block');
-				else $('#_scroll_arrow').css('display','none');
+				// if(needScroll($('#'+_cur_page))) $('#_scroll_arrow').css('display','block');
+				// else $('#_scroll_arrow').css('display','none');
 			
 				break;
 			case '_rank':
@@ -309,12 +312,12 @@ function onPageTransitionEnd(){
 				showItem($('#_button_back'));	
 				updateRank();
 				
-				$('#_scroll_arrow').css('display','block');
+				// $('#_scroll_arrow').css('display','block');
 				
 				break;
 			case '_campaign':
 				showItem($('#_button_back'));		
-				$('#_scroll_arrow').css('display','none');
+				// $('#_scroll_arrow').css('display','none');
 				break;
 	}
 	// $('#'+_cur_page).find('.Button').removeClass('Disable');
@@ -462,6 +465,8 @@ function onButtonRuleOkClick(){
 	
 	// movePage($('#_rule_board'),'moveToTop');
 	hideItem($('#_rule'));
+	showItem($('#_button_control'));
+
 
 	setTimeout(function(){
 		showItem($('#_hint'));
@@ -558,6 +563,7 @@ function showScore(){
 	showItem($('#_button_lottery'));
 	hideItem($('#_button_share'));
 	hideItem($('#_button_the2'));
+	hideItem($('#_button_control'));
 
 
 	setTimeout(function(){
@@ -572,8 +578,8 @@ function clearInfo(){
 	$('#_input_lottery_phone').val("");
 	$('#_input_lottery_email').val("");
 	
-	$('#_button_goto_trial_yes').addClass('checked');
-	$('#_button_goto_trial_no').removeClass('checked');
+	$('#_button_goto_trial_yes').removeClass('checked');
+	$('#_button_goto_trial_no').addClass('checked');
 	$('#_input_lottery_score').val("台北汎德 - 天母");
 
 	_agree=false;
@@ -595,10 +601,7 @@ function sendInfo(callback){
 	}
 
 
-	// fb code //
-	if(_trial_selected) fbq('track', 'Lead');
-	// fb cod //
-
+	
 	// ga code //
 	gtag('event','CLICK_M_FORM_COMPLETE');
 	gtag('event', 'Nav Click', {
@@ -735,6 +738,12 @@ function onClickGotoTrial(set_){
 	if(set_){
 		$('#_button_goto_trial_yes').addClass('checked');
 		$('#_button_goto_trial_no').removeClass('checked');
+
+		// fb code //
+		fbq('track', 'Lead');
+		// fb cod //
+
+
 	}else{
 		$('#_button_goto_trial_yes').removeClass('checked');
 		$('#_button_goto_trial_no').addClass('checked');
@@ -823,9 +832,13 @@ function checkLotteryInput(){
 	var input_phone_=$('#_input_lottery_phone').val();
 	if(input_phone_.length<12 || !mobileReg.test(input_phone_)) error_text=error_text+"*手機格式錯誤\n";
 
-	var emailRegx=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	var input_email=$('#_input_lottery_email').val().toLowerCase();
-    if(!emailRegx.test(input_email)) error_text=error_text+"*email格式錯誤\n";
+	// var emailRegx=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	// var input_email=$('#_input_lottery_email').val().toLowerCase();
+ //    if(!emailRegx.test(input_email)) error_text=error_text+"*email格式錯誤\n";
+
+ 	var input_email=$('#_input_lottery_email').val().toLowerCase();
+ 	if(input_email.length<0) error_text=error_text+"*email不可空白";
+
 
     if(!_agree) error_text+="*請同意個人資料使用";
 

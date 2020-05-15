@@ -51,12 +51,27 @@ var Render = {
     let seg_index=Math.floor(index/segmentPerDraw)%2;
 
 
-    Render.polygon(n*PolyPerSeg,  0, y2, 0, y1,width,y1,width,y2, 3+seg_index,uv_index,scene);
+    Render.polygon(n*PolyPerSeg,
+                  0, y2, 0, y1,
+                  offset_width*2+width,y1,
+                  offset_width*2+width,y2, 3+seg_index,uv_index,scene);
     
-    Render.polygon(n*PolyPerSeg+1,  x2-w2-r2, y2, x1-w1-r1, y1, x1-w1, y1, x2-w2, y2,  5+seg_index,uv_index,scene);
-    Render.polygon(n*PolyPerSeg+2,  x2+w2+r2, y2, x1+w1+r1, y1, x1+w1, y1, x2+w2, y2,  5+seg_index,uv_index,scene);
+    Render.polygon(n*PolyPerSeg+1,  
+                  offset_width+x2-w2-r2, y2, 
+                  offset_width+x1-w1-r1, y1, 
+                  offset_width+x1-w1, y1, 
+                  offset_width+x2-w2, y2,  5+seg_index,uv_index,scene);
+    Render.polygon(n*PolyPerSeg+2,  
+                  offset_width+x2+w2+r2, y2, 
+                  offset_width+x1+w1+r1, y1, 
+                  offset_width+x1+w1, y1, 
+                  offset_width+x2+w2, y2,  5+seg_index,uv_index,scene);
 
-    Render.polygon(n*PolyPerSeg+3,x2-w2,    y2, x1-w1,    y1, x1+w1, y1, x2+w2, y2,  seg_index,uv_index,scene);
+    Render.polygon(n*PolyPerSeg+3,
+                    offset_width+x2-w2,    y2, 
+                    offset_width+x1-w1,    y1, 
+                    offset_width+x1+w1, y1, 
+                    offset_width+x2+w2, y2,  seg_index,uv_index,scene);
     
     // Render.polygon(n,  0, y2, 0, y1,width,y1,width,y2, 3+Math.floor(index/segmentPerDraw)%2);
     
@@ -72,34 +87,34 @@ var Render = {
       // let start_lane=
       // for(lane = 1 ; lane < lanes ; lanex1 += lanew1, lanex2 += lanew2, lane++)
         Render.polygon(n*PolyPerSeg+4,
-          lanex2 - l2/2, y2,
-          lanex1 - l1/2, y1, 
-          lanex1 + l1/2, y1, 
-          lanex2 + l2/2, y2, 
+          offset_width+lanex2 - l2/2, y2,
+          offset_width+lanex1 - l1/2, y1, 
+          offset_width+lanex1 + l1/2, y1, 
+          offset_width+lanex2 + l2/2, y2, 
            2,uv_index,scene);
 
         Render.polygon(n*PolyPerSeg+5,
-          lanex2-lanew2+l2 - l2/2, y2,
-          lanex1-lanew1+l1 - l1/2, y1, 
-          lanex1-lanew1+l1 + l1/2, y1, 
-          lanex2-lanew2+l2+ l2/2, y2, 
+          offset_width+lanex2-lanew2+l2 - l2/2, y2,
+          offset_width+lanex1-lanew1+l1 - l1/2, y1, 
+          offset_width+lanex1-lanew1+l1 + l1/2, y1, 
+          offset_width+lanex2-lanew2+l2+ l2/2, y2, 
            7,uv_index,scene);
         
         lanex1+=lanew1;
         lanex2+=lanew2;
 
         Render.polygon(n*PolyPerSeg+6,
-          lanex2 + l2/2, y2, 
-          lanex1 + l1/2, y1, 
-          lanex1 - l1/2, y1, 
-          lanex2 - l2/2, y2,
+          offset_width+lanex2 + l2/2, y2, 
+          offset_width+lanex1 + l1/2, y1, 
+          offset_width+lanex1 - l1/2, y1, 
+          offset_width+lanex2 - l2/2, y2,
            2,uv_index,scene);
 
          Render.polygon(n*PolyPerSeg+7,
-          lanex2+lanew2-l2 + l2/2, y2, 
-          lanex1+lanew1-l1 + l1/2, y1, 
-          lanex1+lanew1-l1 - l1/2, y1, 
-          lanex2+lanew2-l2 - l2/2, y2,
+          offset_width+lanex2+lanew2-l2 + l2/2, y2, 
+          offset_width+lanex1+lanew1-l1 + l1/2, y1, 
+          offset_width+lanex1+lanew1-l1 - l1/2, y1, 
+          offset_width+lanex2+lanew2-l2 - l2/2, y2,
            7,uv_index,scene);
     }
     

@@ -47,7 +47,7 @@ html{
 	letter-spacing:3px;
 }
 .FontSpeedMeter{
-	font-size: min(1.33rem, 4vh);
+	font-size: min(1.33rem, 2vh);
 	letter-spacing:3px;
 }
 .FontInfo{

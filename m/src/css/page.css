@@ -1,6 +1,10 @@
 *:focus {
     outline: none;
 }
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
 body{
 
 	font-family:'BMWFont-Bold';
@@ -11,20 +15,21 @@ body{
 	outline:none;
 	background-color: #001368;
 	/*overflow: hidden;*/
-	-webkit-overflow-scrolling: auto;
+	-webkit-overflow-scrolling: touch;
 
 	text-transform: uppercase;
 
 	position: fixed;
   	overflow: hidden;
   	/*overflow-y:auto;*/
+  	top:0;
   	width: 100%;
-  	/*min-height: 56.25vw;*/
-  	height: 100%;
+  	/*min-height: 56.25vw;*/  	
 }
 .PageWrapper{
 	position: absolute;
 	top:0;
+	bottom:0;
 	left: 0;
 	width: 100%;
   	height: 100%;
@@ -37,7 +42,7 @@ body{
 	-o-transition: .5s ease;
 	transition: .5s ease;
 	overflow: hidden;
-
+	background-color: #001368;
 }
 
 img, a {border:none; outline: none;}
@@ -143,9 +148,21 @@ input:-webkit-autofill:active {
 .close{
 	display:none !important;
 }
+#_body_wrapper{
+	position: fixed;
+	left:0;
+	right:0;
+	/*top:0;*/
+	/*bottom:0;*/
+	overflow: hidden;
+
+	transition:all .5s ease-out;
+}
+
 .FullPageContainer{
 	position: absolute;
 	top:0;
+	bottom:0;
 	left:0;
 	width: 100%;
 	height: 100%;
@@ -223,8 +240,13 @@ input:-webkit-autofill:active {
 	/*background-image:url(../../asset/img/ui/BG_rank.png);*/
 	z-index: 11;
 	background-position: top;
+	/*overflow-y:auto;*/
+}
+#_rank>div{
+	max-width: unset;
 	overflow-y:auto;
 }
+
 #_game{
 	z-index: 3;
 }
@@ -280,11 +302,11 @@ input:-webkit-autofill:active {
 }
 /* page driver */
 .ButtonBack{
-	position: fixed;
+	position: absolute;
 	
-	top:min(1rem, 5.5vh);
-	left:1rem;
-	height:min(2rem, 11vh);	
+	top:2rem;
+	left:44px;
+	 height:min(2rem, 11vh);
 	/*height:8%;
 	max-height: 100px;*/
 
@@ -505,8 +527,8 @@ input:-webkit-autofill:active {
 }
 
 #_hud{
-	position:fixed;
-	top:1rem;
+	position:absolute;
+	top:2rem;
 	left:4rem;
 	right:max(3rem, calc(11vh + 3rem));
 
@@ -555,14 +577,14 @@ input:-webkit-autofill:active {
 
 
 #_speed_meter{
-	position:fixed;
+	position:absolute;
 	left:1rem;
 	bottom:1rem;
-	/*width:14%;*/
-	height:18%;
+	width:7.3rem;
+	height:6rem;
 }
 #_speed_meter>img:first-child{
-	max-height: 100%;
+	height: 100%;
 }
 #_speed_pointer{
 	position: absolute;
@@ -584,12 +606,12 @@ input:-webkit-autofill:active {
 }
 #_speed_value{
 	position: absolute;
-	right:45%;
+	right:3.2rem;
 	bottom:0;
 }
 
 #_driver_in_game{
-	position:fixed;
+	position:absolute;
 	right:1rem;
 	bottom:1rem;	
 	
@@ -775,6 +797,7 @@ input:-webkit-autofill:active {
 	width: 100%;
 	/*height: min(3rem, 8vh);*/
 	overflow: hidden;
+	white-space: nowrap;
 }
 #_info_complete{
 	
@@ -815,8 +838,8 @@ input:-webkit-autofill:active {
 }
 
 #_car_complete{
-	margin-top: 1.5rem;
-	max-height: 50%;
+	/*margin-top: 1.5rem;*/
+	max-height: 45%;
 /*	-webkit-box-flex: 1;
 	    -ms-flex-positive: 1;
 	        flex-grow: 1;*/
@@ -1092,9 +1115,9 @@ input:-webkit-autofill:active {
 }
 
 #_button_rank{
-	position: fixed;
+	position: absolute;
 	top:0;
-	right:4rem;
+	right:calc(min(2rem, 11vh) + 44px + 1rem);
 	height:min(7.4rem,25vh);
 	
 	z-index: 10;
@@ -1154,12 +1177,18 @@ input:-webkit-autofill:active {
 
 #_hint_landscape,#_hint_webview{
 	z-index: 500;
-	background-color:rgba(0,0,0,0.8);
+	background-color:rgba(0,0,0,0.99);
 	display: none;
+	position: fixed;
+	top:0;
+	left:0;
+	width: 100vw;
+	height: 100vh;
+	transition: all 0s;
 }
 #_hint_ipad_only{
 	z-index: 501;
-	background-color:rgba(0,0,0,0.8);
+	background-color:rgba(0,0,0,0.99);
 }
 #_hint_landscape img,#_hint_ipad_only img,#_hint_webview img{
 	width:80%;
@@ -1219,9 +1248,9 @@ input:-webkit-autofill:active {
 }
 #_button_control{
 	z-index: 8;
-    position: fixed;
-    right: 1rem;
-    top: min(1rem, 5.5vh);
+    position: absolute;
+    right: 44px;
+    top:2rem;
     /*max-height: 4vw;*/
 
     height:min(2rem, 11vh);

@@ -2,6 +2,7 @@ var fps            = 60;                      // how many 'update' frames per se
 var step           = 1/fps;                   // how long is each frame (in seconds)
 var width          = null;                    // logical canvas width
 var height         = null;                     // logical canvas height
+var offset_width=null;
 
 var centrifugal    = 0.3;                     // centrifugal force multiplier when going around curves
 var offRoadDecel   = 0.99;                    // speed multiplier when off road (e.g. you lose 2% speed each update frame)
@@ -195,12 +196,15 @@ function update(dt) {
     segment.looped = segment.index < baseSegment.index;
     segment.fog    = Util.exponentialFog(n/drawDistance, fogDensity);
     // segment.clip   = maxy;
+    
+    let camerax=playerX*roadWidth*2;
+    // let camerax=playerX*(;
 
     Util.project(n,segment.p1, 
-                (playerX  * roadWidth) - x, playerY + cameraHeight, roadPosition, 
+                (camerax) - x, playerY + cameraHeight, roadPosition, 
                 cameraDepth, width, height, roadWidth);
     Util.project((n+1),segment.p2, 
-                (playerX  * roadWidth) - x - dx, playerY + cameraHeight, roadPosition, 
+                (camerax) - x - dx, playerY + cameraHeight, roadPosition, 
                 cameraDepth, width, height, roadWidth);
 
 
@@ -547,7 +551,7 @@ function render() {
       sprite      = segment.sprites[i];
 
       spriteScale = segment.p1.project.y*height*RoadRatio*SideSpriteXScale*SpriteScale;
-      spriteX     = segment.p1.screen.x + ( sprite.offset *Math.abs(segment.p1.screen.w));
+      spriteX     = offset_width+segment.p1.screen.x + ( sprite.offset *Math.abs(segment.p1.screen.w));
       spriteY     = segment.p1.screen.y;      
       alpha=1;//Math.min(segment.p1.project.y/0.08,1);
       let zIndex=drawDistance-n;
@@ -585,7 +589,7 @@ function render() {
       if(hasCar[road]) continue;
       
       spriteScale = CoinScale*segment.p1.project.y*height*RoadRatio*RoadSpriteXScale*SpriteScale*(1-coin.offsetY);
-      spriteX     = segment.p1.screen.x + ( coin.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
+      spriteX     = offset_width+segment.p1.screen.x + ( coin.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
       spriteY     = segment.p1.screen.y - Util.easeInOut(0,1,coin.offsetY)*height;      
       alpha=1;//Math.min(segment.p1.project.y/0.08,1);
       
@@ -608,7 +612,7 @@ function render() {
       if(hasCar[road]) continue;
       
       spriteScale = ObstacleScale*segment.p1.project.y*height*RoadRatio*RoadSpriteWScale*SpriteScale*1.2*(1-obstacle.offsetY);
-      spriteX     = segment.p1.screen.x + ( obstacle.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
+      spriteX     = offset_width+segment.p1.screen.x + ( obstacle.offsetX *Math.abs(segment.p1.screen.w)/lanes*2);
       spriteY     = segment.p1.screen.y-  Util.easeInOut(0,1,obstacle.offsetY)*height;      
       
       alpha=1;//Math.min(segment.p1.project.y/0.08,1);
@@ -642,7 +646,7 @@ function render() {
 
       spriteScale = py1*height*RoadRatio*RoadSpriteWScale*SpriteScale*1.2*(1-car.offsetY);
       
-      spriteX     = x1 + ( car.offsetX *Math.abs(w1)/lanes*2);
+      spriteX     = offset_width+x1 + ( car.offsetX *Math.abs(w1)/lanes*2);
       spriteY     = y1-  Util.easeInOut(0,1,car.offsetY)*height;      
       
       // road=(car.offsetX==0)?0:(car.offsetX<0?1:2);
@@ -659,7 +663,7 @@ function render() {
     if (segment == playerSegment) {
 
       var carscale=CarScale;
-      var carx=width/2;
+      var carx=offset_width+width/2;
       var cary=height;
 
       if(segment.index>sceneSegment[2]-endGateZ/segmentLength){
@@ -668,7 +672,7 @@ function render() {
         else carscale=segment.p1.project.y*height*RoadRatio*RoadSpriteWScale*SpriteScale*1.2;
           
 
-        carx=segment.p1.screen.x + (playerX *Math.abs(segment.p1.screen.w)/lanes*2);
+        carx=offset_width+segment.p1.screen.x + (playerX *Math.abs(segment.p1.screen.w)/lanes*2);
         cary=segment.p1.screen.y; 
       }
 

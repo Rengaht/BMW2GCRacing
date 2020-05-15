@@ -38,13 +38,14 @@ var audio_context;
 let url=window.location.href;
 let MapURL="https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/vender/asset/map/map-3.csv";
 // let MapURL="https://mmlab.com.tw/project/the2/asset/map/map-3.csv";
-// let MapURL="http://127.0.0.1/2gc/asset/map/map-3.csv";
+// let MapURL="http://127.0.0.1/BMW2GCRacing/m/asset/map/map-3.csv";
 let OtherCarCount=10;
 
 var _game_loaded=false;
 var _sound_loaded=false;
 
 var _game_elapse_time=0;
+
 
 // if(url.indexOf('?')>-1) MapURL=url.substring(0,url.indexOf('?')-1)+"/asset/map/map-3.csv";
 // else MapURL=url+"asset/map/map-3.csv";
@@ -139,7 +140,15 @@ function onload(){
 		$('#_input_lottery_email').val($('#_input_lottery_email').val().replace(/ /g,''));
 	});
 
-	doResize();
+
+	// const targetElement = document.querySelector('body');
+	$('bdoy').scrollTop(0);
+	bodyScrollLock.disableBodyScroll(document.querySelector('#_lottery_info'));
+	bodyScrollLock.disableBodyScroll(document.querySelector('#_campaign_wrapper'));
+	bodyScrollLock.disableBodyScroll(document.querySelector('#_rank_info'));
+	bodyScrollLock.disableBodyScroll(document.querySelector('#_rank_wrapper'));
+
+	resize();
 }
 function resize(){
 	
@@ -151,31 +160,45 @@ function resize(){
 	// 	}
 	// }
 
-	clearTimeout(_resize_timeout);
+	// clearTimeout(_resize_timeout);
 
 	if(Ticker.started) Ticker.stop(); 		
-	_resize_timeout=setTimeout(doResize,10);
+	// _resize_timeout=setTimeout(doResize,200);
+	doResize();
 }
 function doResize(){
-	// var ww_ = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; 
- //  	var wh_ = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+	var www_ = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth; 
+  	var wwh_ = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 	
- 	ww_=$('#_game_container').width();
- 	wh_=$('#_game_container').height();
+ 	
 
-	if(ww_<wh_){
+	if(www_<wwh_){
   		$('#_hint_landscape').css('display','block');
+  		$('#_body_wrapper').css({ height:'100%',marginTop:0});
+  		// $('body').css({ height:'100%'});
   		return;	
+  	}else{
+  		var vhHeight=$("body").height();
+		var navbarHeight=vhHeight-window.innerHeight;
+		// $('body').css({ height: window.innerHeight+navbarHeight});
+		$('#_body_wrapper').css({ height: window.innerHeight});
+		$('bdoy').scrollTop(0);
   	}
   	$('#_hint_landscape').css('display','none');
   			
+  	ww_=$('#_game_container').width();
+ 	wh_=$('#_game_container').height();
 
   	console.log('window size:'+ww_+' x '+wh_);
 
-  	_windowWidth=width=ww_;
-  	_windowHeight=height=wh_;
+  	_windowWidth=ww_;
+  	_windowHeight=wh_;
 
-  	if(!Ticker.started && isPlaying) Ticker.start();
+  	height=_windowHeight;
+	width=Math.min(_windowWidth,height/9.0*16.0);
+	offset_width=ww_/2-width/2;
+
+  	if(!Ticker.started && _game_elapse_time>=0) Ticker.start();
 
   	if(_app){
   		
@@ -189,7 +212,7 @@ function doResize(){
 		if(_mountain)
 			_mountain.y=_windowHeight*(1.0-RoadRatio+yproj[drawDistance/segmentPerDraw]);
 		
-		if(_texture_car) computeCarScale();
+		computeCarScale();
 			
 
 
@@ -230,10 +253,12 @@ function setupPixi(){
 	Ticker.autoStart=false;
 
 
-	width=_windowWidth=$('#_game_container').width();
-	height=_windowHeight=$('#_game_container').height();
-
+	_windowWidth=$('#_game_container').width();
+	_windowHeight=$('#_game_container').height();
 	
+	height=_windowHeight;
+	width=Math.min(_windowWidth,height/9.0*16.0);
+	offset_width=_windowWidth/2-width/2;
 
 	_app=new PIXI.Application({
 	    autoResize:true,
@@ -481,6 +506,9 @@ function setupCarSprite(color_){
 
 
 function setupGame(){
+
+	doResize();
+	 _app.renderer.clear();
 
 	console.log("------ set up game ----------");
 	position=0;
