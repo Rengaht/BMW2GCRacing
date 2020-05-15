@@ -7,15 +7,15 @@ var Render = {
       return;
 
 
-    const buffer=quad.geometry.getBuffer('aVertexPosition');
+    var buffer=quad.geometry.getBuffer('aVertexPosition');
     // buffer.update(new Float32Array([x1, y1, x2, y2, x3, y3,
     //                                 x1, y1,x3, y3,x4, y4]));    
     buffer.update(new Float32Array([x1, y1, x2, y2, x3, y3,x4, y4]));    
-    const uv=quad.geometry.getBuffer('aTextureCoord');
+    var uv=quad.geometry.getBuffer('aTextureCoord');
     
-    let p=1.0/segmentPerDraw;
+    var p=1.0/segmentPerDraw;
     
-    let i=parseFloat(Math.floor(index/PolyPerSeg)%segmentPerDraw);
+    var i=parseFloat(Math.floor(index/PolyPerSeg)%segmentPerDraw);
     uv.update(new Float32Array([color,uv_index+p,
                                 color,uv_index,
                                 color+.5,uv_index,
@@ -44,11 +44,11 @@ var Render = {
         l2 = Render.laneMarkerWidth(w2, lanes),
         lanew1, lanew2, lanex1, lanex2, lane;
     
-    let n=index%drawDistance;
-    let uv_index=(index%segmentPerDraw)/segmentPerDraw;
-    // let uv_index=(index%drawDistance)/drawDistance;
+    var n=index%drawDistance;
+    var uv_index=(index%segmentPerDraw)/segmentPerDraw;
+    // var uv_index=(index%drawDistance)/drawDistance;
     
-    let seg_index=Math.floor(index/segmentPerDraw)%2;
+    var seg_index=Math.floor(index/segmentPerDraw)%2;
 
 
     Render.polygon(n*PolyPerSeg,
@@ -183,24 +183,24 @@ var Render = {
     // _scene.addChild(sprite);
 
   },
-  trafficLight(container,gateX,gateY,gateScale,zIndex){
+  trafficLight:function(container,gateX,gateY,gateScale,zIndex){
     
     if(!container) return;
 
 
-    let gateW=1766*gateScale;
-    let gateH=626*gateScale;
+    var gateW=1766*gateScale;
+    var gateH=626*gateScale;
 
     gateX=gateX-gateW/2;
     gateY=gateY-gateH;
 
-    let x=[0.11,0.91];
-    let y=[0.44,0.55,0.66];
+    var x=[0.11,0.91];
+    var y=[0.44,0.55,0.66];
 
     for(var i=0;i<2;++i){
       for(var j=0;j<3;++j){
 
-          let child=container.getChildAt(i*3+j);
+          var child=container.getChildAt(i*3+j);
           child.x=gateX+x[i]*gateW;
           child.y=gateY+y[j]*gateH;
           child.height=child.width=gateScale*54;

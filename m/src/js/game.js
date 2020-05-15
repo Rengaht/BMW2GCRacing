@@ -35,11 +35,11 @@ var _resize_timeout;
 
 var audio_context;
 
-let url=window.location.href;
-let MapURL="https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/vender/asset/map/map-3.csv";
-// let MapURL="https://mmlab.com.tw/project/the2/asset/map/map-3.csv";
-// let MapURL="http://127.0.0.1/BMW2GCRacing/m/asset/map/map-3.csv";
-let OtherCarCount=10;
+var url=window.location.href;
+var MapURL="https://event.bmw.com.tw/campaign/2020/the2_racing_challenge/vender/asset/map/map-3.csv";
+// var MapURL="https://mmlab.com.tw/project/the2/asset/map/map-3.csv";
+// var MapURL="http://127.0.0.1/BMW2GCRacing/m/asset/map/map-3.csv";
+var OtherCarCount=10;
 
 var _game_loaded=false;
 var _sound_loaded=false;
@@ -339,7 +339,7 @@ function loadFinish(loader,resources_){
 	_start_gate=new PIXI.Sprite(resources.gate.textures['start.png']);
 
 	// load road
-	let uniforms={
+	var uniforms={
 		uSampler:resources.road.texture,
 		uColor:new Float32Array([1.,1.,1.,1.]),
 		vColor:1.0,
@@ -378,10 +378,10 @@ function loadFinish(loader,resources_){
 	// road element
 	for(var n=0;n<drawDistance;n++){
  	 	// scene object
-	 	let sprite_left=new PIXI.Sprite();
-	 	let sprite_right=new PIXI.Sprite();
+	 	var sprite_left=new PIXI.Sprite();
+	 	var sprite_right=new PIXI.Sprite();
 	 	
-	 	let z=drawDistance-n;
+	 	var z=drawDistance-n;
 	 	sprite_left.zIndex=z;
 	 	sprite_right.zIndex=z;
 
@@ -389,9 +389,9 @@ function loadFinish(loader,resources_){
 	 	_scene_side.addChild(sprite_right);
 
 	 	// road object
-	 	let coin_left=new PIXI.Sprite();
-	 	let coin_center=new PIXI.Sprite();
-	 	let coin_right=new PIXI.Sprite();
+	 	var coin_left=new PIXI.Sprite();
+	 	var coin_center=new PIXI.Sprite();
+	 	var coin_right=new PIXI.Sprite();
 
 	 	coin_left.zIndex=drawDistance-n;
 	 	coin_center.zIndex=drawDistance-n;
@@ -448,7 +448,7 @@ function loadFinish(loader,resources_){
 
    		if(segments.length<1) return;
    		
-   		let dt=_app.ticker.deltaMS/1000;
+   		var dt=_app.ticker.deltaMS/1000;
 
    		// while(dt>step){
    			update(dt);
@@ -464,7 +464,7 @@ function setupCarSprite(color_){
 
 
 
-	let id=null;
+	var id=null;
 	switch(color_){
 		case 'blue': id='1'; break;
 		case 'red': id='2'; break;
@@ -635,7 +635,7 @@ function createQuadGeometry(index,x1, y1, x2, y2, x3, y3, x4, y4){
 	
 	var index=[0,1,2,0,2,3];
 	
-	let geometry=new PIXI.Geometry();
+	var geometry=new PIXI.Geometry();
 	geometry.addAttribute('aVertexPosition',vertices,2);
 	geometry.addAttribute('aTextureCoord',uvs,2);
 	geometry.addIndex(index);
@@ -821,8 +821,8 @@ function updateRibbon(gateX,gateY,gateScale,zIndex){
 	gateX=width/2;
 	gateY=height;
 	gateScale=1;
-	let gateW=width;//2000*gateScale;
-    let gateH=height;//800*gateScale;
+	var gateW=width;//2000*gateScale;
+    var gateH=height;//800*gateScale;
 
     gateX=gateX-gateW/2;
     gateY=gateY-gateH;
@@ -844,7 +844,7 @@ function updateRibbon(gateX,gateY,gateScale,zIndex){
 	}
 }
 function addMountain(){
-	let mountain_scale=_windowWidth/2048.0;
+	var mountain_scale=_windowWidth/2048.0;
 
 	var pos=0;
 

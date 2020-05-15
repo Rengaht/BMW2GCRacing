@@ -75,7 +75,7 @@ var sceneSegment=[];
 
 tmp=0;
 for(var i=0;i<totalScene;++i){
-  let len=.5*BaseSpeed*(sceneSpeedRatio[i]+sceneSpeedRatio[i+1])*sceneInterval[i];  
+  var len=.5*BaseSpeed*(sceneSpeedRatio[i]+sceneSpeedRatio[i+1])*sceneInterval[i];  
   tmp+=Math.ceil(len/segmentLength);
   sceneSegment.push(tmp);
 }
@@ -173,7 +173,7 @@ function update(dt) {
   }
 
  
-  let roadPosition=Math.min(position,sceneSegment[2]*segmentLength-endGateZ);
+  var roadPosition=Math.min(position,sceneSegment[2]*segmentLength-endGateZ);
   
  // update projection coordinates 
   var baseSegment   = findSegment(roadPosition);
@@ -197,7 +197,7 @@ function update(dt) {
     segment.fog    = Util.exponentialFog(n/drawDistance, fogDensity);
     // segment.clip   = maxy;
     
-    let camerax=playerX*roadWidth*2;
+    var camerax=playerX*roadWidth*2;
     // let camerax=playerX*(;
 
     Util.project(n,segment.p1, 
@@ -249,8 +249,8 @@ function update(dt) {
     // check coins and obstacles
     if(lastPlayerSegment!=playerSegment.index){
 
-      let firstSegment=segments[playerSegment.index];
-      let ss=firstSegment.p1.project.y*height*RoadRatio*SideSpriteXScale*SpriteScale;
+      var firstSegment=segments[playerSegment.index];
+      var ss=firstSegment.p1.project.y*height*RoadRatio*SideSpriteXScale*SpriteScale;
 
       for(n = 0 ; n < firstSegment.coins.length ; n++) {
           
@@ -317,7 +317,7 @@ function update(dt) {
   lastPlayerSegment=playerSegment.index;
 
   if(indexScene>0){
-    let dest_=baseSegment.index-sceneSegment[indexScene-1];
+    var dest_=baseSegment.index-sceneSegment[indexScene-1];
     if(dest_<=40){
       setShaderUniforms(indexScene-1,indexScene,Math.min(1,dest_/30));  
     }
@@ -427,14 +427,14 @@ function updateCarOffset(car, carSegment, playerSegment, playerW) {
 //-------------------------------------------------------------------------
 function updateHud(){
   
-  let map_speed=Util.interpolate(0,200,speed/maxSpeed);
+  var map_speed=Util.interpolate(0,200,speed/maxSpeed);
   updateHudElement('speed',Math.round(map_speed));
   
   // update speed meter
-  let speed_angle=Util.interpolate(-65,135,map_speed/200);
+  var speed_angle=Util.interpolate(-65,135,map_speed/200);
   $('#_speed_pointer').css('transform','rotate('+speed_angle+'deg)');
 
-  let seg_offset=playerZ/segmentLength;
+  var seg_offset=playerZ/segmentLength;
   updateHudElement('time', formatTime(sceneLapsedInterval[totalScene-1]*Math.max(0,1-(lastPlayerSegment-seg_offset)/(sceneSegment[totalScene-1]-seg_offset))));  
   updateHudElement('life',Math.max(0,life));
   updateHudElement('score',pad(score,3));
@@ -470,7 +470,7 @@ function render() {
 	// _road.removeChildren();
 
 	// console.log("---------------render loop---------------");
-  let roadPosition=Math.min(position,sceneSegment[2]*segmentLength-endGateZ);
+  var roadPosition=Math.min(position,sceneSegment[2]*segmentLength-endGateZ);
   
   var baseSegment   = findSegment(roadPosition);
   var basePercent   = Util.percentRemaining(roadPosition, segmentLength);
@@ -542,8 +542,8 @@ function render() {
 
     
 
-    let index_draw=(baseSegment.index + n)%drawDistance;
-    let index_scene=findSegmentScene(segment.index);
+    var index_draw=(baseSegment.index + n)%drawDistance;
+    var index_scene=findSegmentScene(segment.index);
     var hasCar=[false,false,false];
 
     for(i = 0 ; i < segment.sprites.length ; i++) {
@@ -554,7 +554,7 @@ function render() {
       spriteX     = offset_width+segment.p1.screen.x + ( sprite.offset *Math.abs(segment.p1.screen.w));
       spriteY     = segment.p1.screen.y;      
       alpha=1;//Math.min(segment.p1.project.y/0.08,1);
-      let zIndex=drawDistance-n;
+      var zIndex=drawDistance-n;
 
       if(sprite.source===GATE.START){
         texture=resources.gate.textures[sprite.source];
@@ -800,7 +800,7 @@ function resetRoad(file_,callback) {
   addStraight(sceneSegment[0],0);
   addStraight(sceneSegment[1]-sceneSegment[0],1);
 
-  let offsetZ=startGateZ/segmentLength;
+  var offsetZ=startGateZ/segmentLength;
   addStraight(sceneSegment[2]-sceneSegment[1]+drawDistance,2);
   // addSCurves();
   // addCurve(ROAD.LENGTH.SHORT, ROAD.CURVE.MEDIUM, ROAD.HILL.NONE);

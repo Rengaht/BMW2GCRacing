@@ -57,14 +57,14 @@ function resetSprites() {
   
   var n, i;
 
-  let offsetZ=startGateZ/segmentLength;
+  var offsetZ=startGateZ/segmentLength;
   
   for(var scene_=0;scene_<totalScene;++scene_){
 
-    let start_seg=scene_<1?0:sceneSegment[scene_-1];
-    let end_seg=sceneSegment[scene_];
+    var start_seg=scene_<1?0:sceneSegment[scene_-1];
+    var end_seg=sceneSegment[scene_];
 
-    let option_=[Math.round(Math.random()*(scene_<1?5:4)),
+    var option_=[Math.round(Math.random()*(scene_<1?5:4)),
                  Math.round(Math.random()*(scene_<1?5:4))];
 
     for(var i=start_seg;i<end_seg;++i){
@@ -74,10 +74,10 @@ function resetSprites() {
 
       for(var j=0;j<2;++j){
         
-        let dir=sidePosition[j];
+        var dir=sidePosition[j];
 
         if(Math.random()*10>1){ // prob. no sprite
-          let txt=getRandomSprite(scene_,option_[j],dir);
+          var txt=getRandomSprite(scene_,option_[j],dir);
 
           if(txt===SPRITES2.BRIDGE[0]) dir=0;
           if(txt!=null) addSprite(i,txt,dir);
@@ -97,7 +97,7 @@ function resetSprites() {
 }
 function getRandomSprite(index_,opt_,dir_){
 
-  let txt=null;
+  var txt=null;
   switch(index_){
     case 0:
       switch(opt_){
@@ -166,15 +166,15 @@ function getRandomSprite(index_,opt_,dir_){
 
 function resetCars(){
 
-  let offsetZ=startGateZ/segmentLength;
+  var offsetZ=startGateZ/segmentLength;
   
   cars = [];
   var n, car, segment, offset, z, sprite, speed,color;
   
   for(var scene_=0;scene_<totalScene;++scene_){
     
-    let start_seg=scene_<1?offsetZ:sceneSegment[scene_-1];
-    let end_seg=(scene_==totalScene-1?-offsetZ:0)+sceneSegment[scene_];
+    var start_seg=scene_<1?offsetZ:sceneSegment[scene_-1];
+    var end_seg=(scene_==totalScene-1?-offsetZ:0)+sceneSegment[scene_];
 
     for(var n = 0 ; n<totalCars[scene_] ; n++){
 
@@ -203,12 +203,12 @@ function resetCars(){
 
 function resetCoins(){
 
-  let offsetZ=startGateZ/segmentLength;
+  var offsetZ=startGateZ/segmentLength;
 
   for(var scene_=0;scene_<totalScene;++scene_){
 
-    let start_seg=scene_<1?offsetZ:sceneSegment[scene_-1];
-    let end_seg=sceneSegment[scene_];
+    var start_seg=scene_<1?offsetZ:sceneSegment[scene_-1];
+    var end_seg=sceneSegment[scene_];
 
     var count=totalCoins[scene_]+totalCombos[scene_];
 
@@ -221,11 +221,13 @@ function resetCoins(){
     shuffleArray(arr);
     
     arr=arr.slice(0,count);
-    let combo=arr.slice(0,totalCombos[scene_]);
+    var combo=arr.slice(0,totalCombos[scene_]);
 
-    arr.sort((a,b)=>a-b);
+    arr.sort(function(a,b){
+      return a-b;
+    });
 
-    let dir=Math.floor(Math.random()*onRoadPosition.length);
+    var dir=Math.floor(Math.random()*onRoadPosition.length);
       
     var added=0;
     for(var i=0;i<arr.length && added<count;++i){
@@ -234,11 +236,11 @@ function resetCoins(){
         if(Math.random()*(1+totalScene-scene_)<1) 
             dir=Math.floor(Math.random()*onRoadPosition.length);
 
-        let mm=Math.random()*2<1?1:Math.floor(Math.random()*2+1);
+        var mm=Math.random()*2<1?1:Math.floor(Math.random()*2+1);
         for(var k=0;k<mm;++k){
 
-          let off=onRoadPosition[(dir+k)%3];
-          let coin={offsetX:off,
+          var off=onRoadPosition[(dir+k)%3];
+          var coin={offsetX:off,
                     offsetY:0,
                     source:(combo.indexOf(arr[i])>-1)?'COMBO':'COIN',
                     score:(combo.indexOf(arr[i])>-1)?5:1};
@@ -254,12 +256,12 @@ function resetCoins(){
 }
 function resetObstacles(){
 
-    let offsetZ=startGateZ/segmentLength;
+    var offsetZ=startGateZ/segmentLength;
 
   for(var scene_=0;scene_<totalScene;++scene_){
 
-    let start_seg=scene_<1?offsetZ:sceneSegment[scene_-1];
-    let end_seg=sceneSegment[scene_];
+    var start_seg=scene_<1?offsetZ:sceneSegment[scene_-1];
+    var end_seg=sceneSegment[scene_];
 
     var count=totalObstacles[scene_];
 
@@ -276,10 +278,10 @@ function resetObstacles(){
     var added=0;
     for(var i=0;i<count;++i){
         
-        let pos_=[];
+        var pos_=[];
         for(var k=0;k<onRoadPosition.length;++k){
           
-          let off=onRoadPosition[k];
+          var off=onRoadPosition[k];
           
           if(segmentHasCoin(arr[i],off)) continue;
           for(var d=0;d<segmentPerDraw/2;++d){
@@ -291,8 +293,8 @@ function resetObstacles(){
 
         if(pos_.length<1) continue;
 
-        let offset=Util.randomChoice(pos_);
-        let obstacle={offsetX:offset,
+        var offset=Util.randomChoice(pos_);
+        var obstacle={offsetX:offset,
                       offsetY:0,
                       source:(Math.random()*2<1)?'CONE-'+(scene_+1):'BLOCK-'+(scene_+1)};
 
@@ -308,7 +310,7 @@ function segmentHasCoin(index,offset){
 
   if(index<0 || index>segments.length-1) return false;
 
-  let seg=segments[index];
+  var seg=segments[index];
   for(var i=0;i<seg.coins.length;++i){
     if(seg.coins[i].offsetX==offset) return true;
   }
@@ -319,7 +321,9 @@ function segmentHasCoin(index,offset){
 function shuffleArray(array){
     for (var i = array.length - 1; i > 0; i--) {
         var rand = Math.floor(Math.random() * (i + 1));
-        [array[i], array[rand]] = [array[rand], array[i]]
+        var tmp=array[i];
+        arr[i]=arr[rand];
+        arr[rand]=tmp;
     }
 }
 
@@ -342,7 +346,7 @@ function printMap(){
 
 		if(n%(segmentPerDraw/2)!=0) continue;
 
-		let seg=segments[n];
+		var seg=segments[n];
 
 		output+=seg.index+',';
 
@@ -409,7 +413,7 @@ function readMap(file_url_,callback){
 }
 function processData(data){
 
-	let mcolumn=6;
+	var mcolumn=6;
 	var allTextLines = data.split(/\r\n|\n/);
     var lines = [];
 
@@ -436,14 +440,14 @@ function processData(data){
 
 	for(var n=0;n<lines.length;++n){
 
-		let index=Math.floor(lines[n][0]*ROAD_SCALE);
+		var index=Math.floor(lines[n][0]*ROAD_SCALE);
     if(index>=sceneSegment[2]) continue;
 
 		var scene=(index<sceneSegment[0])?0:(index<sceneSegment[1]?1:2);
-		let seg=segments[index];
+		var seg=segments[index];
 
     var percent;
-		let textureMap;
+		var textureMap;
 		if(index>=sceneSegment[1]){
         textureMap=SPRITES3;
         percent=index/(sceneSegment[2]-sceneSegment[1]);
@@ -456,8 +460,8 @@ function processData(data){
       percent=index/(sceneSegment[0]);
     } 
 		
-		let tag=lines[n][1];
-		let texture;
+		var tag=lines[n][1];
+		var texture;
 
 		try{
 			if(tag.length>0){

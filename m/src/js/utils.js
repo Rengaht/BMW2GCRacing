@@ -64,14 +64,14 @@ var Util = {
 
 
 
-    let iseg=Math.floor(index/segmentPerDraw);
-    let inter=index/segmentPerDraw-iseg;
-    let d_=Util.interpolate(dk[iseg],dk[Math.min(dk.length,iseg+1)],inter);
+    var iseg=Math.floor(index/segmentPerDraw);
+    var inter=index/segmentPerDraw-iseg;
+    var d_=Util.interpolate(dk[iseg],dk[Math.min(dk.length,iseg+1)],inter);
 
     p.screen.scale = d_/p.camera.z;
 
-    let xp=p.camera.x*d_/p.camera.z;
-    let yp=p.camera.y*d_/p.camera.z;
+    var xp=p.camera.x*d_/p.camera.z;
+    var yp=p.camera.y*d_/p.camera.z;
     
     // console.log();
 

@@ -7,7 +7,7 @@ var _guid;
 var _agree=false;
 
 var _trial_selected=true;
-const ClickBorder=0.5;
+var ClickBorder=0.5;
 var _isVender;
 var _inTransition=false;
 
@@ -179,7 +179,7 @@ function setupPage(page_){
 			
 			if(_cur_page==='_game') clearInfo();
 
-			onClickGotoTrial(true);
+			onClickGotoTrial(false);
 			$('#_button_send').removeClass('Click');    
 			$('#_button_back').removeClass('Click');
 			hideItem($('#_button_rank'));
@@ -302,6 +302,7 @@ function onPageTransitionEnd(){
 				showItem($('#_button_back'));
 				$('#_button_send').removeClass('Disable');
 				$('#_button_send').removeClass('Click');
+				showItem($('#_button_control'));
 				
 				// if(needScroll($('#'+_cur_page))) $('#_scroll_arrow').css('display','block');
 				// else $('#_scroll_arrow').css('display','none');
@@ -317,6 +318,7 @@ function onPageTransitionEnd(){
 				break;
 			case '_campaign':
 				showItem($('#_button_back'));		
+				showItem($('#_button_control'));
 				// $('#_scroll_arrow').css('display','none');
 				break;
 	}
@@ -499,7 +501,7 @@ function onButtonHomeClick(){
 
 	// ga code //
 	
-	let ga_tag='CLICK_M_COMPLETE_BACK';
+	var ga_tag='CLICK_M_COMPLETE_BACK';
 	if($('#_button_share').hasClass('hidden')){
 		ga_tag='CLICK_M_RESULT_RETURN';
 	}
@@ -618,7 +620,7 @@ function sendInfo(callback){
     
     _sound_fx['button_large'].play();
 
-	let data={
+	var data={
 		// "uuid":_uuid,
 		"player":_driver_name,
 		"color":_driver_color,
@@ -774,20 +776,20 @@ function updateRank(callback){
 			var count=1;
 			for(var i in data){
 				
-				let user=data[i];
+				var user=data[i];
 				if(user[2]==="") break;
 
-				let row=$('<div></div>');
+				var row=$('<div></div>');
 				$('<sapn></span>').text(count+'.').appendTo(row);
 				$('<sapn></span>').text(user[0]).appendTo(row);
 				$('<sapn></span>').text(user[2]).appendTo(row);
 				
 				row.addClass('RankItem');
 				
-				row.addClass('hidden');
-				setTimeout(function(){
-					row.removeClass('hidden');
-				},i*100);
+				// row.addClass('hidden');
+				// setTimeout(function(){
+				// 	row.removeClass('hidden');
+				// },i*100);
 
 				row.appendTo($('#_rank_info'));
 
@@ -893,7 +895,7 @@ function onClickCampaignInfo(){
 	gotoPage('_campaign','bb');	
 }
 function isIpad(){
-    const ua = window.navigator.userAgent;
+    var ua = window.navigator.userAgent;
     if (ua.indexOf('iPad') > -1) {
         return true;
     }

@@ -1,5 +1,7 @@
 function colorArray(arr_){
-	return new Float32Array(arr_.map(x=>x/255));
+	return new Float32Array(arr_.map(function(x){
+		return x/255
+	}));
 }
 
 var SceneColor=[
@@ -40,7 +42,7 @@ var SceneColor=[
 	sideColor2:colorArray([230,50,147,255])
 }];
 
-let vertex_shader='precision highp float;\
+var vertex_shader='precision highp float;\
 		attribute vec2 aVertexPosition;\
 		attribute vec2 aTextureCoord;\
 		uniform mat3 projectionMatrix;\
@@ -57,7 +59,7 @@ let vertex_shader='precision highp float;\
 		}';
 
 		// vTextureCoord = (uTextureMatrix * vec3(aTextureCoord, 1.0)).xy;
-let frag_shader="varying vec3 vTextureCoord;\
+var frag_shader="varying vec3 vTextureCoord;\
 	varying float vColor;\
 	uniform vec4 uColor;\
 	uniform sampler2D uSampler;\
