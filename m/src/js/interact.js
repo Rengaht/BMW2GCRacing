@@ -839,7 +839,7 @@ function checkLotteryInput(){
  //    if(!emailRegx.test(input_email)) error_text=error_text+"*email格式錯誤\n";
 
  	var input_email=$('#_input_lottery_email').val().toLowerCase();
- 	if(input_email.length<0) error_text=error_text+"*email不可空白";
+ 	if(input_email.length<1) error_text=error_text+"*email不可空白";
 
 
     if(!_agree) error_text+="*請同意個人資料使用";
